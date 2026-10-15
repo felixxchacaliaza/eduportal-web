@@ -1,0 +1,92 @@
+<!-- src/app/shared/components/sidebar/sidebar.component.html -->
+<aside class="app-sidebar" [class.app-sidebar--collapsed]="isCollapsed()">
+  <nav class="app-sidebar__nav">
+    <div class="app-sidebar__section-label">
+      @if (!isCollapsed()) {
+        <span>MENÚ PRINCIPAL</span>
+      } @else {
+        <span>•••</span>
+      }
+    </div>
+
+    <ul class="app-sidebar__menu">
+      @for (item of navItems; track item.label) {
+        <li class="app-sidebar__item">
+          @if (item.children && item.children.length > 0) {
+            <!-- Ítem de grupo desplegable -->
+            <button
+              type="button"
+              class="app-sidebar__link app-sidebar__link--group"
+              [class.app-sidebar__link--group-open]="isGroupOpen(item.label)"
+              (click)="toggleGroup(item.label)"
+              [title]="isCollapsed() ? item.label : ''"
+            >
+              <mat-icon class="app-sidebar__icon">{{ item.icon }}</mat-icon>
+
+              @if (!isCollapsed()) {
+                <span class="app-sidebar__label">{{ item.label }}</span>
+                @if (item.badge) {
+                  <span class="app-sidebar__badge badge badge--info">{{ item.badge }}</span>
+                }
+                <mat-icon class="app-sidebar__arrow-icon">
+                  {{ isGroupOpen(item.label) ? 'expand_less' : 'expand_more' }}
+                </mat-icon>
+              }
+            </button>
+
+            <!-- Submenú de opciones del grupo -->
+            @if (!isCollapsed() && isGroupOpen(item.label)) {
+              <ul class="app-sidebar__submenu">
+                @for (subItem of item.children; track subItem.path) {
+                  <li class="app-sidebar__submenu-item">
+                    <a
+                      [routerLink]="subItem.path"
+                      routerLinkActive="app-sidebar__submenu-link--active"
+                      class="app-sidebar__submenu-link"
+                    >
+                      @if (subItem.icon) {
+                        <mat-icon class="app-sidebar__submenu-icon">{{ subItem.icon }}</mat-icon>
+                      }
+                      <span class="app-sidebar__submenu-label">{{ subItem.label }}</span>
+                      @if (subItem.badge) {
+                        <span class="app-sidebar__badge badge badge--info">{{ subItem.badge }}</span>
+                      }
+                    </a>
+                  </li>
+                }
+              </ul>
+            }
+          } @else {
+            <!-- Enlace directo individual -->
+            <a
+              [routerLink]="item.path"
+              routerLinkActive="app-sidebar__link--active"
+              class="app-sidebar__link"
+              [title]="isCollapsed() ? item.label : ''"
+            >
+              <mat-icon class="app-sidebar__icon">{{ item.icon }}</mat-icon>
+
+              @if (!isCollapsed()) {
+                <span class="app-sidebar__label">{{ item.label }}</span>
+                @if (item.badge) {
+                  <span class="app-sidebar__badge badge badge--info">{{ item.badge }}</span>
+                }
+              }
+            </a>
+          }
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <div class="app-sidebar__footer">
+    <div class="app-sidebar__version">
+      @if (!isCollapsed()) {
+        <span>EduPortal v22.0.0</span>
+        <span class="app-sidebar__status-dot"></span>
+      } @else {
+        <span class="app-sidebar__status-dot" title="EduPortal v22.0.0 Online"></span>
+      }
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,228 @@
+/* src/app/shared/components/sidebar/sidebar.component.scss */
+.app-sidebar {
+  width: 250px;
+  height: calc(100vh - 64px);
+  background-color: var(--secondary);
+  color: #94a3b8;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  box-shadow: var(--shadow-md);
+
+  &--collapsed {
+    width: 72px;
+
+    .app-sidebar__section-label {
+      text-align: center;
+      padding: 1rem 0 0.5rem;
+    }
+
+    .app-sidebar__link {
+      justify-content: center;
+      padding: 0.75rem 0;
+    }
+
+    .app-sidebar__icon {
+      margin-right: 0;
+    }
+  }
+
+  &__nav {
+    padding: 1rem 0;
+  }
+
+  &__section-label {
+    padding: 0.75rem 1.25rem 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #64748b;
+    text-transform: uppercase;
+    user-select: none;
+  }
+
+  &__menu {
+    list-style: none;
+    margin: 0;
+    padding: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__item {
+    margin: 0;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #94a3b8;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+
+      .app-sidebar__icon {
+        color: var(--accent);
+      }
+    }
+
+    &--group {
+      width: 100%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: left;
+    }
+
+    &--group-open {
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.04);
+
+      .app-sidebar__icon {
+        color: var(--accent);
+      }
+    }
+
+    &--active {
+      background-color: var(--primary) !important;
+      color: #ffffff !important;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(228, 0, 53, 0.35);
+
+      .app-sidebar__icon {
+        color: #ffffff !important;
+      }
+
+      .app-sidebar__badge {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+      }
+    }
+  }
+
+  &__arrow-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #64748b;
+    margin-left: auto;
+    transition: transform 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  &__submenu {
+    list-style: none;
+    margin: 0.25rem 0 0.5rem 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  &__submenu-item {
+    margin: 0;
+  }
+
+  &__submenu-link {
+    display: flex;
+    align-items: center;
+    padding: 0.6rem 1rem 0.6rem 2.6rem;
+    color: #94a3b8;
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.84rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+
+      .app-sidebar__submenu-icon {
+        color: var(--accent);
+      }
+    }
+
+    &--active {
+      background-color: rgba(228, 0, 53, 0.15) !important;
+      color: #ffffff !important;
+      font-weight: 600;
+      border-left: 3px solid var(--primary);
+      padding-left: calc(2.6rem - 3px);
+
+      .app-sidebar__submenu-icon {
+        color: var(--primary) !important;
+      }
+    }
+  }
+
+  &__submenu-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    margin-right: 0.65rem;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+  }
+
+  &__submenu-label {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: 0.85rem;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__badge {
+    margin-left: 0.5rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  &__footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &__version {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: #64748b;
+  }
+
+  &__status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--success);
+    border-radius: var(--radius-full);
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  }
+}

@@ -1,1 +1,122 @@
 /* You can add global styles to this file, and also import other style files */
+/* src/styles.scss */
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+:root {
+  /* Paleta Institucional EduPortal */
+  --primary: #e40035;
+  --primary-hover: #c8002f;
+  --primary-light: #fff1f2;
+  --secondary: #0f172a;
+  --secondary-light: #1e293b;
+  --accent: #00b4d8;
+
+  /* Fondos y Superficies */
+  --bg-page: #f8fafc;
+  --bg-surface: #ffffff;
+  --border-color: #e2e8f0;
+
+  /* Textos */
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+
+  /* Estados Escolares */
+  --success: #10b981;
+  --success-bg: #ecfdf5;
+  --warning: #f59e0b;
+  --warning-bg: #fffbeb;
+  --danger: #ef4444;
+  --danger-bg: #fef2f2;
+  --info: #3b82f6;
+  --info-bg: #eff6ff;
+
+  /* Sombras y Radios */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Tipografías */
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Poppins', var(--font-main);
+}
+
+/* Reset y Estructura Global */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* Angular Material typography override to Inter */
+.mat-mdc-form-field,
+.mat-mdc-floating-label,
+.mat-mdc-select,
+.mat-mdc-select-value,
+.mat-mdc-input-element,
+.mat-mdc-option,
+.mat-mdc-card {
+  font-family: var(--font-main) !important;
+}
+
+/* Badges con Metodología BEM */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+
+  &--success {
+    background-color: var(--success-bg);
+    color: var(--success);
+  }
+
+  &--danger {
+    background-color: var(--danger-bg);
+    color: var(--danger);
+  }
+
+  &--warning {
+    background-color: var(--warning-bg);
+    color: var(--warning);
+  }
+
+  &--info {
+    background-color: var(--info-bg);
+    color: var(--info);
+  }
+}
+
+.header {
+  &--primary {
+    color: var(--primary);
+  }
+
+  &--secondary {
+    color: var(--secondary);
+  }
+}
+
+
+

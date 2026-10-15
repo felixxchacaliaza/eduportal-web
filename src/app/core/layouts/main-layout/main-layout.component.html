@@ -1,0 +1,46 @@
+<!-- ==========================================================================
+  Main Layout Component Template
+  Marco estructural de la aplicación que proyecta navegación, sidebar y vistas.
+  Consume su estado y cabeceras dinámicas desde MainLayoutPresenter.
+========================================================================== -->
+<div class="main-layout">
+  <!-- Navbar superior con alternancia del menú lateral -->
+  <app-navbar (toggleSidebar)="presenter.toggleSidebar()"></app-navbar>
+
+  <div class="main-layout__body">
+    <!-- Sidebar con estado colapsado controlado por el presenter -->
+    <app-sidebar [isCollapsed]="presenter.isSidebarCollapsed()"></app-sidebar>
+
+    <!-- Área de contenido dinámico proyectado -->
+    <main class="main-layout__content">
+      <div class="main-layout__container">
+        @if (presenter.currentHeader(); as header) {
+          <header class="page-header">
+            <!-- Breadcrumbs -->
+            <nav class="page-header__breadcrumbs" aria-label="Ruta de navegación">
+              @for (crumb of header.breadcrumbs; track $index; let isLast = $last) {
+                <span class="page-header__crumb" [class.page-header__crumb--active]="isLast">
+                  {{ crumb }}
+                </span>
+                @if (!isLast) {
+                  <span class="page-header__crumb-separator">›</span>
+                }
+              }
+            </nav>
+
+            <!-- Título con icono -->
+            <div class="page-header__main">
+              <mat-icon class="page-header__icon">{{ header.icon }}</mat-icon>
+              <h1 class="page-header__title">{{ header.title }}</h1>
+            </div>
+
+            <!-- Subtítulo / Descripción pedagógica -->
+            <p class="page-header__description">{{ header.description }}</p>
+          </header>
+        }
+
+        <router-outlet />
+      </div>
+    </main>
+  </div>
+</div>
