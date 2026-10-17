@@ -1,0 +1,23 @@
+<!-- ==========================================================================
+  Subjects Feature Page Template
+  Contenedor principal (Smart Component). Orquesta el flujo de datos
+  unidireccional (Top-Down vía input()) y eventos (Bottom-Up vía output()).
+========================================================================== -->
+<div class="subjects">
+  <!-- 1. Tarjetas de Métricas Estadísticas de la Malla Curricular -->
+  <app-subjects-cards [cards]="cards()" />
+
+  <!-- 2. Barra Unificada de Filtros, Búsqueda y Botón Crear Asignatura -->
+  <app-subjects-filters
+    [areas]="areas()"
+    (filterChange)="onFilterChange($event)"
+    (create)="handleCreateSubject()"
+  />
+
+  <!-- 3. Tabla de Asignaturas (Dumb Component) -->
+  <app-subjects-table
+    [subjects]="filteredSubjects()"
+    (toggleStatus)="onToggleStatus($event)"
+    (edit)="onEditSubject($event)"
+  />
+</div>

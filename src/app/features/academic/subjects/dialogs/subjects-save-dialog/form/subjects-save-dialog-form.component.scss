@@ -1,0 +1,52 @@
+/**
+ * ============================================================================
+ * Subjects Save Form - Stylesheet
+ * ============================================================================
+ * Estilos para el formulario reactivo de asignaturas bajo convención BEM.
+ * ============================================================================
+ */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.subjects-save-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding-top: 8px;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__field {
+    width: 100%;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+  }
+
+  &__btn {
+    border-radius: 8px;
+    font-weight: 600;
+    height: 42px;
+    padding: 0 18px;
+  }
+}
+
