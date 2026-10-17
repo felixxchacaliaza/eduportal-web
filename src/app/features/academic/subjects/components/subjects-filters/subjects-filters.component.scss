@@ -1,0 +1,84 @@
+/**
+ * ============================================================================
+ * Subjects Filters Component - Stylesheet
+ * ============================================================================
+ * Estilos del panel de filtros, búsqueda y acciones bajo convención BEM.
+ *
+ * Características:
+ * - Contenedor en tarjeta (mat-card) con bordes suaves y elevación sutil.
+ * - Disposición flexible (Flexbox space-between) que organiza los controles a la
+ *   izquierda y el botón de acción principal a la derecha.
+ * - Soporte responsivo fluido en pantallas reducidas.
+ * ============================================================================
+ */
+
+/* ----------------------------------------------------------------------------
+   1. Host Scope
+   ---------------------------------------------------------------------------- */
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* ----------------------------------------------------------------------------
+   2. Bloque Principal: .subjects-filters
+   Card contenedor con borde estilizado y espaciado consistente.
+   ---------------------------------------------------------------------------- */
+.subjects-filters {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  margin-bottom: 24px;
+
+  /* Contenedor interno para alineación horizontal y envoltura responsive */
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* Grupo de controles de formulario (selects + barra de búsqueda) */
+  &__controls {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    flex: 1;
+  }
+
+  /* --------------------------------------------------------------------------
+     3. Elementos de Campo (mat-form-field)
+     -------------------------------------------------------------------------- */
+  &__field {
+    min-width: 190px;
+
+    /* Modificador: Campo de búsqueda expandible para ocupar espacio sobrante */
+    &--search {
+      min-width: 240px;
+      flex: 1;
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     4. Acciones Principales (Botón Crear Asignatura)
+     -------------------------------------------------------------------------- */
+  &__actions {
+    display: flex;
+    align-items: center;
+  }
+
+  button#{&}__create-btn {
+    border-radius: 8px;
+    font-weight: 600;
+    height: 56px;
+    padding: 0 20px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+}
