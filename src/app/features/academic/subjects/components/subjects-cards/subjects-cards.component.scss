@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.subjects-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  width: 100%;
+  margin-bottom: 24px;
+}

@@ -1,5 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AreaService, SubjectService } from './core/api';
+
+
 
 @Component({
   imports: [RouterOutlet],
@@ -9,6 +12,10 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('eduportal-web');
+
+/*   private readonly areaService = inject(AreaService);
+  private readonly subjectService = inject(SubjectService); */
+
 }
 
 export class HeroeSimple {
