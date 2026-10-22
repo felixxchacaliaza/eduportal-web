@@ -1,0 +1,96 @@
+<div class="grade-subjects">
+  <!-- 1. Encabezado del Módulo -->
+  <header class="grade-subjects__header">
+    <h2 class="grade-subjects__title">
+      Escoger Asignaturas para {{ presenter.selectedGrade()?.description || 'Secundaria' }}
+    </h2>
+    <p class="grade-subjects__subtitle">
+      Seleccione las asignaturas oficiales que cursarán los estudiantes de este grado a partir del catálogo registrado.
+    </p>
+  </header>
+
+  <!-- 2. Pestañas de Grados Escolares con Contadores de Asignaturas y Horas -->
+  <app-grade-subjects-tabs
+    [stats]="presenter.gradeStats()"
+    [selectedGradeId]="presenter.selectedGradeId()"
+    (gradeSelected)="presenter.selectGrade($event)"
+  />
+
+  <!-- 3. Barra de Resumen Métrico y Acciones por Lote (Seleccionar / Desmarcar Todos) -->
+  <div class="grade-subjects__summary-bar">
+    <div class="grade-subjects__summary-metrics">
+      <div class="grade-subjects__metric-pill">
+        <span>
+          <strong>{{ presenter.selectedCount() }}</strong> de {{ presenter.totalCatalogCount() }} asignaturas seleccionadas
+        </span>
+      </div>
+
+      <div
+        class="grade-subjects__metric-pill grade-subjects__metric-pill--hours"
+        [class.grade-subjects__metric-pill--warning]="presenter.totalAssignedHours() > 38"
+      >
+        <span>
+          <strong>{{ presenter.totalAssignedHours() }}</strong> horas semanales normadas (Tope: 40h)
+        </span>
+      </div>
+    </div>
+
+    <div class="grade-subjects__batch-actions">
+      <button
+        mat-stroked-button
+        class="grade-subjects__batch-btn grade-subjects__batch-btn--select-all"
+        [disabled]="presenter.isOperating() || presenter.areAllSelected()"
+        (click)="presenter.selectAll()"
+        title="Asignar todas las materias disponibles para este grado"
+      >
+        Seleccionar Todos
+      </button>
+
+      <button
+        mat-stroked-button
+        class="grade-subjects__batch-btn grade-subjects__batch-btn--deselect-all"
+        [disabled]="presenter.isOperating() || presenter.selectedCount() === 0"
+        (click)="presenter.deselectAll()"
+        title="Quitar / Desmarcar todas las materias de este grado"
+      >
+        Desmarcar Todos
+      </button>
+    </div>
+  </div>
+
+  <!-- 4. Barra Unificada de Filtros (Año Lectivo, Área, Estado y Búsqueda) -->
+  <app-grade-subjects-filters
+    [academicYears]="presenter.academicYears()"
+    [selectedYear]="presenter.selectedYear()"
+    [areas]="presenter.areas()"
+    [filterState]="presenter.filterState()"
+    (yearChange)="presenter.selectYear($event)"
+    (filterChange)="presenter.applyFilters($event)"
+  />
+
+  <!-- 5. Mensaje de Alerta / Notificación de Operaciones -->
+  @if (presenter.alertMessage(); as alert) {
+    <div
+      class="grade-subjects__alert"
+      [class.grade-subjects__alert--success]="alert.type === 'success'"
+      [class.grade-subjects__alert--warning]="alert.type === 'warning'"
+      [class.grade-subjects__alert--error]="alert.type === 'error'"
+    >
+      <span class="grade-subjects__alert-text">{{ alert.message }}</span>
+    </div>
+  }
+
+  <!-- 6. Indicador de Carga o Tabla Principal -->
+  @if (presenter.isLoading()) {
+    <div class="grade-subjects__loading">
+      <mat-spinner diameter="44" />
+      <p>Cargando asignaturas y malla curricular...</p>
+    </div>
+  } @else {
+    <app-grade-subjects-table
+      [rows]="presenter.filteredRows()"
+      [isOperating]="presenter.isOperating()"
+      (toggleAssignment)="presenter.toggleAssignment($event)"
+    />
+  }
+</div>

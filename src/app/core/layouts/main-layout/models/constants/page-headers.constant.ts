@@ -13,6 +13,13 @@ import { PageHeaderConfig } from '../interfaces/page-header-config.interface';
  */
 export const PAGE_HEADERS_CONSTANT: readonly PageHeaderConfig[] = Object.freeze([
   Object.freeze({
+    route: '/grados-asignaturas',
+    breadcrumbs: ['Académico', 'Grados y Asignaturas'],
+    title: 'Grados-Asignaturas',
+    icon: 'auto_stories',
+    description: 'Malla Curricular por Grado Escolar • Asignación oficial de materias según CNEB - MINEDU',
+  }),
+  Object.freeze({
     route: '/asignaturas',
     breadcrumbs: ['Académico', 'Asignaturas'],
     title: 'Asignaturas',

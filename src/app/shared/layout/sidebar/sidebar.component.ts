@@ -53,6 +53,7 @@ export class SidebarComponent {
       label: 'Académico',
       icon: 'school',
       children: [
+        { path: '/grados-asignaturas', label: 'Grados-Asignaturas', icon: 'auto_stories' },
         { path: '/asignaturas', label: 'Asignaturas', icon: 'menu_book' }
       ]
     },
