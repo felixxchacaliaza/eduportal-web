@@ -5,6 +5,10 @@ export const ACADEMIC_ROUTES: Routes = [
     path: 'asignaturas',
     loadComponent: () =>
       import('./subjects/subjects.component').then(m => m.SubjectsComponent),
-  }
+  },
+  {
+    path: 'grados-asignaturas',
+    loadComponent: () =>
+      import('./grade-subjects/grade-subjects.component').then(m => m.GradeSubjectsComponent),
+  },
 ];
-

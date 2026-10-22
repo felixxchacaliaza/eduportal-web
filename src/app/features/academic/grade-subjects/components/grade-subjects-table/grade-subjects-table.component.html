@@ -1,0 +1,151 @@
+<div class="grade-table mat-elevation-z1">
+  <table mat-table [dataSource]="rows()" class="grade-table__table">
+    
+    <!-- 1. Columna: Asignar (Checkbox) -->
+    <ng-container matColumnDef="assign">
+      <th mat-header-cell *matHeaderCellDef class="grade-table__header-cell grade-table__header-cell--checkbox">
+        Asignar
+      </th>
+      <td mat-cell *matCellDef="let row" class="grade-table__cell grade-table__cell--checkbox">
+        <mat-checkbox
+          [checked]="row.isAssigned"
+          [disabled]="isOperating()"
+          (change)="onRowToggle(row)"
+          color="primary"
+          [attr.aria-label]="'Asignar ' + row.name"
+        />
+      </td>
+    </ng-container>
+
+    <!-- 2. Columna: Código -->
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef class="grade-table__header-cell">Código</th>
+      <td mat-cell *matCellDef="let row" class="grade-table__cell">
+        <span
+          class="grade-table__code-badge"
+          [style.borderColor]="row.color"
+          [style.color]="row.color"
+        >
+          {{ row.code }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- 3. Columna: Asignatura -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef class="grade-table__header-cell">Asignatura</th>
+      <td mat-cell *matCellDef="let row" class="grade-table__cell">
+        <strong class="grade-table__title">{{ row.name }}</strong>
+        @if (row.description) {
+          <div class="grade-table__description-text" [title]="row.description">
+            {{ row.description }}
+          </div>
+        }
+      </td>
+    </ng-container>
+
+    <!-- 4. Columna: Área Curricular -->
+    <ng-container matColumnDef="area">
+      <th mat-header-cell *matHeaderCellDef class="grade-table__header-cell">Área Curricular</th>
+      <td mat-cell *matCellDef="let row" class="grade-table__cell">
+        <span class="grade-table__area-badge">{{ row.area }}</span>
+      </td>
+    </ng-container>
+
+    <!-- 5. Columna: Horas Semanales -->
+    <ng-container matColumnDef="hours">
+      <th mat-header-cell *matHeaderCellDef class="grade-table__header-cell">Horas Semanales</th>
+      <td mat-cell *matCellDef="let row" class="grade-table__cell">
+        <span class="grade-table__hours-tag">
+          <strong>{{ row.hours }}</strong> hrs/sem
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- 6. Columna: Estado Operativo -->
+    <ng-container matColumnDef="operationalStatus">
+      <th mat-header-cell *matHeaderCellDef class="grade-table__header-cell">Estado Operativo</th>
+      <td mat-cell *matCellDef="let row" class="grade-table__cell">
+        @if (row.operationalStatus === 'Activa') {
+          <span class="grade-table__status-badge grade-table__status-badge--active">
+            Activa
+          </span>
+        } @else {
+          <span class="grade-table__status-badge grade-table__status-badge--inactive">
+            Desactiva
+          </span>
+        }
+      </td>
+    </ng-container>
+
+    <!-- 7. Columna: Estado de Asignación -->
+    <ng-container matColumnDef="assignmentStatus">
+      <th mat-header-cell *matHeaderCellDef class="grade-table__header-cell">Estado de Asignación</th>
+      <td mat-cell *matCellDef="let row" class="grade-table__cell">
+        @if (row.assignmentStatus === 'Asignado') {
+          <span class="grade-table__assign-badge grade-table__assign-badge--assigned">
+            Asignado
+          </span>
+        } @else if (row.assignmentStatus === 'Deshabilitado') {
+          <span class="grade-table__assign-badge grade-table__assign-badge--disabled">
+            Deshabilitado
+          </span>
+        } @else {
+          <span class="grade-table__assign-badge grade-table__assign-badge--unassigned">
+            No asignado
+          </span>
+        }
+      </td>
+    </ng-container>
+
+    <!-- 8. Columna: Acciones de Gestión -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="grade-table__header-cell grade-table__header-cell--actions">
+        Acciones
+      </th>
+      <td mat-cell *matCellDef="let row" class="grade-table__cell grade-table__cell--actions">
+        <div class="grade-table__actions">
+          @if (row.isAssigned) {
+            <button
+              mat-stroked-button
+              class="grade-table__action-btn grade-table__action-btn--remove"
+              [disabled]="isOperating()"
+              (click)="onRowToggle(row)"
+              title="Quitar / Deshabilitar de este grado"
+            >
+              Quitar
+            </button>
+          } @else {
+            <button
+              mat-flat-button
+              color="primary"
+              class="grade-table__action-btn grade-table__action-btn--assign"
+              [disabled]="isOperating()"
+              (click)="onRowToggle(row)"
+              title="Asignar al grado escolar"
+            >
+              Asignar
+            </button>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Filas -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="grade-table__header-row"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="grade-table__row"
+      [class.grade-table__row--assigned]="row.isAssigned"
+      [class.grade-table__row--unassigned]="!row.isAssigned"
+    ></tr>
+
+    <!-- Estado vacío -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell grade-table__empty-cell" [attr.colspan]="displayedColumns.length">
+        No se encontraron asignaturas que coincidan con los filtros aplicados.
+      </td>
+    </tr>
+  </table>
+</div>
