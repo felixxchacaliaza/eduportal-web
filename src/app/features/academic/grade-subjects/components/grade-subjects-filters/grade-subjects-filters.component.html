@@ -1,0 +1,64 @@
+<mat-card class="grade-filters mat-elevation-z1">
+  <div class="grade-filters__container">
+    <div class="grade-filters__controls">
+      
+      <!-- 1. Filtro: Año Lectivo -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grade-filters__field grade-filters__field--year">
+        <mat-label>Año Lectivo</mat-label>
+        <mat-icon matPrefix>calendar_today</mat-icon>
+        <mat-select
+          [value]="selectedYear()"
+          (selectionChange)="onYearSelect($event.value)"
+        >
+          @for (yearItem of academicYears(); track yearItem.id) {
+            <mat-option [value]="yearItem.year">
+              {{ yearItem.year }} @if (yearItem.status === 'ACTIVO') { (ACTIVO) } @else if (yearItem.status === 'CERRADO') { (CERRADO) }
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- 2. Filtro: Área Curricular -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grade-filters__field">
+        <mat-label>Área Curricular</mat-label>
+        <mat-icon matPrefix>category</mat-icon>
+        <mat-select
+          [value]="filterState().area"
+          (selectionChange)="onAreaSelect($event.value)"
+        >
+          @for (area of areas(); track area.value) {
+            <mat-option [value]="area.value">{{ area.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- 3. Filtro: Asignación -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grade-filters__field">
+        <mat-label>Estado de Asignación</mat-label>
+        <mat-icon matPrefix>check_circle_outline</mat-icon>
+        <mat-select
+          [value]="filterState().assignmentStatus"
+          (selectionChange)="onStatusSelect($event.value)"
+        >
+          @for (opt of statusOptions; track opt.value) {
+            <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- 4. Filtro: Búsqueda -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="grade-filters__field grade-filters__field--search">
+        <mat-label>Buscar Asignatura o Código...</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          [value]="filterState().search"
+          (input)="onSearchInput($event)"
+          placeholder="Ej: Matemática o MAT-001"
+        />
+      </mat-form-field>
+
+    </div>
+  </div>
+</mat-card>
+

@@ -1,0 +1,21 @@
+<div class="grade-tabs">
+  <div class="grade-tabs__label">SELECCIONAR GRADO:</div>
+  <div class="grade-tabs__list">
+    @for (grade of stats(); track grade.gradeId) {
+      <button
+        type="button"
+        class="grade-tabs__btn"
+        [class.grade-tabs__btn--active]="grade.gradeId === selectedGradeId()"
+        (click)="onSelect(grade.gradeId)"
+      >
+        <span class="grade-tabs__title">{{ grade.description }}</span>
+        <span class="grade-tabs__badge grade-tabs__badge--count">
+          {{ grade.assignedSubjectsCount }} asignaturas
+        </span>
+        <span class="grade-tabs__badge grade-tabs__badge--hours">
+          {{ grade.totalHours }}h
+        </span>
+      </button>
+    }
+  </div>
+</div>
