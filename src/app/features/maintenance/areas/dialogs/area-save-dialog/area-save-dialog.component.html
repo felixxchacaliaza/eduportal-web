@@ -1,0 +1,63 @@
+<div class="area-save-dialog">
+  @if (isSaving) {
+    <mat-progress-bar mode="indeterminate" class="area-save-dialog__progress" />
+  }
+
+  <div class="area-save-dialog__header">
+    <div class="area-save-dialog__icon-wrapper">
+      <mat-icon>{{ data.mode === 'create' ? 'category' : 'edit' }}</mat-icon>
+    </div>
+    <div class="area-save-dialog__titles">
+      <h2 mat-dialog-title class="area-save-dialog__title">
+        {{ data.mode === 'create' ? 'Nueva Área Curricular' : 'Editar Área Curricular' }}
+      </h2>
+      <p class="area-save-dialog__subtitle">
+        Define el nombre y alcance pedagógico del área (ej. Matemática, Comunicación, Ciencias Sociales).
+      </p>
+    </div>
+    <button mat-icon-button type="button" class="area-save-dialog__close-btn" (click)="close()" [disabled]="isSaving">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (errorMessage) {
+    <div class="area-save-dialog__error-banner">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-dialog-content class="area-save-dialog__content">
+      <div class="area-save-dialog__form-grid">
+        <!-- Nombre del Área -->
+        <mat-form-field appearance="outline" class="area-save-dialog__full-row">
+          <mat-label>Nombre del Área</mat-label>
+          <mat-icon matPrefix>book</mat-icon>
+          <input matInput type="text" formControlName="name" placeholder="Ej. MATEMÁTICA, COMUNICACIÓN..." />
+          @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+            <mat-error>El nombre del área es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Descripción -->
+        <mat-form-field appearance="outline" class="area-save-dialog__full-row">
+          <mat-label>Descripción / Observación</mat-label>
+          <mat-icon matPrefix>description</mat-icon>
+          <textarea matInput formControlName="description" rows="3" placeholder="Descripción de las competencias del área..."></textarea>
+          <mat-hint align="end">{{ form.get('description')?.value?.length || 0 }} / 100</mat-hint>
+        </mat-form-field>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="area-save-dialog__actions">
+      <button mat-button type="button" (click)="close()" [disabled]="isSaving">
+        Cancelar
+      </button>
+      <button mat-flat-button color="primary" type="submit" [disabled]="isSaving || form.invalid">
+        <mat-icon>{{ data.mode === 'create' ? 'add' : 'check' }}</mat-icon>
+        {{ data.mode === 'create' ? 'Registrar Área' : 'Guardar Cambios' }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

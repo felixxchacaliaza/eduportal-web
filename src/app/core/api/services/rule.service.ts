@@ -9,16 +9,7 @@ import { Rule } from '../models/interfaces/rule.interface';
  * ============================================================================
  * RuleService (Infraestructura HTTP)
  * ============================================================================
- * Servicio para consultar las reglas de configuración institucional en MongoDB.
- *
- * @remarks
- * CONCEPTOS PEDAGÓGICOS:
- * 1. Promesas con `firstValueFrom`:
- *    - Reemplazo moderno y estándar de `.toPromise()` en RxJS 7+.
- * 2. Fallback Defensivo en `getShifts`:
- *    - Si el backend o la base de datos no tienen configurada la regla 'SHIFTS',
- *      el método captura el error y retorna un fallback predeterminado para
- *      evitar que la UI quede en blanco.
+ * Servicio para consultar y mantener las reglas de configuración institucional en MongoDB.
  * ============================================================================
  */
 @Injectable({
@@ -58,7 +49,6 @@ export class RuleService {
 
   /**
    * Obtiene los turnos escolares válidos para el año escolar especificado.
-   * Resuelve automáticamente si el valor viene en `currentValue` o en la matriz `value`.
    */
   public async getShifts(year: string = '2026'): Promise<string[]> {
     try {
@@ -77,5 +67,25 @@ export class RuleService {
       console.warn('No se pudo cargar la regla SHIFTS del backend, usando fallback:', error);
       return ['MAÑANA', 'TARDE'];
     }
+  }
+
+  /**
+   * Registra una nueva regla en la base de datos.
+   */
+  public async createRule(payload: Partial<Rule>): Promise<Rule> {
+    const res = await firstValueFrom(
+      this.http.post<ApiResponse<Rule>>(this.endpoint, payload)
+    );
+    return res.data;
+  }
+
+  /**
+   * Actualiza una regla existente por ID o por KEY.
+   */
+  public async updateRule(idOrKey: string, payload: Partial<Rule>): Promise<Rule> {
+    const res = await firstValueFrom(
+      this.http.put<ApiResponse<Rule>>(`${this.endpoint}/${idOrKey}`, payload)
+    );
+    return res.data;
   }
 }

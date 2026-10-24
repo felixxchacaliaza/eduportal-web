@@ -1,0 +1,130 @@
+<div class="areas">
+  <!-- 1. Tarjetas KPI Métricas -->
+  <div class="areas__cards">
+    @for (card of cards(); track card.label) {
+      <app-info-card [data]="card" />
+    }
+  </div>
+
+  <!-- 2. Barra de Filtros y Búsqueda -->
+  <div class="areas__filters">
+    <div class="areas__filters-controls">
+      <!-- Buscador -->
+      <mat-form-field appearance="outline" class="areas__field areas__field--search">
+        <mat-label>Buscar por código o nombre...</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          type="text"
+          placeholder="Ej. Matemática, CIE-001..."
+          [ngModel]="filterState().search"
+          (ngModelChange)="onSearchChange($event)"
+        />
+      </mat-form-field>
+
+      <!-- Selector de Estado -->
+      <mat-form-field appearance="outline" class="areas__field">
+        <mat-label>Estado</mat-label>
+        <mat-icon matPrefix>toggle_on</mat-icon>
+        <mat-select [ngModel]="filterState().status" (ngModelChange)="onStatusFilterChange($event)">
+          <mat-option value="ALL">Todos los Estados</mat-option>
+          <mat-option value="ACTIVE">Solo Activas</mat-option>
+          <mat-option value="INACTIVE">Solo Inactivas</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Botón Nueva Área -->
+    <div class="areas__action">
+      <button mat-flat-button color="primary" class="areas__create-btn" (click)="onCreateArea()">
+        <mat-icon>add</mat-icon>
+        Nueva Área
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. Spinner o Tabla de Datos -->
+  @if (isLoading()) {
+    <div class="areas__loading">
+      <mat-spinner diameter="44" />
+      <p>Cargando catálogo de áreas curriculares...</p>
+    </div>
+  } @else {
+    <div class="areas__table-container mat-elevation-z1">
+      <table mat-table [dataSource]="filteredAreas()" class="areas__table">
+        <!-- Código -->
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef class="areas__header-cell areas__header-cell--code">CÓDIGO</th>
+          <td mat-cell *matCellDef="let item" class="areas__cell areas__cell--code">
+            <span class="areas__code-badge">{{ item.code }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Nombre -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef class="areas__header-cell areas__header-cell--name">NOMBRE DEL ÁREA</th>
+          <td mat-cell *matCellDef="let item" class="areas__cell areas__cell--name">
+            <strong class="areas__name-title">{{ item.name }}</strong>
+          </td>
+        </ng-container>
+
+        <!-- Descripción -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef class="areas__header-cell areas__header-cell--desc">DESCRIPCIÓN</th>
+          <td mat-cell *matCellDef="let item" class="areas__cell areas__cell--desc">
+            <span class="areas__desc-text">{{ item.description || 'Sin descripción' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Estado -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef class="areas__header-cell areas__header-cell--status">ESTADO</th>
+          <td mat-cell *matCellDef="let item" class="areas__cell areas__cell--status">
+            <span
+              class="areas__status-badge"
+              [class.areas__status-badge--active]="item.enabled"
+              [class.areas__status-badge--inactive]="!item.enabled"
+            >
+              {{ item.enabled ? 'Activa' : 'Inactiva' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Acciones -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="areas__header-cell areas__header-cell--actions">ACCIONES</th>
+          <td mat-cell *matCellDef="let item" class="areas__cell areas__cell--actions">
+            <div class="areas__actions-wrapper">
+              <button mat-stroked-button class="areas__action-btn areas__action-btn--edit" (click)="onEditArea(item)">
+                Editar
+              </button>
+              <button
+                mat-stroked-button
+                class="areas__action-btn"
+                [class.areas__action-btn--deactivate]="item.enabled"
+                [class.areas__action-btn--reactivate]="!item.enabled"
+                (click)="onToggleStatus(item.id)"
+              >
+                {{ item.enabled ? 'Desactivar' : 'Activar' }}
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="areas__header-row"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="areas__row"
+          [class.areas__row--inactive]="!row.enabled"
+        ></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell areas__empty-cell" [attr.colspan]="displayedColumns.length">
+            No se encontraron áreas curriculares registradas o coincidentes con la búsqueda.
+          </td>
+        </tr>
+      </table>
+    </div>
+  }
+</div>

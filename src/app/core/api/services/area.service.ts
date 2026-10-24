@@ -5,6 +5,13 @@ import { API_ENDPOINTS } from '../endpoints';
 import { ApiResponse } from '../models/interfaces/api-response.interface';
 import { Area } from '../models/interfaces/area.interface';
 
+/**
+ * ============================================================================
+ * AreaService (Core API Service)
+ * ============================================================================
+ * Servicio HTTP para la gestión de Áreas Curriculares (Colección `areas`).
+ * ============================================================================
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -13,8 +20,7 @@ export class AreaService {
   private readonly endpoint = API_ENDPOINTS.areas;
 
   /**
-   * 1. Listar todas las áreas curriculares (Promesa con async / await)
-   * GET /api/areas (areaRoutes.get('/', AreaController.getAreas))
+   * Listar todas las áreas curriculares
    */
   public async getAreas(): Promise<Area[]> {
     const response = await firstValueFrom(
@@ -24,8 +30,7 @@ export class AreaService {
   }
 
   /**
-   * 2. Obtener área curricular por ID o CODE (Promesa con async / await)
-   * GET /api/areas/:id
+   * Obtener área curricular por ID o CODE
    */
   public async getAreaById(id: string): Promise<Area> {
     const response = await firstValueFrom(
@@ -33,5 +38,24 @@ export class AreaService {
     );
     return response.data;
   }
-}
 
+  /**
+   * Registrar una nueva área curricular
+   */
+  public async createArea(payload: Partial<Area>): Promise<Area> {
+    const response = await firstValueFrom(
+      this.http.post<ApiResponse<Area>>(this.endpoint, payload)
+    );
+    return response.data;
+  }
+
+  /**
+   * Actualizar área curricular por ID
+   */
+  public async updateArea(id: string, payload: Partial<Area>): Promise<Area> {
+    const response = await firstValueFrom(
+      this.http.put<ApiResponse<Area>>(`${this.endpoint}/${id}`, payload)
+    );
+    return response.data;
+  }
+}

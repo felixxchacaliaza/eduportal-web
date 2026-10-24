@@ -1,0 +1,197 @@
+// ============================================================================
+// Areas Container Styles (BEM Methodology)
+// ============================================================================
+.areas {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background-color: #ffffff;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+    &-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      flex: 1;
+    }
+  }
+
+  &__field {
+    min-width: 200px;
+    margin-bottom: -1.25em;
+
+    &--search {
+      flex: 1;
+      min-width: 260px;
+    }
+  }
+
+  &__create-btn {
+    height: 48px;
+    padding: 0 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    gap: 1rem;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+
+    p {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.875rem;
+    }
+  }
+
+  &__table-container {
+    width: 100%;
+    border-radius: 12px;
+    overflow-x: auto;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 24px;
+  }
+
+  &__table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background: transparent;
+  }
+
+  &__header-row {
+    background-color: #f8fafc;
+    height: 52px;
+  }
+
+  &__header-cell {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.05em;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+
+    &--code { width: 15%; }
+    &--name { width: 30%; }
+    &--desc { width: 30%; }
+    &--status { width: 12%; }
+    &--actions { width: 13%; text-align: right; }
+  }
+
+  &__row {
+    height: 56px;
+    transition: background-color 0.15s ease;
+    &:hover { background-color: #f8fafc; }
+    &--inactive { opacity: 0.6; background-color: #fcfcfc; }
+  }
+
+  &__cell {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    color: #1e293b;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+
+    &--actions { text-align: right; }
+  }
+
+  &__code-badge {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+  }
+
+  &__name-title {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  &__desc-text {
+    color: #64748b;
+    font-size: 0.8125rem;
+  }
+
+  &__status-badge {
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    &--active { background: #dcfce7; color: #15803d; }
+    &--inactive { background: #fef3c7; color: #b45309; }
+  }
+
+  &__actions-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+
+  &__action-btn {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 10px;
+    border-radius: 6px;
+
+    &--edit {
+      color: #334155;
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    &--deactivate {
+      color: #e11d48;
+      background: #fff1f2;
+      border-color: #fecdd3;
+    }
+
+    &--reactivate {
+      color: #15803d;
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+  }
+
+  &__empty-cell {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+    font-size: 0.875rem;
+  }
+}
