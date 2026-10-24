@@ -1,0 +1,133 @@
+<div class="grades-sections-save-dialog">
+  <!-- Barra de progreso superior al guardar -->
+  @if (presenter.isSaving() || presenter.isLoadingCatalog()) {
+    <mat-progress-bar mode="indeterminate" class="grades-sections-save-dialog__progress" />
+  }
+
+  <!-- Cabecera del diálogo centrada -->
+  <div class="grades-sections-save-dialog__header">
+    <div class="grades-sections-save-dialog__icon-wrapper">
+      <mat-icon>{{ presenter.data.mode === 'create' ? 'add_business' : 'edit' }}</mat-icon>
+    </div>
+    <div class="grades-sections-save-dialog__titles">
+      <h2 mat-dialog-title class="grades-sections-save-dialog__title">
+        {{ presenter.data.mode === 'create' ? 'Aperturar Nueva Sección' : 'Editar Sección' }}
+      </h2>
+      <p class="grades-sections-save-dialog__subtitle">
+        Define el grado, sección, turno y aula física con su aforo normado.
+      </p>
+    </div>
+    <button
+      mat-icon-button
+      type="button"
+      class="grades-sections-save-dialog__close-btn"
+      (click)="presenter.close()"
+      [disabled]="presenter.isSaving()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Banner de error si falla la API -->
+  @if (presenter.errorMessage(); as error) {
+    <div class="grades-sections-save-dialog__error-banner">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error }}</span>
+    </div>
+  }
+
+  <!-- Formulario -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-dialog-content class="grades-sections-save-dialog__content">
+      <div class="grades-sections-save-dialog__form-grid">
+        <!-- Grado -->
+        <mat-form-field appearance="outline">
+          <mat-label>Grado Escolar</mat-label>
+          <mat-icon matPrefix>school</mat-icon>
+          <mat-select formControlName="grade">
+            @for (grade of presenter.grades(); track grade.id) {
+              <mat-option [value]="grade.id">{{ grade.description || (grade.name + '° Secundaria') }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('grade')?.hasError('required') && form.get('grade')?.touched) {
+            <mat-error>El grado es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Sección -->
+        <mat-form-field appearance="outline">
+          <mat-label>Sección</mat-label>
+          <mat-icon matPrefix>class</mat-icon>
+          <mat-select formControlName="section">
+            @for (section of presenter.sections(); track section.id) {
+              <mat-option [value]="section.id">{{ section.name }}</mat-option>
+            }
+          </mat-select>
+          @if (form.get('section')?.hasError('required') && form.get('section')?.touched) {
+            <mat-error>La sección es obligatoria</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Turno -->
+        <mat-form-field appearance="outline">
+          <mat-label>Turno</mat-label>
+          <mat-icon matPrefix>schedule</mat-icon>
+          <mat-select formControlName="shift">
+            @for (shift of presenter.shifts(); track shift) {
+              <mat-option [value]="shift">{{ shift }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Aula Física -->
+        <mat-form-field appearance="outline">
+          <mat-label>Aula Física</mat-label>
+          <mat-icon matPrefix>meeting_room</mat-icon>
+          <mat-select formControlName="classroom">
+            @for (classroom of presenter.availableClassrooms(); track classroom.id) {
+              <mat-option [value]="classroom.id">
+                {{ classroom.name }} (Capacidad: {{ classroom.capacity }} alumnos)
+              </mat-option>
+            }
+          </mat-select>
+          @if (form.get('classroom')?.hasError('required') && form.get('classroom')?.touched) {
+            <mat-error>El aula física es obligatoria</mat-error>
+          }
+          @if (presenter.availableClassrooms().length === 0) {
+            <mat-hint class="grades-sections-save-dialog__empty-classrooms-hint">
+              No hay aulas físicas disponibles en el turno {{ form.get('shift')?.value }}.
+            </mat-hint>
+          }
+        </mat-form-field>
+
+        <!-- Aforo Máximo -->
+        <mat-form-field appearance="outline" class="grades-sections-save-dialog__full-row">
+          <mat-label>Aforo Máximo de Estudiantes (Capacidad del Aula)</mat-label>
+          <mat-icon matPrefix>groups</mat-icon>
+          <input matInput type="number" formControlName="maxCapacity" readonly />
+          <mat-hint>Aforo fijado por la capacidad física del aula seleccionada.</mat-hint>
+        </mat-form-field>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="grades-sections-save-dialog__actions">
+      <button
+        mat-button
+        type="button"
+        (click)="presenter.close()"
+        [disabled]="presenter.isSaving()"
+      >
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="presenter.isSaving() || presenter.isLoadingCatalog()"
+      >
+        <mat-icon>{{ presenter.data.mode === 'create' ? 'add' : 'check' }}</mat-icon>
+        {{ presenter.data.mode === 'create' ? 'Aperturar Sección' : 'Guardar Cambios' }}
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>

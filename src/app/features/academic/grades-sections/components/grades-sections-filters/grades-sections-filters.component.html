@@ -1,0 +1,48 @@
+<div class="grades-sections-filters">
+  <!-- Contenedor de controles de filtrado -->
+  <div class="grades-sections-filters__controls">
+    <!-- 1. Filtrar por Grado -->
+    <mat-form-field appearance="outline" class="grades-sections-filters__field">
+      <mat-label>Filtrar por Grado</mat-label>
+      <mat-icon matPrefix>filter_list</mat-icon>
+      <mat-select [ngModel]="filterState().gradeId" (ngModelChange)="onGradeChange($event)">
+        <mat-option value="ALL">Todos los Grados</mat-option>
+        @for (grade of grades(); track grade.id) {
+          <mat-option [value]="grade.id">{{ grade.description || (grade.name + '° Secundaria') }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- 2. Estado de Sección -->
+    <mat-form-field appearance="outline" class="grades-sections-filters__field">
+      <mat-label>Estado de Sección</mat-label>
+      <mat-icon matPrefix>toggle_on</mat-icon>
+      <mat-select [ngModel]="filterState().status" (ngModelChange)="onStatusChange($event)">
+        <mat-option value="ALL">Todos los Estados</mat-option>
+        <mat-option value="ACTIVE">Solo Activas</mat-option>
+        <mat-option value="INACTIVE">Solo Desactivas</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- 3. Buscador por Aula o Sección -->
+    <mat-form-field appearance="outline" class="grades-sections-filters__field grades-sections-filters__field--search">
+      <mat-label>Buscar por Aula o Sección...</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        type="text"
+        placeholder="Ej. Aula 101, Sección A..."
+        [ngModel]="filterState().search"
+        (ngModelChange)="onSearchChange($event)"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- Botón de apertura / registro -->
+  <div class="grades-sections-filters__action">
+    <button mat-flat-button color="primary" class="grades-sections-filters__create-btn" (click)="create.emit()">
+      <mat-icon>add</mat-icon>
+      Aperturar Nueva Sección
+    </button>
+  </div>
+</div>

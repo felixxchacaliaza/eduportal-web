@@ -7,8 +7,8 @@ export const API_ENDPOINTS = {
   grades: `${environment.apiUrl}/grades`,
   sections: `${environment.apiUrl}/sections`,
   classrooms: `${environment.apiUrl}/classrooms`,
+  rules: `${environment.apiUrl}/rules`,
   academicYears: `${environment.apiUrl}/academic-years`,
   gradeSections: `${environment.apiUrl}/grade-sections`,
   gradeSubjects: `${environment.apiUrl}/grade-subjects`,
 } as const;
-

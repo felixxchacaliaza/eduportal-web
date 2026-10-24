@@ -1,0 +1,142 @@
+<div class="grades-sections-table mat-elevation-z1">
+  <table mat-table [dataSource]="sections()" class="grades-sections-table__table">
+
+    <!-- 1. Columna: Grado Escolar -->
+    <ng-container matColumnDef="grade">
+      <th mat-header-cell *matHeaderCellDef class="grades-sections-table__header-cell grades-sections-table__header-cell--grade">
+        GRADO
+      </th>
+      <td mat-cell *matCellDef="let item" class="grades-sections-table__cell grades-sections-table__cell--grade">
+        <strong class="grades-sections-table__grade-title">{{ item.gradeName }}</strong>
+      </td>
+    </ng-container>
+
+    <!-- 2. Columna: Sección -->
+    <ng-container matColumnDef="section">
+      <th mat-header-cell *matHeaderCellDef class="grades-sections-table__header-cell grades-sections-table__header-cell--section">
+        SECCIÓN
+      </th>
+      <td mat-cell *matCellDef="let item" class="grades-sections-table__cell grades-sections-table__cell--section">
+        <span class="grades-sections-table__section-badge">
+          {{ item.sectionName }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- 3. Columna: Aula Física -->
+    <ng-container matColumnDef="classroom">
+      <th mat-header-cell *matHeaderCellDef class="grades-sections-table__header-cell grades-sections-table__header-cell--classroom">
+        AULA FÍSICA
+      </th>
+      <td mat-cell *matCellDef="let item" class="grades-sections-table__cell grades-sections-table__cell--classroom">
+        <div class="grades-sections-table__classroom">
+          <mat-icon class="grades-sections-table__classroom-icon">meeting_room</mat-icon>
+          <span>{{ item.classroomName }}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- 4. Columna: Turno -->
+    <ng-container matColumnDef="shift">
+      <th mat-header-cell *matHeaderCellDef class="grades-sections-table__header-cell grades-sections-table__header-cell--shift">
+        TURNO
+      </th>
+      <td mat-cell *matCellDef="let item" class="grades-sections-table__cell grades-sections-table__cell--shift">
+        <span
+          class="grades-sections-table__shift-tag"
+          [class.grades-sections-table__shift-tag--morning]="item.shift === 'MAÑANA'"
+          [class.grades-sections-table__shift-tag--afternoon]="item.shift === 'TARDE'"
+        >
+          {{ item.shift }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- 5. Columna: Aforo Máximo -->
+    <ng-container matColumnDef="capacity">
+      <th mat-header-cell *matHeaderCellDef class="grades-sections-table__header-cell grades-sections-table__header-cell--capacity">
+        AFORO MÁXIMO
+      </th>
+      <td mat-cell *matCellDef="let item" class="grades-sections-table__cell grades-sections-table__cell--capacity">
+        <span class="grades-sections-table__capacity-tag">
+          <strong>{{ item.maxCapacity }}</strong> estudiantes
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- 6. Columna: Estado Operativo -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="grades-sections-table__header-cell grades-sections-table__header-cell--status">
+        ESTADO OPERATIVO
+      </th>
+      <td mat-cell *matCellDef="let item" class="grades-sections-table__cell grades-sections-table__cell--status">
+        @if (item.status === 'Activa') {
+          <span class="grades-sections-table__status-badge grades-sections-table__status-badge--active">
+            Activa
+          </span>
+        } @else {
+          <span class="grades-sections-table__status-badge grades-sections-table__status-badge--inactive">
+            Desactiva
+          </span>
+        }
+      </td>
+    </ng-container>
+
+    <!-- 7. Columna: Acciones de Gestión -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="grades-sections-table__header-cell grades-sections-table__header-cell--actions">
+        ACCIONES
+      </th>
+      <td mat-cell *matCellDef="let item" class="grades-sections-table__cell grades-sections-table__cell--actions">
+        <div class="grades-sections-table__actions">
+          <!-- Botón Editar -->
+          <button
+            mat-stroked-button
+            class="grades-sections-table__action-btn grades-sections-table__action-btn--edit"
+            (click)="edit.emit(item)"
+            title="Editar parámetros del aula y sección"
+          >
+            Editar
+          </button>
+
+          <!-- Alternar Estado -->
+          @if (item.status === 'Activa') {
+            <button
+              mat-stroked-button
+              class="grades-sections-table__action-btn grades-sections-table__action-btn--deactivate"
+              (click)="toggleStatus.emit(item.id)"
+              title="Desactivar sección"
+            >
+              Desactivar
+            </button>
+          } @else {
+            <button
+              mat-flat-button
+              class="grades-sections-table__action-btn grades-sections-table__action-btn--reactivate"
+              (click)="toggleStatus.emit(item.id)"
+              title="Reactivar sección"
+            >
+              Activar
+            </button>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Headers & Rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="grades-sections-table__header-row"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="grades-sections-table__row"
+      [class.grades-sections-table__row--inactive]="row.status !== 'Activa'"
+    ></tr>
+
+    <!-- No Data Row -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell grades-sections-table__empty-cell" [attr.colspan]="displayedColumns.length">
+        No se encontraron secciones registradas o coincidentes con los filtros aplicados.
+      </td>
+    </tr>
+  </table>
+</div>
