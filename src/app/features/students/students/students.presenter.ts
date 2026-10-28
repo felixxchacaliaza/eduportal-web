@@ -1,6 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { InfoCardData } from '../../../shared/components/info-card/info-card.component';
 import { StudentService } from './services/student.service';
 import { IStudent } from './models';
 import { StudentSaveDialogComponent } from './dialogs/student-save-dialog/student-save-dialog.component';
@@ -13,7 +14,7 @@ import { EnrollmentSaveDialogData } from './dialogs/enrollment-save-dialog/form/
  * StudentsPresenter
  * ============================================================================
  * Presentador de vista (View Presenter) para el Padrón de Estudiantes.
- * Maneja el estado reactivo con Signals, filtrado y coordinación de diálogos.
+ * Maneja el estado reactivo con Signals, filtrado, KPIs y coordinación de diálogos.
  * Regla: 1 sola clase por archivo.
  * ============================================================================
  */
@@ -23,23 +24,31 @@ export class StudentsPresenter {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
 
-  public readonly students = signal<IStudent[]>([]);
+  public readonly students = signal<readonly IStudent[]>([]);
   public readonly searchTerm = signal<string>('');
+  public readonly statusFilter = signal<'ALL' | 'ACTIVE' | 'INACTIVE'>('ALL');
   public readonly isLoading = signal<boolean>(false);
   public readonly error = signal<string | null>(null);
 
   /**
-   * Listado derivado filtrado por DNI, nombres, apellidos o código.
+   * Listado derivado filtrado por DNI, nombres, apellidos, código y estado.
    */
-  public readonly filteredStudents = computed(() => {
+  public readonly filteredStudents = computed<readonly IStudent[]>(() => {
     const list = this.students();
     const query = this.searchTerm().trim().toLowerCase();
-
-    if (!query) {
-      return list;
-    }
+    const status = this.statusFilter();
 
     return list.filter(item => {
+      // Filtro por estado
+      const matchStatus =
+        status === 'ALL' ||
+        (status === 'ACTIVE' && item.enabled) ||
+        (status === 'INACTIVE' && !item.enabled);
+
+      if (!matchStatus) return false;
+
+      if (!query) return true;
+
       const dni = item.person?.dni?.toLowerCase() || '';
       const firstName = item.person?.firstName?.toLowerCase() || '';
       const lastName = item.person?.lastName?.toLowerCase() || '';
@@ -61,6 +70,46 @@ export class StudentsPresenter {
   public readonly activeCount = computed(
     () => this.students().filter(s => s.enabled).length
   );
+
+  public readonly inactiveCount = computed(
+    () => this.students().filter(s => !s.enabled).length
+  );
+
+  /**
+   * Tarjetas métricas estadísticas oficiales del Padrón Escolar.
+   */
+  public readonly cards = computed<readonly InfoCardData[]>(() => {
+    const total = this.totalCount();
+    const active = this.activeCount();
+    const inactive = this.inactiveCount();
+
+    return [
+      {
+        label: 'Padrón Total',
+        value: total,
+        subtitle: 'Estudiantes Registrados',
+        color: 'blue',
+      },
+      {
+        label: 'Estudiantes Activos',
+        value: active,
+        subtitle: 'Habilitados en el sistema',
+        color: 'green',
+      },
+      {
+        label: 'Estudiantes Inactivos',
+        value: inactive,
+        subtitle: 'Dados de baja o suspendidos',
+        color: 'amber',
+      },
+      {
+        label: 'Año Lectivo',
+        value: '2026',
+        subtitle: 'Periodo Escolar Vigente',
+        color: 'blue',
+      },
+    ];
+  });
 
   /**
    * Consulta el padrón de estudiantes desde el API.
@@ -90,18 +139,25 @@ export class StudentsPresenter {
   }
 
   /**
+   * Actualiza el filtro de estado.
+   */
+  public setStatusFilter(status: 'ALL' | 'ACTIVE' | 'INACTIVE'): void {
+    this.statusFilter.set(status);
+  }
+
+  /**
    * Abre el modal de creación de un nuevo alumno.
    */
   public openCreateDialog(): void {
     const dialogData: StudentSaveDialogData = {
-      mode: 'create'
+      mode: 'create',
     };
 
     const dialogRef = this.dialog.open(StudentSaveDialogComponent, {
       width: '750px',
       maxWidth: '95vw',
       disableClose: true,
-      data: dialogData
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe((createdStudent?: IStudent) => {
@@ -118,14 +174,14 @@ export class StudentsPresenter {
   public openEditDialog(student: IStudent): void {
     const dialogData: StudentSaveDialogData = {
       mode: 'edit',
-      student
+      student,
     };
 
     const dialogRef = this.dialog.open(StudentSaveDialogComponent, {
       width: '750px',
       maxWidth: '95vw',
       disableClose: true,
-      data: dialogData
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe((updatedStudent?: IStudent) => {
@@ -141,14 +197,14 @@ export class StudentsPresenter {
    */
   public openEnrollDialog(student: IStudent): void {
     const dialogData: EnrollmentSaveDialogData = {
-      student
+      student,
     };
 
     const dialogRef = this.dialog.open(EnrollmentSaveDialogComponent, {
       width: '620px',
       maxWidth: '95vw',
       disableClose: true,
-      data: dialogData
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe(enrolled => {

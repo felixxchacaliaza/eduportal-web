@@ -28,8 +28,8 @@ export class SidebarComponent {
   // Signal input reactivo recibido desde el componente padre:
   public readonly isCollapsed = input<boolean>(false);
 
-  // Control de grupos desplegados (inicia abierto 'Académico'):
-  public readonly openGroups = signal<Set<string>>(new Set(['Académico']));
+  // Control de grupos desplegados (inicia abierto 'Académico' y 'Estudiantes'):
+  public readonly openGroups = signal<Set<string>>(new Set(['Académico', 'Estudiantes']));
 
   public toggleGroup(label: string): void {
     const current = new Set(this.openGroups());
@@ -48,7 +48,13 @@ export class SidebarComponent {
   // Lista tipada de navegación escolar:
   public readonly navItems: readonly NavigationItem[] = [
     { path: '/dashboard', label: 'Panel de Control', icon: 'dashboard' },
-    { path: '/alumnos', label: 'Padrón de Alumnos', icon: 'people', badge: '100' },
+    {
+      label: 'Estudiantes',
+      icon: 'people',
+      children: [
+        { path: '/alumnos', label: 'Padrón de Alumnos', icon: 'badge' },
+      ]
+    },
     {
       label: 'Académico',
       icon: 'school',

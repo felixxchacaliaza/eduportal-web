@@ -1,10 +1,10 @@
-import { FormHtml } from '../../../../../../shared/interfaces/form-html';
+import { FormHtml } from '../../../../../../../shared/interfaces/form-html';
 
 /**
  * ============================================================================
  * GUARDIAN_FORM_MODEL_CONSTANT
  * ============================================================================
- * Constante inmutable que encapsula la metadata visual para los campos de apoderados.
+ * Constante inmutable de metadata visual para cada fila de apoderado.
  * ============================================================================
  */
 export const GUARDIAN_FORM_MODEL_CONSTANT: Record<string, FormHtml> = Object.freeze({
@@ -18,41 +18,42 @@ export const GUARDIAN_FORM_MODEL_CONSTANT: Record<string, FormHtml> = Object.fre
   }),
   firstName: Object.freeze({
     formControlName: 'firstName',
-    label: 'Nombres',
-    placeHolder: 'Nombres del apoderado',
+    label: 'Nombres del Apoderado',
+    placeHolder: 'Nombres completos',
     type: 'text',
     iconLeft: 'person',
     validators: { minLength: 2, maxLength: 80 }
   }),
   lastName: Object.freeze({
     formControlName: 'lastName',
-    label: 'Apellidos',
-    placeHolder: 'Apellidos del apoderado',
+    label: 'Apellidos del Apoderado',
+    placeHolder: 'Apellidos completos',
     type: 'text',
     iconLeft: 'badge',
     validators: { minLength: 2, maxLength: 80 }
   }),
   relationship: Object.freeze({
     formControlName: 'relationship',
-    label: 'Parentesco Legal',
+    label: 'Parentesco',
     iconLeft: 'family_restroom'
   }),
   isPrimary: Object.freeze({
     formControlName: 'isPrimary',
-    label: 'Contacto Principal (Prioridad de Notificación)'
+    label: 'Contacto Principal'
   }),
   phone: Object.freeze({
     formControlName: 'phone',
-    label: 'Celular de Contacto',
-    placeHolder: '9 dígitos (ej: 998877665)',
-    type: 'tel',
-    iconLeft: 'call'
+    label: 'Celular del Apoderado',
+    placeHolder: '9 dígitos (opcional)',
+    type: 'text',
+    iconLeft: 'phone',
+    validators: { minLength: 9, maxLength: 9 }
   }),
   email: Object.freeze({
     formControlName: 'email',
-    label: 'Correo Electrónico',
+    label: 'Correo de Contacto',
     placeHolder: 'apoderado@ejemplo.com',
     type: 'email',
-    iconLeft: 'alternate_email'
+    iconLeft: 'mail'
   })
 });

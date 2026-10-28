@@ -1,36 +1,33 @@
 import { Validators } from '@angular/forms';
-import { FormModel } from '../../../../../../shared/class/form-model';
+import { FormModel } from '../../../../../../../shared/class/form-model';
 
 /**
  * ============================================================================
  * GuardianFormModel
  * ============================================================================
- * Modelo reactivo de controles para cada fila de apoderado dentro del FormArray.
- *
- * @remarks
- * Regla de Oro: 1 sola clase por archivo.
- * Extiende de {@link FormModel} para heredar `getErrorMessage(control, form)`.
+ * Modelo reactivo de controles para cada apoderado dentro del FormArray.
+ * Regla: 1 sola clase por archivo.
  * ============================================================================
  */
 export class GuardianFormModel extends FormModel {
-  /** DNI civil del apoderado: 8 dígitos */
+  /** DNI del apoderado o tutor legal */
   dni = ['', [Validators.required, Validators.pattern(/^\d{8}$/)]];
 
-  /** Nombres de pila */
+  /** Nombres de pila del apoderado */
   firstName = ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]];
 
-  /** Apellidos */
+  /** Apellidos del apoderado */
   lastName = ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]];
 
-  /** Parentesco o relación jurídica */
+  /** Parentesco formal con el estudiante */
   relationship = ['PADRE', [Validators.required]];
 
-  /** Contacto principal del alumno */
+  /** Bandera de contacto principal de emergencia y citaciones */
   isPrimary = [false];
 
-  /** Celular de emergencia */
+  /** Celular de contacto directo */
   phone = ['', [Validators.pattern(/^\d{9}$/)]];
 
-  /** Correo de contacto del apoderado */
+  /** Correo electrónico para notificaciones */
   email = ['', [Validators.email]];
 }

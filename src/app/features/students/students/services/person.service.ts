@@ -1,15 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { API_ENDPOINTS } from '../../../core/api/endpoints';
-import { ApiResponse } from '../../../core/api/models/interfaces/api-response.interface';
+import { API_ENDPOINTS } from '../../../../core/api/endpoints';
+import { ApiResponse } from '../../../../core/api/models/interfaces/api-response.interface';
 import { IPerson, ICheckDniResponse } from '../models';
 
 /**
  * ============================================================================
  * PersonService
  * ============================================================================
- * Servicio HTTP para la consulta y validación del Padrón Civil Universal.
+ * Servicio HTTP para la consulta civil de personas y validación de DNI.
  * Regla de Arquitectura: 1 sola clase por archivo.
  * ============================================================================
  */
@@ -21,34 +21,32 @@ export class PersonService {
   private readonly endpoint = API_ENDPOINTS.persons;
 
   /**
-   * Valida en tiempo real si un DNI ya existe en el padrón civil o es estudiante.
+   * Consulta si un DNI ya existe en el padrón civil y si ya es estudiante.
    */
   public async checkDni(dni: string): Promise<ICheckDniResponse> {
-    const cleanDni = dni.trim();
-    if (!/^\d{8}$/.test(cleanDni)) {
-      return { exists: false, isStudent: false };
-    }
-
     try {
       const response = await firstValueFrom(
-        this.http.get<ApiResponse<ICheckDniResponse>>(`${this.endpoint}/check-dni/${cleanDni}`)
+        this.http.get<ApiResponse<ICheckDniResponse>>(`${this.endpoint}/check-dni/${dni.trim()}`)
       );
-      return response.data || { exists: false, isStudent: false };
+      return response.data;
     } catch {
-      return { exists: false, isStudent: false };
+      return {
+        exists: false,
+        isStudent: false
+      };
     }
   }
 
   /**
-   * Busca los datos de una persona por su DNI exacto.
+   * Obtiene los datos civiles de una persona por su número de DNI.
    */
   public async getPersonByDni(dni: string): Promise<IPerson | null> {
     try {
       const response = await firstValueFrom(
-        this.http.get<ApiResponse<IPerson[]>>(`${this.endpoint}?search=${dni.trim()}`)
+        this.http.get<ApiResponse<IPerson[]>>(`${this.endpoint}?dni=${dni.trim()}`)
       );
       const list = response.data || [];
-      return list.find(p => p.dni === dni.trim()) || null;
+      return list.find((p: IPerson) => p.dni === dni.trim()) || null;
     } catch {
       return null;
     }

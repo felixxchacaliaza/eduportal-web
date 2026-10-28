@@ -1,11 +1,10 @@
-import { FormHtml } from '../../../../../../shared/interfaces/form-html';
+import { FormHtml } from '../../../../../../../shared/interfaces/form-html';
 
 /**
  * ============================================================================
  * STUDENT_SAVE_DIALOG_FORM_MODEL_CONSTANT
  * ============================================================================
- * Constante inmutable que encapsula la metadata visual de los campos del alumno.
- * Desacopla completamente etiquetas, placeholders e iconos del HTML.
+ * Constante inmutable de metadata visual para el formulario de estudiante.
  * ============================================================================
  */
 export const STUDENT_SAVE_DIALOG_FORM_MODEL_CONSTANT: Record<string, FormHtml> = Object.freeze({
@@ -47,21 +46,22 @@ export const STUDENT_SAVE_DIALOG_FORM_MODEL_CONSTANT: Record<string, FormHtml> =
   }),
   phone: Object.freeze({
     formControlName: 'phone',
-    label: 'Teléfono / Celular (Opcional)',
-    placeHolder: 'Ej: 987654321',
-    type: 'tel',
-    iconLeft: 'phone'
+    label: 'Teléfono Móvil',
+    placeHolder: '9 dígitos (opcional)',
+    type: 'text',
+    iconLeft: 'phone',
+    validators: { minLength: 9, maxLength: 9 }
   }),
   address: Object.freeze({
     formControlName: 'address',
-    label: 'Dirección Domiciliaria',
-    placeHolder: 'Av. Las Palmeras 123, Lima',
+    label: 'Dirección de Domicilio',
+    placeHolder: 'Av. / Jr. / Calle...',
     type: 'text',
     iconLeft: 'home'
   }),
   entryYear: Object.freeze({
     formControlName: 'entryYear',
-    label: 'Año de Ingreso Escolar',
+    label: 'Año de Ingreso',
     placeHolder: '2026',
     type: 'text',
     iconLeft: 'calendar_today',

@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { API_ENDPOINTS } from '../../../core/api/endpoints';
-import { ApiResponse } from '../../../core/api/models/interfaces/api-response.interface';
+import { API_ENDPOINTS } from '../../../../core/api/endpoints';
+import { ApiResponse } from '../../../../core/api/models/interfaces/api-response.interface';
 import {
   IEnrollment,
   IEnrollStudentRequestDto,
@@ -57,7 +57,7 @@ export class EnrollmentService {
     const rawList = response.data || [];
 
     // Calcular vacantes disponibles en tiempo real (maxCapacity - enrolledStudents)
-    return rawList.map(item => ({
+    return rawList.map((item: IGradeSectionSummary) => ({
       ...item,
       availableVacancies: Math.max(0, (item.maxCapacity || 0) - (item.enrolledStudents || 0))
     }));

@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { API_ENDPOINTS } from '../../../core/api/endpoints';
-import { ApiResponse } from '../../../core/api/models/interfaces/api-response.interface';
+import { API_ENDPOINTS } from '../../../../core/api/endpoints';
+import { ApiResponse } from '../../../../core/api/models/interfaces/api-response.interface';
 import {
   IStudent,
   ICreateStudentRequestDto,
@@ -13,7 +13,7 @@ import {
  * ============================================================================
  * StudentService
  * ============================================================================
- * Servicio HTTP para la administración del padrón escolar de estudiantes.
+ * Servicio HTTP para la gestión integral del padrón de alumnos.
  * Regla de Arquitectura: 1 sola clase por archivo.
  * ============================================================================
  */
@@ -25,14 +25,13 @@ export class StudentService {
   private readonly endpoint = API_ENDPOINTS.students;
 
   /**
-   * Obtiene la lista de estudiantes registrados (soporta filtro de búsqueda).
+   * Obtiene la lista completa de estudiantes (con apoderados y personas pobladas).
    */
-  public async getStudents(search?: string): Promise<IStudent[]> {
+  public async getStudents(status?: 'ACTIVE' | 'INACTIVE'): Promise<IStudent[]> {
     let params = new HttpParams();
-    if (search && search.trim()) {
-      params = params.set('search', search.trim());
+    if (status) {
+      params = params.set('status', status);
     }
-
     const response = await firstValueFrom(
       this.http.get<ApiResponse<IStudent[]>>(this.endpoint, { params })
     );
@@ -40,7 +39,7 @@ export class StudentService {
   }
 
   /**
-   * Consulta el expediente completo de un alumno por ID.
+   * Obtiene el detalle de un estudiante por su ObjectId.
    */
   public async getStudentById(id: string): Promise<IStudent> {
     const response = await firstValueFrom(
@@ -50,7 +49,7 @@ export class StudentService {
   }
 
   /**
-   * Registra un nuevo estudiante junto a sus apoderados.
+   * Registra un nuevo alumno junto con su vinculación a persona y apoderados.
    */
   public async createStudent(payload: ICreateStudentRequestDto): Promise<IStudent> {
     const response = await firstValueFrom(
@@ -60,7 +59,7 @@ export class StudentService {
   }
 
   /**
-   * Actualiza los datos de un estudiante o sus apoderados.
+   * Actualiza los datos de un alumno existente.
    */
   public async updateStudent(id: string, payload: IUpdateStudentRequestDto): Promise<IStudent> {
     const response = await firstValueFrom(
@@ -70,11 +69,9 @@ export class StudentService {
   }
 
   /**
-   * Realiza la baja lógica de un estudiante.
+   * Ejecuta la baja lógica de un alumno.
    */
   public async deleteStudent(id: string): Promise<void> {
-    await firstValueFrom(
-      this.http.delete<ApiResponse<void>>(`${this.endpoint}/${id}`)
-    );
+    await firstValueFrom(this.http.delete(`${this.endpoint}/${id}`));
   }
 }
