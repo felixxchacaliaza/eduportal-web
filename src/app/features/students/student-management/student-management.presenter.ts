@@ -13,15 +13,15 @@ import { SectionChangeDialogData } from './dialogs/section-change-dialog/form/mo
 
 /**
  * ============================================================================
- * StudentsPresenter
+ * StudentManagementPresenter
  * ============================================================================
- * Presentador de vista (View Presenter) para el Padrón de Estudiantes.
+ * Presentador de vista (View Presenter) para Gestión de Alumnos / Padrón de Estudiantes.
  * Maneja el estado reactivo con Signals, filtrado, KPIs y coordinación de diálogos.
  * Regla: 1 sola clase por archivo.
  * ============================================================================
  */
 @Injectable()
-export class StudentsPresenter {
+export class StudentManagementPresenter {
   private readonly studentService = inject(StudentService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);

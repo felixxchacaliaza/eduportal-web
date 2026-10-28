@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { StudentsPresenter } from './students.presenter';
+import { StudentManagementPresenter } from './student-management.presenter';
 import { StudentService } from './services/student.service';
 import { IStudent } from './models';
 
-describe('StudentsPresenter', () => {
-  let presenter: StudentsPresenter;
+describe('StudentManagementPresenter', () => {
+  let presenter: StudentManagementPresenter;
   let mockStudentService: jasmine.SpyObj<StudentService>;
   let mockDialog: jasmine.SpyObj<MatDialog>;
   let mockSnackBar: jasmine.SpyObj<MatSnackBar>;
@@ -66,14 +66,14 @@ describe('StudentsPresenter', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        StudentsPresenter,
+        StudentManagementPresenter,
         { provide: StudentService, useValue: mockStudentService },
         { provide: MatDialog, useValue: mockDialog },
         { provide: MatSnackBar, useValue: mockSnackBar }
       ]
     });
 
-    presenter = TestBed.inject(StudentsPresenter);
+    presenter = TestBed.inject(StudentManagementPresenter);
   });
 
   it('should initialize with empty state and zero counts', () => {

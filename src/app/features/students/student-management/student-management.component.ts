@@ -9,19 +9,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { InfoCardComponent } from '../../../shared/components/info-card/info-card.component';
 import { StudentListComponent } from './components/student-list/student-list.component';
-import { StudentsPresenter } from './students.presenter';
+import { StudentManagementPresenter } from './student-management.presenter';
 
 /**
  * ============================================================================
- * StudentsComponent (Smart Component / Container)
+ * StudentManagementComponent (Smart Component / Container)
  * ============================================================================
- * Contenedor orquestador del Padrón de Estudiantes y Matrícula Anual.
+ * Contenedor orquestador de Gestión de Alumnos / Padrón de Estudiantes y Matrícula.
  * Sigue la misma estructura y diseño de ancho/alto que Grados y Secciones.
  * Regla: 1 sola clase por archivo.
  * ============================================================================
  */
 @Component({
-  selector: 'app-students',
+  selector: 'app-student-management',
   standalone: true,
   imports: [
     CommonModule,
@@ -35,13 +35,13 @@ import { StudentsPresenter } from './students.presenter';
     InfoCardComponent,
     StudentListComponent,
   ],
-  providers: [StudentsPresenter],
-  templateUrl: './students.component.html',
-  styleUrl: './students.component.scss',
+  providers: [StudentManagementPresenter],
+  templateUrl: './student-management.component.html',
+  styleUrl: './student-management.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StudentsComponent implements OnInit {
-  public readonly presenter = inject(StudentsPresenter);
+export class StudentManagementComponent implements OnInit {
+  public readonly presenter = inject(StudentManagementPresenter);
 
   public ngOnInit(): void {
     this.presenter.loadStudents();

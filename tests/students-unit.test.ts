@@ -1,9 +1,9 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { STUDENT_SAVE_DIALOG_FORM_MODEL_CONSTANT } from '../src/app/features/students/students/dialogs/student-save-dialog/form/models/student-save-dialog-form.model.constant';
-import { GUARDIAN_FORM_MODEL_CONSTANT } from '../src/app/features/students/students/dialogs/student-save-dialog/form/models/guardian-form.model.constant';
-import { ENROLLMENT_SAVE_DIALOG_FORM_MODEL_CONSTANT } from '../src/app/features/students/students/dialogs/enrollment-save-dialog/form/models/enrollment-save-dialog-form.model.constant';
-import { SECTION_CHANGE_DIALOG_FORM_MODEL_CONSTANT } from '../src/app/features/students/students/dialogs/section-change-dialog/form/models/section-change-dialog-form.model.constant';
+import { STUDENT_SAVE_DIALOG_FORM_MODEL_CONSTANT } from '../src/app/features/students/student-management/dialogs/student-save-dialog/form/models/student-save-dialog-form.model.constant';
+import { GUARDIAN_FORM_MODEL_CONSTANT } from '../src/app/features/students/student-management/dialogs/student-save-dialog/form/models/guardian-form.model.constant';
+import { ENROLLMENT_SAVE_DIALOG_FORM_MODEL_CONSTANT } from '../src/app/features/students/student-management/dialogs/enrollment-save-dialog/form/models/enrollment-save-dialog-form.model.constant';
+import { SECTION_CHANGE_DIALOG_FORM_MODEL_CONSTANT } from '../src/app/features/students/student-management/dialogs/section-change-dialog/form/models/section-change-dialog-form.model.constant';
 
 describe('TDD Unit Tests - Módulo Padrón de Estudiantes y Matrícula (sesion-05.0.0)', () => {
 

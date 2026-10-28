@@ -12,6 +12,8 @@ export const STUDENTS_ROUTES: Routes = [
   {
     path: 'alumnos',
     loadComponent: () =>
-      import('./students/students.component').then(m => m.StudentsComponent),
+      import('./student-management/student-management.component').then(
+        m => m.StudentManagementComponent
+      ),
   },
 ];
