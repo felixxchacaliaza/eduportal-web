@@ -3,7 +3,7 @@
     <mat-progress-bar mode="indeterminate" class="student-list__progress"></mat-progress-bar>
   }
 
-  <table mat-table [dataSource]="students()" class="student-list__table">
+  <table mat-table [dataSource]="pagedStudents()" class="student-list__table">
 
     <!-- DNI -->
     <ng-container matColumnDef="dni">
@@ -151,4 +151,17 @@
       </td>
     </tr>
   </table>
+
+  <!-- Paginador Oficial de Angular Material en Español -->
+  <mat-paginator
+    class="student-list__paginator"
+    [length]="students().length"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[5, 10, 25, 50]"
+    [pageIndex]="pageIndex()"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+    aria-label="Seleccionar página del padrón de alumnos"
+  >
+  </mat-paginator>
 </div>

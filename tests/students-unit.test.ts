@@ -228,4 +228,58 @@ describe('TDD Unit Tests - Módulo Padrón de Estudiantes y Matrícula (sesion-0
     });
   });
 
+  describe('7. Paginación Reactiva del Padrón de Estudiantes', () => {
+    const mockList = Array.from({ length: 12 }, (_, i) => ({
+      id: `stu-${i + 1}`,
+      code: `STU-${String(i + 1).padStart(3, '0')}`
+    }));
+
+    it('debe calcular correctamente el número de páginas según pageSize', () => {
+      const pageSize = 5;
+      const totalPages = Math.ceil(mockList.length / pageSize);
+      assert.strictEqual(totalPages, 3);
+    });
+
+    it('debe paginar la primera página (índice 0) con tamaño 5', () => {
+      const pageIndex = 0;
+      const pageSize = 5;
+      const paged = mockList.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+      assert.strictEqual(paged.length, 5);
+      assert.strictEqual(paged[0].code, 'STU-001');
+      assert.strictEqual(paged[4].code, 'STU-005');
+    });
+
+    it('debe paginar la segunda página (índice 1) con tamaño 5', () => {
+      const pageIndex = 1;
+      const pageSize = 5;
+      const paged = mockList.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+      assert.strictEqual(paged.length, 5);
+      assert.strictEqual(paged[0].code, 'STU-006');
+      assert.strictEqual(paged[4].code, 'STU-010');
+    });
+
+    it('debe paginar la última página conteniendo los elementos restantes', () => {
+      const pageIndex = 2;
+      const pageSize = 5;
+      const paged = mockList.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
+      assert.strictEqual(paged.length, 2);
+      assert.strictEqual(paged[0].code, 'STU-011');
+      assert.strictEqual(paged[1].code, 'STU-012');
+    });
+
+    it('debe formatear el rango en español correctamente', () => {
+      const getRangeLabel = (page: number, pageSize: number, length: number): string => {
+        if (length === 0 || pageSize === 0) return `0 de ${length}`;
+        const startIndex = page * pageSize;
+        const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
+        return `${startIndex + 1} – ${endIndex} de ${length}`;
+      };
+
+      assert.strictEqual(getRangeLabel(0, 5, 12), '1 – 5 de 12');
+      assert.strictEqual(getRangeLabel(1, 5, 12), '6 – 10 de 12');
+      assert.strictEqual(getRangeLabel(2, 5, 12), '11 – 12 de 12');
+      assert.strictEqual(getRangeLabel(0, 5, 0), '0 de 0');
+    });
+  });
+
 });

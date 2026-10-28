@@ -192,4 +192,11 @@
     margin: 0;
     font-size: 0.95rem;
   }
+
+  &__paginator {
+    border-top: 1px solid #e2e8f0;
+    background: #fafafa;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
 }
