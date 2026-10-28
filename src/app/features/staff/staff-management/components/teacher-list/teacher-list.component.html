@@ -1,0 +1,115 @@
+<div class="table-container">
+  @if (isLoading()) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  <div class="table-scroll-wrapper">
+    <table mat-table [dataSource]="pagedTeachers()" class="mat-elevation-z1">
+      <!-- Código Docente -->
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef>Código</th>
+        <td mat-cell *matCellDef="let teacher">
+          <span class="badge-code">{{ teacher.code }}</span>
+        </td>
+      </ng-container>
+
+      <!-- DNI -->
+      <ng-container matColumnDef="dni">
+        <th mat-header-cell *matHeaderCellDef>DNI</th>
+        <td mat-cell *matCellDef="let teacher">
+          <span class="dni-text">{{ teacher.person?.dni || '-' }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Nombres y Apellidos -->
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef>Profesor</th>
+        <td mat-cell *matCellDef="let teacher">
+          <div class="person-cell">
+            <span class="full-name">{{ teacher.person?.lastName }}, {{ teacher.person?.firstName }}</span>
+            <span class="email-sub">{{ teacher.person?.personalEmail }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Especialidad -->
+      <ng-container matColumnDef="specialty">
+        <th mat-header-cell *matHeaderCellDef>Especialidad</th>
+        <td mat-cell *matCellDef="let teacher">
+          <span class="badge-specialty">{{ teacher.specialty || teacher.area?.name || 'General' }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Grado Académico -->
+      <ng-container matColumnDef="academicDegree">
+        <th mat-header-cell *matHeaderCellDef>Grado Académico</th>
+        <td mat-cell *matCellDef="let teacher">
+          <span class="degree-text">{{ getDegreeLabel(teacher.academicDegree) }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Horas Contratadas -->
+      <ng-container matColumnDef="contractedHours">
+        <th mat-header-cell *matHeaderCellDef>Horas / Sem.</th>
+        <td mat-cell *matCellDef="let teacher">
+          <span class="hours-badge">{{ teacher.contractedHours || 30 }} hrs</span>
+        </td>
+      </ng-container>
+
+      <!-- Estado -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let teacher">
+          <span [class]="teacher.enabled !== false ? 'status-pill active' : 'status-pill inactive'">
+            {{ teacher.enabled !== false ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Acciones -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-header">Acciones</th>
+        <td mat-cell *matCellDef="let teacher" class="actions-cell">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="edit.emit(teacher)"
+            matTooltip="Editar docente"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [color]="teacher.enabled !== false ? 'warn' : 'accent'"
+            (click)="toggleStatus.emit(teacher)"
+            [matTooltip]="teacher.enabled !== false ? 'Dar de baja (desactivar)' : 'Reactivar docente'"
+          >
+            <mat-icon>{{ teacher.enabled !== false ? 'delete' : 'restore' }}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Fila Vacía -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell empty-cell" [attr.colspan]="displayedColumns.length">
+          <div class="empty-state">
+            <mat-icon>school</mat-icon>
+            <p>No se encontraron profesores registrados con los criterios especificados.</p>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="teachers().length"
+    [pageSize]="pageSize()"
+    [pageIndex]="pageIndex()"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>
