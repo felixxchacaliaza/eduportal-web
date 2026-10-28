@@ -30,7 +30,7 @@ export class EnrollmentSaveDialogPresenter {
     this.isLoadingSections.set(true);
     this.errorMessage.set(null);
     try {
-      const data = await this.enrollmentService.getGradeSections(academicYear);
+      const data = await this.enrollmentService.getActiveGradeSections(academicYear);
       this.sections.set(data);
       return data;
     } catch (err: any) {

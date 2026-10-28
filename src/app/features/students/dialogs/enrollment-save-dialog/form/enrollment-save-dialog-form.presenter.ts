@@ -26,13 +26,13 @@ export class EnrollmentSaveDialogFormPresenter {
   public readonly selectedSection = computed(() => {
     const id = this.selectedSectionId();
     if (!id) return null;
-    return this.availableSections().find(s => s._id === id || s.id === id) || null;
+    return this.availableSections().find(s => s.id === id) || null;
   });
 
   public readonly hasVacancies = computed(() => {
     const section = this.selectedSection();
     if (!section) return true;
-    return section.availableVacancies > 0;
+    return (section.availableVacancies ?? 0) > 0;
   });
 
   constructor() {
@@ -55,9 +55,9 @@ export class EnrollmentSaveDialogFormPresenter {
     this.availableSections.set(sections);
     if (sections.length > 0) {
       // Si hay al menos una sección con vacante disponible, pre-seleccionar
-      const firstWithVacancy = sections.find(s => s.availableVacancies > 0);
+      const firstWithVacancy = sections.find(s => (s.availableVacancies ?? 0) > 0);
       if (firstWithVacancy) {
-        const id = firstWithVacancy._id || firstWithVacancy.id;
+        const id = firstWithVacancy.id;
         this.form.patchValue({ gradeSection: id });
         this.selectedSectionId.set(id);
       }

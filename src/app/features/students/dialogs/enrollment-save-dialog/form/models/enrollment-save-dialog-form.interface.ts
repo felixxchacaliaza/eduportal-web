@@ -9,5 +9,5 @@ import { IStudent, IGradeSectionSummary } from '../../../../models';
  */
 export interface EnrollmentSaveDialogData {
   student: IStudent;
-  gradeSections: IGradeSectionSummary[];
+  gradeSections?: IGradeSectionSummary[];
 }

@@ -7,12 +7,12 @@
     </div>
     <div class="enrollment-save-form__student-info">
       <h4 class="enrollment-save-form__student-name">
-        {{ student().person?.lastName }}, {{ student().person?.firstName }}
+        {{ student().person.lastName }}, {{ student().person.firstName }}
       </h4>
       <div class="enrollment-save-form__student-meta">
-        <span><strong>DNI:</strong> {{ student().person?.dni }}</span>
+        <span><strong>DNI:</strong> {{ student().person.dni }}</span>
         <span>•</span>
-        <span><strong>Código:</strong> {{ student().studentCode || 'Por Asignar' }}</span>
+        <span><strong>Código:</strong> {{ student().code || 'Por Asignar' }}</span>
         <span>•</span>
         <span><strong>Ingreso:</strong> {{ student().entryYear }}</span>
       </div>
@@ -26,15 +26,15 @@
       <mat-icon matPrefix>{{ presenter.enrollmentConstant['gradeSection'].iconLeft }}</mat-icon>
     }
     <mat-select [formControlName]="presenter.enrollmentConstant['gradeSection'].formControlName!" required>
-      @for (sec of sections(); track sec._id || sec.id) {
+      @for (sec of sections(); track sec.id) {
         <mat-option
-          [value]="sec._id || sec.id"
-          [disabled]="sec.availableVacancies <= 0"
+          [value]="sec.id"
+          [disabled]="(sec.availableVacancies ?? 0) <= 0"
         >
-          {{ sec.grade?.name || 'Grado' }} "{{ sec.section || sec.sectionLetter }}"
-          ({{ sec.shift === 'MORNING' ? 'Mañana' : 'Tarde' }})
-          — Cupos disponibles: {{ sec.availableVacancies }} / {{ sec.capacity }}
-          @if (sec.availableVacancies <= 0) {
+          {{ sec.grade.description || sec.grade.name }} "{{ sec.section.name }}"
+          ({{ sec.shift }})
+          — Cupos disponibles: {{ sec.availableVacancies ?? 0 }} / {{ sec.maxCapacity }}
+          @if ((sec.availableVacancies ?? 0) <= 0) {
             <span class="enrollment-save-form__sold-out">[AGOTADO]</span>
           }
         </mat-option>
@@ -49,29 +49,29 @@
   @if (presenter.selectedSection(); as selected) {
     <div
       class="enrollment-save-form__vacancy-card"
-      [class.enrollment-save-form__vacancy-card--warning]="selected.availableVacancies <= 0"
+      [class.enrollment-save-form__vacancy-card--warning]="(selected.availableVacancies ?? 0) <= 0"
     >
       <div class="enrollment-save-form__vacancy-row">
         <div class="enrollment-save-form__vacancy-item">
           <span class="enrollment-save-form__vacancy-label">Aforo Total</span>
-          <span class="enrollment-save-form__vacancy-value">{{ selected.capacity }}</span>
+          <span class="enrollment-save-form__vacancy-value">{{ selected.maxCapacity }}</span>
         </div>
         <div class="enrollment-save-form__vacancy-item">
           <span class="enrollment-save-form__vacancy-label">Matriculados</span>
-          <span class="enrollment-save-form__vacancy-value">{{ selected.enrolledCount }}</span>
+          <span class="enrollment-save-form__vacancy-value">{{ selected.enrolledStudents }}</span>
         </div>
         <div class="enrollment-save-form__vacancy-item">
           <span class="enrollment-save-form__vacancy-label">Vacantes Restantes</span>
           <span
             class="enrollment-save-form__vacancy-value"
-            [class.enrollment-save-form__vacancy-value--danger]="selected.availableVacancies <= 0"
-            [class.enrollment-save-form__vacancy-value--success]="selected.availableVacancies > 0"
+            [class.enrollment-save-form__vacancy-value--danger]="(selected.availableVacancies ?? 0) <= 0"
+            [class.enrollment-save-form__vacancy-value--success]="(selected.availableVacancies ?? 0) > 0"
           >
-            {{ selected.availableVacancies }}
+            {{ selected.availableVacancies ?? 0 }}
           </span>
         </div>
       </div>
-      @if (selected.availableVacancies <= 0) {
+      @if ((selected.availableVacancies ?? 0) <= 0) {
         <div class="enrollment-save-form__capacity-alert">
           <mat-icon>warning</mat-icon>
           <span>El salón seleccionado ha alcanzado su aforo máximo. Seleccione otra sección.</span>

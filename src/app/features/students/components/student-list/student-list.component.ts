@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { IStudent, IGuardian } from '../../models';
+import { IStudent, IGuardianSubdoc } from '../../models';
 
 /**
  * ============================================================================
@@ -43,14 +43,14 @@ export class StudentListComponent {
   public readonly displayedColumns: readonly string[] = [
     'dni',
     'fullName',
-    'studentCode',
+    'code',
     'guardians',
     'entryYear',
     'status',
     'actions',
   ];
 
-  public getPrimaryGuardian(guardians?: IGuardian[]): string {
+  public getPrimaryGuardian(guardians?: IGuardianSubdoc[]): string {
     if (!guardians || guardians.length === 0) return 'Sin apoderado';
     const primary = guardians.find(g => g.isPrimary);
     const target = primary || guardians[0];

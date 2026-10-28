@@ -1,1 +1,88 @@
-<p>students-page works!</p>
+<div class="students-page">
+
+  <!-- Header principal de la página -->
+  <header class="students-page__header">
+    <div class="students-page__title-group">
+      <div class="students-page__icon-box">
+        <mat-icon>school</mat-icon>
+      </div>
+      <div>
+        <h1 class="students-page__title">Padrón de Estudiantes y Matrícula Anual</h1>
+        <p class="students-page__subtitle">
+          Administre el registro legal de alumnos, gestione apoderados y matricule en los salones escolares aperturados.
+        </p>
+      </div>
+    </div>
+
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="presenter.openCreateDialog()"
+      class="students-page__create-btn"
+    >
+      <mat-icon>person_add</mat-icon>
+      <span>Nuevo Estudiante</span>
+    </button>
+  </header>
+
+  <!-- Métricas Rápidas (KPIs) -->
+  <div class="students-page__kpis">
+    <div class="students-page__kpi-card">
+      <div class="students-page__kpi-icon students-page__kpi-icon--total">
+        <mat-icon>groups</mat-icon>
+      </div>
+      <div class="students-page__kpi-content">
+        <span class="students-page__kpi-label">Padrón Total</span>
+        <span class="students-page__kpi-value">{{ presenter.totalCount() }}</span>
+      </div>
+    </div>
+
+    <div class="students-page__kpi-card">
+      <div class="students-page__kpi-icon students-page__kpi-icon--active">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="students-page__kpi-content">
+        <span class="students-page__kpi-label">Estudiantes Activos</span>
+        <span class="students-page__kpi-value">{{ presenter.activeCount() }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de Búsqueda y Filtros -->
+  <div class="students-page__toolbar">
+    <mat-form-field appearance="outline" class="students-page__search-field">
+      <mat-label>Buscar por DNI, nombres, apellidos o código...</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        #searchInput
+        matInput
+        (input)="onSearchInput($event)"
+        [value]="presenter.searchTerm()"
+        placeholder="Ej. 74859612, García, STU-2026..."
+      />
+      @if (presenter.searchTerm()) {
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="clearSearch(searchInput)"
+          matTooltip="Limpiar filtro"
+        >
+          <mat-icon>clear</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Listado / Tabla de Estudiantes -->
+  <main class="students-page__content">
+    <app-student-list
+      [students]="presenter.filteredStudents()"
+      [isLoading]="presenter.isLoading()"
+      (edit)="presenter.openEditDialog($event)"
+      (enroll)="presenter.openEnrollDialog($event)"
+      (delete)="presenter.deleteStudent($event)"
+    ></app-student-list>
+  </main>
+
+</div>
