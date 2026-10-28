@@ -175,13 +175,8 @@
       type="submit"
       [disabled]="presenter.form.invalid || isSaving()"
     >
-      @if (isSaving()) {
-        <mat-icon class="spin-icon">sync</mat-icon>
-        <span>Guardando...</span>
-      } @else {
-        <mat-icon>save</mat-icon>
-        <span>{{ mode() === 'create' ? 'Guardar Colaborador' : 'Actualizar Colaborador' }}</span>
-      }
+      <mat-icon [class.spin-icon]="isSaving()">{{ isSaving() ? 'sync' : 'save' }}</mat-icon>
+      <span>{{ isSaving() ? 'Guardando...' : (mode() === 'create' ? 'Guardar Colaborador' : 'Actualizar Colaborador') }}</span>
     </button>
   </div>
 </form>

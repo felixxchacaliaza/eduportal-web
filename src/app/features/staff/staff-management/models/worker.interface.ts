@@ -5,9 +5,9 @@ export interface IWorker {
   id: string;
   person: IPerson;
   code: string;
-  position: IPosition;
-  hireDate?: string;
-  status: 'ACTIVO' | 'INACTIVO';
+  position: IPosition | string;
+  shift?: 'MAÑANA' | 'TARDE' | 'COMPLETO';
+  hireDate: string;
   enabled: boolean;
 }
 
@@ -21,7 +21,8 @@ export interface ICreateWorkerRequestDto {
   phone?: string;
   address?: string;
   position: string;
-  hireDate?: string;
+  shift?: 'MAÑANA' | 'TARDE' | 'COMPLETO';
+  hireDate: string;
 }
 
 export interface IUpdateWorkerRequestDto {
@@ -30,6 +31,6 @@ export interface IUpdateWorkerRequestDto {
   phone?: string;
   address?: string;
   position?: string;
+  shift?: 'MAÑANA' | 'TARDE' | 'COMPLETO';
   hireDate?: string;
-  status?: 'ACTIVO' | 'INACTIVO';
 }

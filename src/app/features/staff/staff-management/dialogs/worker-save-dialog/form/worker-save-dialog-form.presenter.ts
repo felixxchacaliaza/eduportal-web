@@ -2,7 +2,7 @@ import { Injectable, inject, DestroyRef, signal } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
-import { PersonService } from '../../../../students/student-management/services/person.service';
+import { PersonService } from '../../../../../students/student-management/services/person.service';
 import { PositionService } from '../../../services/position.service';
 import { WorkerSaveDialogFormModel } from './models/worker-save-dialog-form.model';
 import { WORKER_SAVE_DIALOG_FORM_MODEL_CONSTANT } from './models/worker-save-dialog-form.model.constant';
