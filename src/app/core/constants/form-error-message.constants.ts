@@ -31,4 +31,7 @@ export const ErrorMessage: Record<string, string> = {
 
   /** Error cuando un correo electrónico tiene formato inválido */
   email: 'El formato de correo electrónico no es válido.',
+
+  /** Error de incompatibilidad RN-ACT-01: Alumno no puede ser personal escolar */
+  personIsStudent: 'Esta persona está registrada como alumno activo y no puede ser personal laboral.'
 };

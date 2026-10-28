@@ -1,0 +1,190 @@
+<form [formGroup]="presenter.form" (ngSubmit)="onSubmit()" class="teacher-form">
+  @if (presenter.isSearchingCivilPerson()) {
+    <div class="search-progress">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <span class="search-text">Consultando padrón civil institucional...</span>
+    </div>
+  }
+
+  <div class="form-section">
+    <h3 class="section-title">
+      <mat-icon>person</mat-icon>
+      Datos Civiles y de Identidad
+    </h3>
+
+    <div class="form-grid">
+      <!-- DNI con búsqueda y validación de incompatibilidad -->
+      <mat-form-field appearance="outline" class="col-span-1">
+        <mat-label>{{ presenter.teacherConstant['dni'].label }}</mat-label>
+        <mat-icon matPrefix>{{ presenter.teacherConstant['dni'].iconLeft }}</mat-icon>
+        <input
+          matInput
+          formControlName="dni"
+          [placeholder]="presenter.teacherConstant['dni'].placeHolder!"
+          maxlength="8"
+        />
+        @if (presenter.form.get('dni')?.hasError('personIsStudent')) {
+          <mat-error>Esta persona está registrada como alumno activo y no puede ser personal laboral</mat-error>
+        } @else if (presenter.getErrorMessage('dni')) {
+          <mat-error>{{ presenter.getErrorMessage('dni') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Nombres -->
+      <mat-form-field appearance="outline" class="col-span-1">
+        <mat-label>{{ presenter.teacherConstant['firstName'].label }}</mat-label>
+        <mat-icon matPrefix>{{ presenter.teacherConstant['firstName'].iconLeft }}</mat-icon>
+        <input
+          matInput
+          formControlName="firstName"
+          [placeholder]="presenter.teacherConstant['firstName'].placeHolder!"
+        />
+        @if (presenter.getErrorMessage('firstName')) {
+          <mat-error>{{ presenter.getErrorMessage('firstName') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Apellidos -->
+      <mat-form-field appearance="outline" class="col-span-2">
+        <mat-label>{{ presenter.teacherConstant['lastName'].label }}</mat-label>
+        <mat-icon matPrefix>{{ presenter.teacherConstant['lastName'].iconLeft }}</mat-icon>
+        <input
+          matInput
+          formControlName="lastName"
+          [placeholder]="presenter.teacherConstant['lastName'].placeHolder!"
+        />
+        @if (presenter.getErrorMessage('lastName')) {
+          <mat-error>{{ presenter.getErrorMessage('lastName') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Género -->
+      <div class="col-span-2 gender-group">
+        <label class="gender-label">Género:</label>
+        <mat-radio-group formControlName="gender" class="radio-row">
+          <mat-radio-button value="M">Masculino</mat-radio-button>
+          <mat-radio-button value="F">Femenino</mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <!-- Email -->
+      <mat-form-field appearance="outline" class="col-span-1">
+        <mat-label>{{ presenter.teacherConstant['personalEmail'].label }}</mat-label>
+        <mat-icon matPrefix>{{ presenter.teacherConstant['personalEmail'].iconLeft }}</mat-icon>
+        <input
+          matInput
+          type="email"
+          formControlName="personalEmail"
+          [placeholder]="presenter.teacherConstant['personalEmail'].placeHolder!"
+        />
+        @if (presenter.getErrorMessage('personalEmail')) {
+          <mat-error>{{ presenter.getErrorMessage('personalEmail') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Teléfono Móvil -->
+      <mat-form-field appearance="outline" class="col-span-1">
+        <mat-label>{{ presenter.teacherConstant['phone'].label }}</mat-label>
+        <mat-icon matPrefix>{{ presenter.teacherConstant['phone'].iconLeft }}</mat-icon>
+        <input
+          matInput
+          formControlName="phone"
+          [placeholder]="presenter.teacherConstant['phone'].placeHolder!"
+          maxlength="9"
+        />
+        @if (presenter.getErrorMessage('phone')) {
+          <mat-error>{{ presenter.getErrorMessage('phone') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Dirección -->
+      <mat-form-field appearance="outline" class="col-span-2">
+        <mat-label>{{ presenter.teacherConstant['address'].label }}</mat-label>
+        <mat-icon matPrefix>{{ presenter.teacherConstant['address'].iconLeft }}</mat-icon>
+        <input
+          matInput
+          formControlName="address"
+          [placeholder]="presenter.teacherConstant['address'].placeHolder!"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="form-section">
+    <h3 class="section-title">
+      <mat-icon>school</mat-icon>
+      Perfil Pedagógico y Contrato Laboral
+    </h3>
+
+    <div class="form-grid">
+      <!-- Especialidad Curricular -->
+      <mat-form-field appearance="outline" class="col-span-1">
+        <mat-label>{{ presenter.teacherConstant['specialty'].label }}</mat-label>
+        <mat-icon matPrefix>{{ presenter.teacherConstant['specialty'].iconLeft }}</mat-icon>
+        <input
+          matInput
+          formControlName="specialty"
+          [placeholder]="presenter.teacherConstant['specialty'].placeHolder!"
+        />
+        @if (presenter.getErrorMessage('specialty')) {
+          <mat-error>{{ presenter.getErrorMessage('specialty') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Grado Académico -->
+      <mat-form-field appearance="outline" class="col-span-1">
+        <mat-label>{{ presenter.teacherConstant['academicDegree'].label }}</mat-label>
+        <mat-icon matPrefix>{{ presenter.teacherConstant['academicDegree'].iconLeft }}</mat-icon>
+        <mat-select formControlName="academicDegree">
+          <mat-option value="LICENCIADO">Licenciado en Educación</mat-option>
+          <mat-option value="MAGISTER">Magíster en Educación</mat-option>
+          <mat-option value="DOCTOR">Doctor en Educación</mat-option>
+          <mat-option value="PROFESOR_TITULADO">Profesor Titulado</mat-option>
+        </mat-select>
+        @if (presenter.getErrorMessage('academicDegree')) {
+          <mat-error>{{ presenter.getErrorMessage('academicDegree') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Horas Contratadas -->
+      <mat-form-field appearance="outline" class="col-span-2">
+        <mat-label>{{ presenter.teacherConstant['contractedHours'].label }}</mat-label>
+        <mat-icon matPrefix>{{ presenter.teacherConstant['contractedHours'].iconLeft }}</mat-icon>
+        <input
+          matInput
+          type="number"
+          formControlName="contractedHours"
+          [placeholder]="presenter.teacherConstant['contractedHours'].placeHolder!"
+          min="1"
+          max="48"
+        />
+        <mat-hint>Regla RN-DOC-02: Entre 1 y 48 horas semanales pedagógicas</mat-hint>
+        @if (presenter.getErrorMessage('contractedHours')) {
+          <mat-error>{{ presenter.getErrorMessage('contractedHours') }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button mat-button type="button" (click)="onCancel()" [disabled]="isSaving()">
+      Cancelar
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="presenter.form.invalid || isSaving()"
+    >
+      @if (isSaving()) {
+        <mat-icon class="spin-icon">sync</mat-icon>
+        <span>Guardando...</span>
+      } @else {
+        <mat-icon>save</mat-icon>
+        <span>{{ mode() === 'create' ? 'Guardar Docente' : 'Actualizar Docente' }}</span>
+      }
+    </button>
+  </div>
+</form>
