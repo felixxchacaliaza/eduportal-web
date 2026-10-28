@@ -8,6 +8,8 @@ import { StudentSaveDialogComponent } from './dialogs/student-save-dialog/studen
 import { StudentSaveDialogData } from './dialogs/student-save-dialog/form/models/student-save-dialog-form.interface';
 import { EnrollmentSaveDialogComponent } from './dialogs/enrollment-save-dialog/enrollment-save-dialog.component';
 import { EnrollmentSaveDialogData } from './dialogs/enrollment-save-dialog/form/models/enrollment-save-dialog-form.interface';
+import { SectionChangeDialogComponent } from './dialogs/section-change-dialog/section-change-dialog.component';
+import { SectionChangeDialogData } from './dialogs/section-change-dialog/form/models/section-change-dialog-form.interface';
 
 /**
  * ============================================================================
@@ -75,13 +77,22 @@ export class StudentsPresenter {
     () => this.students().filter(s => !s.enabled).length
   );
 
+  public readonly enrolledCount = computed(
+    () => this.students().filter(s => s.currentEnrollment?.status === 'MATRICULADO').length
+  );
+
+  public readonly pendingEnrollmentCount = computed(
+    () => this.students().filter(s => !s.currentEnrollment).length
+  );
+
   /**
    * Tarjetas métricas estadísticas oficiales del Padrón Escolar.
    */
   public readonly cards = computed<readonly InfoCardData[]>(() => {
     const total = this.totalCount();
+    const enrolled = this.enrolledCount();
+    const pending = this.pendingEnrollmentCount();
     const active = this.activeCount();
-    const inactive = this.inactiveCount();
 
     return [
       {
@@ -91,21 +102,21 @@ export class StudentsPresenter {
         color: 'blue',
       },
       {
-        label: 'Estudiantes Activos',
-        value: active,
-        subtitle: 'Habilitados en el sistema',
+        label: 'Matriculados 2026',
+        value: enrolled,
+        subtitle: 'Con aula y vacante asignada',
         color: 'green',
       },
       {
-        label: 'Estudiantes Inactivos',
-        value: inactive,
-        subtitle: 'Dados de baja o suspendidos',
+        label: 'Sin Matrícula 2026',
+        value: pending,
+        subtitle: 'Pendientes de matriculación',
         color: 'amber',
       },
       {
-        label: 'Año Lectivo',
-        value: '2026',
-        subtitle: 'Periodo Escolar Vigente',
+        label: 'Estudiantes Activos',
+        value: active,
+        subtitle: 'Habilitados en el sistema',
         color: 'blue',
       },
     ];
@@ -119,7 +130,7 @@ export class StudentsPresenter {
     this.error.set(null);
 
     try {
-      const data = await this.studentService.getStudents();
+      const data = await this.studentService.getStudents(undefined, '2026');
       this.students.set(data);
     } catch (err: any) {
       console.error('Error al cargar alumnos:', err);
@@ -210,6 +221,30 @@ export class StudentsPresenter {
     dialogRef.afterClosed().subscribe(enrolled => {
       if (enrolled) {
         this.snackBar.open('¡Matrícula anual registrada con éxito!', 'OK', { duration: 3500 });
+        this.loadStudents();
+      }
+    });
+  }
+
+  /**
+   * Abre el modal para cambiar/trasladar de sección escolar al alumno ya matriculado.
+   */
+  public openSectionChangeDialog(student: IStudent): void {
+    const dialogData: SectionChangeDialogData = {
+      student,
+    };
+
+    const dialogRef = this.dialog.open(SectionChangeDialogComponent, {
+      width: '620px',
+      maxWidth: '95vw',
+      disableClose: true,
+      data: dialogData,
+    });
+
+    dialogRef.afterClosed().subscribe(changed => {
+      if (changed) {
+        this.snackBar.open('¡Traslado de sección registrado con éxito!', 'OK', { duration: 3500 });
+        this.loadStudents();
       }
     });
   }

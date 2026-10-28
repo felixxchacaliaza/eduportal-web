@@ -25,12 +25,15 @@ export class StudentService {
   private readonly endpoint = API_ENDPOINTS.students;
 
   /**
-   * Obtiene la lista completa de estudiantes (con apoderados y personas pobladas).
+   * Obtiene la lista completa de estudiantes (con apoderados, personas pobladas y matrícula del año lectivo).
    */
-  public async getStudents(status?: 'ACTIVE' | 'INACTIVE'): Promise<IStudent[]> {
+  public async getStudents(status?: 'ACTIVE' | 'INACTIVE', academicYear = '2026'): Promise<IStudent[]> {
     let params = new HttpParams();
     if (status) {
       params = params.set('status', status);
+    }
+    if (academicYear) {
+      params = params.set('academicYear', academicYear);
     }
     const response = await firstValueFrom(
       this.http.get<ApiResponse<IStudent[]>>(this.endpoint, { params })

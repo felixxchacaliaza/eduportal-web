@@ -1,5 +1,6 @@
 import { IPerson } from './person.interface';
 import { IGuardianSubdoc, IGuardianFormItemDto } from './guardian.interface';
+import { IEnrollment } from './enrollment.interface';
 
 /**
  * ============================================================================
@@ -16,6 +17,7 @@ export interface IStudent {
   guardians: IGuardianSubdoc[];
   entryYear: string;
   enabled: boolean;
+  currentEnrollment?: IEnrollment | null;
 }
 
 export interface ICreateStudentRequestDto {

@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { IStudent, IGuardianSubdoc } from '../../models';
+import { IStudent, IGuardianSubdoc, IEnrollment } from '../../models';
 
 /**
  * ============================================================================
@@ -38,6 +38,7 @@ export class StudentListComponent {
 
   public readonly edit = output<IStudent>();
   public readonly enroll = output<IStudent>();
+  public readonly changeSection = output<IStudent>();
   public readonly delete = output<IStudent>();
 
   public readonly displayedColumns: readonly string[] = [
@@ -45,7 +46,7 @@ export class StudentListComponent {
     'fullName',
     'code',
     'guardians',
-    'entryYear',
+    'enrollment',
     'status',
     'actions',
   ];
@@ -56,5 +57,21 @@ export class StudentListComponent {
     const target = primary || guardians[0];
     const name = target.person ? `${target.person.lastName}, ${target.person.firstName}` : 'Apoderado';
     return `${name} (${target.relationship})`;
+  }
+
+  public isEnrolled(student: IStudent): boolean {
+    return !!student.currentEnrollment && student.currentEnrollment.status === 'MATRICULADO';
+  }
+
+  public getEnrollmentSummary(enrollment?: IEnrollment | null): string {
+    if (!enrollment) return 'Sin Matrícula';
+    const gs = enrollment.gradeSection as any;
+    if (typeof gs === 'object' && gs !== null) {
+      const gradeDesc = gs.grade?.description || gs.grade?.name || 'Grado';
+      const secName = gs.section?.name || '';
+      const shift = gs.shift ? ` (${gs.shift})` : '';
+      return `${gradeDesc} "${secName}"${shift}`;
+    }
+    return enrollment.code || 'Matriculado';
   }
 }

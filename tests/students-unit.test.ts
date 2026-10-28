@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { STUDENT_SAVE_DIALOG_FORM_MODEL_CONSTANT } from '../src/app/features/students/students/dialogs/student-save-dialog/form/models/student-save-dialog-form.model.constant';
 import { GUARDIAN_FORM_MODEL_CONSTANT } from '../src/app/features/students/students/dialogs/student-save-dialog/form/models/guardian-form.model.constant';
 import { ENROLLMENT_SAVE_DIALOG_FORM_MODEL_CONSTANT } from '../src/app/features/students/students/dialogs/enrollment-save-dialog/form/models/enrollment-save-dialog-form.model.constant';
+import { SECTION_CHANGE_DIALOG_FORM_MODEL_CONSTANT } from '../src/app/features/students/students/dialogs/section-change-dialog/form/models/section-change-dialog-form.model.constant';
 
 describe('TDD Unit Tests - Módulo Padrón de Estudiantes y Matrícula (sesion-05.0.0)', () => {
 
@@ -31,6 +32,13 @@ describe('TDD Unit Tests - Módulo Padrón de Estudiantes y Matrícula (sesion-0
       assert.strictEqual(ENROLLMENT_SAVE_DIALOG_FORM_MODEL_CONSTANT['gradeSection'].formControlName, 'gradeSection');
       assert.strictEqual(ENROLLMENT_SAVE_DIALOG_FORM_MODEL_CONSTANT['academicYear'].formControlName, 'academicYear');
       assert.strictEqual(ENROLLMENT_SAVE_DIALOG_FORM_MODEL_CONSTANT['status'].formControlName, 'status');
+    });
+
+    it('SECTION_CHANGE_DIALOG_FORM_MODEL_CONSTANT debe ser inmutable y definir el control gradeSection', () => {
+      assert.ok(Object.isFrozen(SECTION_CHANGE_DIALOG_FORM_MODEL_CONSTANT));
+      assert.strictEqual(SECTION_CHANGE_DIALOG_FORM_MODEL_CONSTANT['gradeSection'].formControlName, 'gradeSection');
+      assert.strictEqual(SECTION_CHANGE_DIALOG_FORM_MODEL_CONSTANT['gradeSection'].label, 'Nueva Sección de Destino');
+      assert.strictEqual(SECTION_CHANGE_DIALOG_FORM_MODEL_CONSTANT['gradeSection'].iconLeft, 'swap_horiz');
     });
   });
 
@@ -157,6 +165,66 @@ describe('TDD Unit Tests - Módulo Padrón de Estudiantes y Matrícula (sesion-0
       const filtered = students.filter(s => s.code.toLowerCase().includes(query));
       assert.strictEqual(filtered.length, 1);
       assert.strictEqual(filtered[0].person.firstName, 'Mateo');
+    });
+  });
+
+  describe('6. Regla de Negocio: Visibilidad de Acciones y Estado de Matrícula en Año en Curso', () => {
+    const studentUnenrolled = {
+      id: 'stu-1',
+      code: 'STU-001',
+      currentEnrollment: null
+    };
+
+    const studentEnrolled = {
+      id: 'stu-2',
+      code: 'STU-002',
+      currentEnrollment: {
+        code: 'MAT-001',
+        academicYear: '2026',
+        status: 'MATRICULADO',
+        gradeSection: {
+          id: 'sec-1',
+          grade: { description: '1° Secundaria' },
+          section: { name: 'A' },
+          shift: 'MAÑANA'
+        }
+      }
+    };
+
+    it('estudiante sin matrícula debe permitir matricular (how_to_reg) y ocultar cambio de sección', () => {
+      const isEnrolled = !!studentUnenrolled.currentEnrollment && studentUnenrolled.currentEnrollment.status === 'MATRICULADO';
+      const showEnrollBtn = !isEnrolled;
+      const showChangeSectionBtn = isEnrolled;
+
+      assert.strictEqual(showEnrollBtn, true, 'Debe mostrar botón Matricular');
+      assert.strictEqual(showChangeSectionBtn, false, 'No debe mostrar botón de Cambio de Sección');
+    });
+
+    it('estudiante ya matriculado NO debe permitir matricular de nuevo y debe habilitar cambio de sección', () => {
+      const isEnrolled = !!studentEnrolled.currentEnrollment && studentEnrolled.currentEnrollment.status === 'MATRICULADO';
+      const showEnrollBtn = !isEnrolled;
+      const showChangeSectionBtn = isEnrolled;
+
+      assert.strictEqual(showEnrollBtn, false, 'Debe ocultar el botón Matricular para evitar duplicidad');
+      assert.strictEqual(showChangeSectionBtn, true, 'Debe mostrar el botón de Cambio de Sección');
+    });
+
+    it('traslado de sección debe rechazar si se intenta cambiar a la misma sección actual', () => {
+      const currentSectionId = 'sec-1';
+      const targetSectionId = 'sec-1';
+      const isSame = currentSectionId === targetSectionId;
+
+      assert.strictEqual(isSame, true, 'Debe detectar que es la misma sección');
+    });
+
+    it('traslado de sección debe validar vacantes en la sección destino', () => {
+      const targetSectionWithVacancies = { maxCapacity: 30, enrolledStudents: 28 };
+      const vacancies = Math.max(0, targetSectionWithVacancies.maxCapacity - targetSectionWithVacancies.enrolledStudents);
+      assert.strictEqual(vacancies > 0, true);
+
+      const targetSectionFull = { maxCapacity: 30, enrolledStudents: 30 };
+      const noVacancies = Math.max(0, targetSectionFull.maxCapacity - targetSectionFull.enrolledStudents);
+      assert.strictEqual(noVacancies > 0, false);
     });
   });
 

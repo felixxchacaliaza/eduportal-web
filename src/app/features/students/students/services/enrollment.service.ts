@@ -47,6 +47,18 @@ export class EnrollmentService {
   }
 
   /**
+   * Realiza el cambio/traslado de sección escolar de una matrícula existente.
+   */
+  public async changeSection(enrollmentId: string, gradeSectionId: string): Promise<IEnrollment> {
+    const response = await firstValueFrom(
+      this.http.patch<ApiResponse<IEnrollment>>(`${this.endpoint}/${enrollmentId}/section`, {
+        gradeSection: gradeSectionId
+      })
+    );
+    return response.data;
+  }
+
+  /**
    * Obtiene los salones activos del año escolar con aforo y vacantes calculadas.
    */
   public async getActiveGradeSections(academicYear = '2026'): Promise<IGradeSectionSummary[]> {
