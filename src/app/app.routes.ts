@@ -5,7 +5,7 @@ import { Routes } from '@angular/router';
  * App Root Routes (Enrutamiento Principal de EduPortal)
  * ============================================================================
  * Carga el layout base con Sidebar y Header, e inyecta los submódulos
- * funcionales (Dashboard, Estudiantes, Académico y Mantenimiento) vía Lazy Loading.
+ * funcionales (Dashboard, Personal, Estudiantes, Académico y Mantenimiento) vía Lazy Loading.
  * ============================================================================
  */
 export const routes: Routes = [
@@ -25,6 +25,11 @@ export const routes: Routes = [
           import('./features/dashboard/pages/dashboard-page/dashboard-page.component').then(
             m => m.DashboardPageComponent
           )
+      },
+      {
+        path: 'personal',
+        loadChildren: () =>
+          import('./features/staff').then(m => m.STAFF_ROUTES)
       },
       {
         path: '',

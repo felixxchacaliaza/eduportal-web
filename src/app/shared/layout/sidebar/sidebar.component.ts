@@ -1,4 +1,4 @@
-// src/app/shared/components/sidebar/sidebar.component.ts
+// src/app/shared/layout/sidebar/sidebar.component.ts
 import { Component, input, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +20,7 @@ export interface NavigationItem {
 
 @Component({
   selector: 'app-sidebar',
+  standalone: true,
   imports: [RouterLink, RouterLinkActive, MatIconModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
@@ -48,6 +49,7 @@ export class SidebarComponent {
   // Lista tipada de navegación escolar:
   public readonly navItems: readonly NavigationItem[] = [
     { path: '/dashboard', label: 'Panel de Control', icon: 'dashboard' },
+    { path: '/personal', label: 'Personal Escolar', icon: 'groups' },
     {
       label: 'Estudiantes',
       icon: 'people',
