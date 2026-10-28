@@ -39,6 +39,7 @@ export class EnrollmentSaveDialogFormPresenter {
     this.form = this.fb.group({
       gradeSection: this.formModel.gradeSection,
       academicYear: this.formModel.academicYear,
+      enrollmentType: this.formModel.enrollmentType,
       status: this.formModel.status,
       observation: this.formModel.observation
     });
@@ -97,7 +98,8 @@ export class EnrollmentSaveDialogFormPresenter {
       student: studentId,
       gradeSection: String(raw.gradeSection).trim(),
       academicYear: String(raw.academicYear).trim(),
-      status: raw.status || 'DEFINITIVA',
+      enrollmentType: raw.enrollmentType || 'REGULAR',
+      status: raw.status || 'MATRICULADO',
       observation: raw.observation ? String(raw.observation).trim() : undefined
     };
   }

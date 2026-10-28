@@ -22,6 +22,11 @@ export const ENROLLMENT_SAVE_DIALOG_FORM_MODEL_CONSTANT: Record<string, FormHtml
     iconLeft: 'event',
     validators: { minLength: 4, maxLength: 4 }
   }),
+  enrollmentType: Object.freeze({
+    formControlName: 'enrollmentType',
+    label: 'Tipo de Matrícula',
+    iconLeft: 'category'
+  }),
   status: Object.freeze({
     formControlName: 'status',
     label: 'Condición de Matrícula',

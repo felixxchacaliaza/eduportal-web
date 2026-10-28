@@ -9,7 +9,8 @@ import { IGradeSectionSummary } from './grade-section-summary.interface';
  * ============================================================================
  */
 
-export type EnrollmentStatusType = 'DEFINITIVA' | 'CONDICIONAL' | 'TRASLADADO' | 'RETIRADO';
+export type EnrollmentStatusType = 'MATRICULADO' | 'TRASLADADO' | 'RETIRADO';
+export type EnrollmentType = 'REGULAR' | 'INGRESANTE' | 'TRASLADO';
 
 export interface IEnrollment {
   id: string;
@@ -17,8 +18,9 @@ export interface IEnrollment {
   student: string | IStudent;
   gradeSection: string | IGradeSectionSummary;
   academicYear: string;
-  enrollmentDate: string;
+  enrollmentType?: EnrollmentType;
   status: EnrollmentStatusType;
+  enrolledAt?: string;
   observation?: string;
   enabled: boolean;
 }
@@ -27,6 +29,7 @@ export interface IEnrollStudentRequestDto {
   student: string; // ObjectId del alumno
   gradeSection: string; // ObjectId del salón
   academicYear: string; // "2026"
-  status: EnrollmentStatusType;
+  enrollmentType?: EnrollmentType;
+  status?: EnrollmentStatusType;
   observation?: string;
 }

@@ -80,7 +80,7 @@
     </div>
   }
 
-  <!-- Fila: Año Lectivo y Condición de Matrícula -->
+  <!-- Fila 1: Año Lectivo y Tipo de Matrícula -->
   <div class="enrollment-save-form__row">
     <mat-form-field appearance="outline" class="enrollment-save-form__field">
       <mat-label>{{ presenter.enrollmentConstant['academicYear'].label }}</mat-label>
@@ -100,36 +100,53 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="enrollment-save-form__field">
+      <mat-label>{{ presenter.enrollmentConstant['enrollmentType'].label }}</mat-label>
+      @if (presenter.enrollmentConstant['enrollmentType'].iconLeft) {
+        <mat-icon matPrefix>{{ presenter.enrollmentConstant['enrollmentType'].iconLeft }}</mat-icon>
+      }
+      <mat-select [formControlName]="presenter.enrollmentConstant['enrollmentType'].formControlName!" required>
+        <mat-option value="REGULAR">Regular</mat-option>
+        <mat-option value="INGRESANTE">Ingresante</mat-option>
+        <mat-option value="TRASLADO">Traslado</mat-option>
+      </mat-select>
+      @if (presenter.getErrorMessage('enrollmentType')) {
+        <mat-error>{{ presenter.getErrorMessage('enrollmentType') }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Fila 2: Condición de Matrícula y Observaciones -->
+  <div class="enrollment-save-form__row">
+    <mat-form-field appearance="outline" class="enrollment-save-form__field">
       <mat-label>{{ presenter.enrollmentConstant['status'].label }}</mat-label>
       @if (presenter.enrollmentConstant['status'].iconLeft) {
         <mat-icon matPrefix>{{ presenter.enrollmentConstant['status'].iconLeft }}</mat-icon>
       }
       <mat-select [formControlName]="presenter.enrollmentConstant['status'].formControlName!" required>
-        <mat-option value="DEFINITIVA">Definitiva</mat-option>
-        <mat-option value="CONDICIONAL">Condicional</mat-option>
-        <mat-option value="PROVISIONAL">Provisional</mat-option>
+        <mat-option value="MATRICULADO">Matriculado</mat-option>
+        <mat-option value="TRASLADADO">Trasladado</mat-option>
+        <mat-option value="RETIRADO">Retirado</mat-option>
       </mat-select>
       @if (presenter.getErrorMessage('status')) {
         <mat-error>{{ presenter.getErrorMessage('status') }}</mat-error>
       }
     </mat-form-field>
-  </div>
 
-  <!-- Observaciones -->
-  <mat-form-field appearance="outline" class="enrollment-save-form__field">
-    <mat-label>{{ presenter.enrollmentConstant['observation'].label }}</mat-label>
-    @if (presenter.enrollmentConstant['observation'].iconLeft) {
-      <mat-icon matPrefix>{{ presenter.enrollmentConstant['observation'].iconLeft }}</mat-icon>
-    }
-    <input
-      matInput
-      [formControlName]="presenter.enrollmentConstant['observation'].formControlName!"
-      [placeholder]="presenter.enrollmentConstant['observation'].placeHolder!"
-    />
-    @if (presenter.getErrorMessage('observation')) {
-      <mat-error>{{ presenter.getErrorMessage('observation') }}</mat-error>
-    }
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="enrollment-save-form__field">
+      <mat-label>{{ presenter.enrollmentConstant['observation'].label }}</mat-label>
+      @if (presenter.enrollmentConstant['observation'].iconLeft) {
+        <mat-icon matPrefix>{{ presenter.enrollmentConstant['observation'].iconLeft }}</mat-icon>
+      }
+      <input
+        matInput
+        [formControlName]="presenter.enrollmentConstant['observation'].formControlName!"
+        [placeholder]="presenter.enrollmentConstant['observation'].placeHolder!"
+      />
+      @if (presenter.getErrorMessage('observation')) {
+        <mat-error>{{ presenter.getErrorMessage('observation') }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
 
   <!-- Botones de Acción -->
   <div class="enrollment-save-form__actions">
