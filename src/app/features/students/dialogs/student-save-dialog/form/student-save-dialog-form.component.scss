@@ -1,0 +1,165 @@
+.student-save-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &--between {
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+  }
+
+  &__section-icon {
+    color: var(--md-sys-color-primary, #1976d2);
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &__section-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--md-sys-color-on-surface, #1e293b);
+  }
+
+  &__section-hint {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.825rem;
+    color: var(--md-sys-color-on-surface-variant, #64748b);
+  }
+
+  &__searching-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: #0284c7;
+    background: #e0f2fe;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+  }
+
+  &__spin-icon {
+    animation: spin 1.5s linear infinite;
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__field {
+    width: 100%;
+  }
+
+  &__divider {
+    margin: 0.5rem 0;
+  }
+
+  &__guardians-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  &__guardian-card {
+    border: 1px solid var(--md-sys-color-outline-variant, #e2e8f0);
+    border-radius: 8px;
+    padding: 1rem;
+    background: var(--md-sys-color-surface, #ffffff);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &--primary {
+      border-color: #3b82f6;
+      background: #f8faff;
+      box-shadow: 0 1px 3px rgba(59, 130, 246, 0.1);
+    }
+  }
+
+  &__guardian-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed #e2e8f0;
+  }
+
+  &__guardian-card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__guardian-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  &__primary-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.8rem;
+    color: #64748b;
+
+    &--active {
+      color: #2563eb;
+      font-weight: 600;
+
+      mat-icon {
+        color: #f59e0b;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  &__cancel-btn, &__submit-btn {
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
