@@ -39,6 +39,7 @@ import { AttendanceStatus } from '../../models/attendance-status.type';
 export class AttendanceTableComponent {
   @Input() public items!: FormArray<FormGroup>;
   @Input() public isLoading = false;
+  @Input() public version = 0;
 
   @Output() public readonly statusChange = new EventEmitter<{ index: number; status: AttendanceStatus }>();
   @Output() public readonly observationChange = new EventEmitter<{ index: number; observation: string }>();
@@ -51,7 +52,7 @@ export class AttendanceTableComponent {
   public onSetStatus(index: number, status: AttendanceStatus): void {
     const group = this.items.at(index);
     if (group) {
-      group.patchValue({ status });
+      group.get('status')?.setValue(status);
       this.statusChange.emit({ index, status });
     }
   }
@@ -61,7 +62,7 @@ export class AttendanceTableComponent {
     const observation = input?.value || '';
     const group = this.items.at(index);
     if (group) {
-      group.patchValue({ observation });
+      group.get('observation')?.setValue(observation);
       this.observationChange.emit({ index, observation });
     }
   }

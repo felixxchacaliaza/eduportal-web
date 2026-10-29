@@ -8,6 +8,8 @@
       }
       <input
         matInput
+        name="title"
+        data-testid="incident-title"
         [formControlName]="presenter.constant['title'].formControlName!"
         [placeholder]="presenter.constant['title'].placeHolder!"
         required
@@ -63,6 +65,8 @@
       <textarea
         matInput
         rows="3"
+        name="description"
+        data-testid="incident-description"
         [formControlName]="presenter.constant['description'].formControlName!"
         [placeholder]="presenter.constant['description'].placeHolder!"
         required
@@ -83,6 +87,8 @@
       <textarea
         matInput
         rows="2"
+        name="actionTaken"
+        data-testid="incident-action"
         [formControlName]="presenter.constant['actionTaken'].formControlName!"
         [placeholder]="presenter.constant['actionTaken'].placeHolder!"
       ></textarea>
@@ -90,13 +96,20 @@
   </div>
 
   <div class="incident-save-form__actions">
-    <button mat-button type="button" (click)="onCancel()" [disabled]="isSubmitting">
+    <button
+      mat-button
+      type="button"
+      data-testid="incident-cancel-btn"
+      (click)="onCancel()"
+      [disabled]="isSubmitting"
+    >
       Cancelar
     </button>
     <button
       mat-flat-button
       color="primary"
       type="submit"
+      data-testid="incident-submit-btn"
       [disabled]="presenter.form.invalid || isSubmitting"
       class="incident-save-form__submit-btn"
     >

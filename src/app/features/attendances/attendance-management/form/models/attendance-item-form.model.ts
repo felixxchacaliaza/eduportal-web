@@ -16,4 +16,5 @@ export class AttendanceItemFormModel extends FormModel {
   studentDni = [''];
   status = ['PRESENTE', [Validators.required]];
   observation = [''];
+  code = [''];
 }

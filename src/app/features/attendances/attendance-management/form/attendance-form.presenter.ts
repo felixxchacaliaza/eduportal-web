@@ -25,6 +25,7 @@ export class AttendanceFormPresenter {
   public readonly form: FormGroup;
   public readonly itemsArray: FormArray<FormGroup>;
 
+  public readonly version = signal<number>(0);
   public readonly totalCount = signal<number>(0);
   public readonly presentCount = signal<number>(0);
   public readonly lateCount = signal<number>(0);
@@ -43,6 +44,7 @@ export class AttendanceFormPresenter {
 
     this.itemsArray.valueChanges.subscribe(() => {
       this.recalculateCounts();
+      this.version.update(v => v + 1);
     });
   }
 
@@ -71,6 +73,7 @@ export class AttendanceFormPresenter {
       const existing = attendanceMap.get(studentId?.toString());
       const status: AttendanceStatus = (existing?.status as AttendanceStatus) || 'PRESENTE';
       const observation = existing?.observation || '';
+      const code = existing?.code || `ATT-${Math.floor(100 + Math.random() * 899)}`;
 
       const itemModel = new AttendanceItemFormModel();
       const group = this.fb.group({
@@ -79,13 +82,15 @@ export class AttendanceFormPresenter {
         studentName: [fullName],
         studentDni: [studentDni],
         status: [status, itemModel.status[1]],
-        observation: [observation]
+        observation: [observation],
+        code: [code]
       });
 
       this.itemsArray.push(group);
     });
 
     this.recalculateCounts();
+    this.version.update(v => v + 1);
   }
 
   /**
@@ -93,10 +98,10 @@ export class AttendanceFormPresenter {
    */
   public markAllPresent(): void {
     this.itemsArray.controls.forEach(ctrl => {
-      ctrl.patchValue({ status: 'PRESENTE' }, { emitEvent: false });
+      ctrl.get('status')?.setValue('PRESENTE');
     });
-    this.itemsArray.updateValueAndValidity();
     this.recalculateCounts();
+    this.version.update(v => v + 1);
   }
 
   /**
@@ -105,7 +110,9 @@ export class AttendanceFormPresenter {
   public setStatus(index: number, status: AttendanceStatus): void {
     const control = this.itemsArray.at(index);
     if (control) {
-      control.patchValue({ status });
+      control.get('status')?.setValue(status);
+      this.recalculateCounts();
+      this.version.update(v => v + 1);
     }
   }
 
@@ -145,9 +152,11 @@ export class AttendanceFormPresenter {
       gradeSection: raw['gradeSection'],
       academicYear: raw['academicYear'] || '2026',
       registeredBy,
-      attendances: this.itemsArray.controls.map(ctrl => {
+      attendances: this.itemsArray.controls.map((ctrl, i) => {
         const val = ctrl.getRawValue();
+        const code = val['code'] || `ATT-${Math.floor(100 + Math.random() * 899)}`;
         return {
+          code,
           student: val['student'],
           status: val['status'],
           observation: val['observation'] || ''

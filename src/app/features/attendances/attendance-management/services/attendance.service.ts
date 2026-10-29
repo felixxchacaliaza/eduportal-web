@@ -29,7 +29,7 @@ export class AttendanceService {
       .set('date', date);
 
     const response = await firstValueFrom(
-      this.http.get<ApiResponse<IAttendance[]>>(`${this.endpoint}/section-date`, { params })
+      this.http.get<ApiResponse<IAttendance[]>>(`${this.endpoint}/by-section-date`, { params })
     );
 
     return response.data || [];
@@ -62,7 +62,7 @@ export class AttendanceService {
    */
   public async bulkRegister(payload: BulkAttendanceRequestDto): Promise<any[]> {
     const response = await firstValueFrom(
-      this.http.post<ApiResponse<any[]>>(`${this.endpoint}/bulk`, payload)
+      this.http.post<ApiResponse<any[]>>(`${this.endpoint}/bulk-register`, payload)
     );
 
     return response.data || [];

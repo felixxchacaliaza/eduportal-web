@@ -24,6 +24,7 @@
   <app-attendance-table
     [items]="presenter.formPresenter.itemsArray"
     [isLoading]="presenter.isLoading()"
+    [version]="presenter.formPresenter.version()"
     (statusChange)="presenter.formPresenter.setStatus($event.index, $event.status)"
     (reportIncident)="presenter.openIncidentDialog($event)"
   ></app-attendance-table>
