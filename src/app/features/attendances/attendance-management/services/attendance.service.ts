@@ -67,4 +67,11 @@ export class AttendanceService {
 
     return response.data || [];
   }
+
+  /**
+   * Alias para persistencia masiva de asistencias.
+   */
+  public async saveBulk(payload: BulkAttendanceRequestDto): Promise<any[]> {
+    return this.bulkRegister(payload);
+  }
 }

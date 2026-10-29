@@ -51,6 +51,11 @@ export const routes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'asistencia',
+        loadChildren: () =>
+          import('./features/attendances/attendance.routes').then(m => m.ATTENDANCE_ROUTES)
+      },
+      {
         path: '',
         loadChildren: () =>
           import('./features/academic').then(m => m.ACADEMIC_ROUTES)
