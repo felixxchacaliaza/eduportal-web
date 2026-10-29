@@ -1,0 +1,32 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <div class="header-title">
+      <mat-icon color="primary">school</mat-icon>
+      <h2>{{ presenter.data?.mode === 'edit' ? 'Editar Docente' : 'Nuevo Docente' }}</h2>
+    </div>
+    <button mat-icon-button (click)="presenter.close()" [disabled]="presenter.isSaving()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (presenter.isSaving()) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  <mat-dialog-content class="dialog-body">
+    @if (presenter.errorMessage()) {
+      <div class="error-banner">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ presenter.errorMessage() }}</span>
+      </div>
+    }
+
+    <app-teacher-save-dialog-form
+      [mode]="presenter.data?.mode || 'create'"
+      [initialData]="presenter.data?.teacher"
+      [isSaving]="presenter.isSaving()"
+      (formSubmit)="onFormSubmit($event)"
+      (formCancel)="onFormCancel()"
+    ></app-teacher-save-dialog-form>
+  </mat-dialog-content>
+</div>
