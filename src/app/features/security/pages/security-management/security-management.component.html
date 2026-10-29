@@ -35,6 +35,7 @@
     <div class="security-page__actions">
       @if (presenter.activeTabIndex() === 0) {
         <button
+          *appHasPermission="{ module: 'security', level: 'FULL' }"
           mat-flat-button
           color="primary"
           type="button"
@@ -46,6 +47,7 @@
         </button>
       } @else {
         <button
+          *appHasPermission="{ module: 'security', level: 'FULL' }"
           mat-flat-button
           color="primary"
           type="button"
