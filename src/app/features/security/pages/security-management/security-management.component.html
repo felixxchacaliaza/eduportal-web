@@ -1,0 +1,89 @@
+<div class="security-page">
+  <!-- Cabecera de la Vista -->
+  <header class="security-page__header">
+    <div class="security-page__header-text">
+      <div class="security-page__badge">
+        <mat-icon>shield</mat-icon>
+        <span>Seguridad y Auditoría Escolar</span>
+      </div>
+      <h1 class="security-page__title">Seguridad y Control de Acceso</h1>
+      <p class="security-page__subtitle">
+        Administración centralizada de cuentas de usuario, vinculación con el personal y matriz de permisos RBAC.
+      </p>
+    </div>
+  </header>
+
+  <!-- Métricas KPI en Tiempo Real -->
+  <section class="security-page__kpis">
+    @for (card of presenter.kpiCards(); track card.label) {
+      <app-info-card [data]="card" />
+    }
+  </section>
+
+  <!-- Barra de Herramientas y Filtros -->
+  <div class="security-page__toolbar">
+    <mat-form-field appearance="outline" class="security-page__search-field">
+      <mat-label>{{ presenter.activeTabIndex() === 0 ? 'Buscar por correo, nombre o DNI...' : 'Buscar por nombre o código de perfil...' }}</mat-label>
+      <input
+        matInput
+        [value]="presenter.searchTerm()"
+        (input)="onSearchChange($any($event.target).value)"
+        data-testid="security-search-input" />
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+    <div class="security-page__actions">
+      @if (presenter.activeTabIndex() === 0) {
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          class="security-page__add-btn"
+          data-testid="add-user-btn"
+          (click)="openCreateUser()">
+          <mat-icon>person_add</mat-icon>
+          <span>Nuevo Usuario</span>
+        </button>
+      } @else {
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          class="security-page__add-btn"
+          data-testid="add-profile-btn"
+          (click)="openCreateProfile()">
+          <mat-icon>add_moderator</mat-icon>
+          <span>Nuevo Perfil</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Pestañas de Gestión -->
+  <mat-tab-group
+    class="security-page__tabs"
+    [selectedIndex]="presenter.activeTabIndex()"
+    (selectedIndexChange)="presenter.setActiveTab($event)"
+    animationDuration="200ms">
+
+    <!-- Pestaña 1: Cuentas de Usuario -->
+    <mat-tab label="Cuentas de Usuario">
+      <div class="security-page__tab-content">
+        <app-user-list
+          [users]="presenter.filteredUsers()"
+          (edit)="openEditUser($event)"
+          (toggle)="onToggleUser($event)" />
+      </div>
+    </mat-tab>
+
+    <!-- Pestaña 2: Perfiles y Permisos RBAC -->
+    <mat-tab label="Perfiles y Permisos RBAC">
+      <div class="security-page__tab-content">
+        <app-profile-list
+          [profiles]="presenter.filteredProfiles()"
+          (edit)="openEditProfile($event)"
+          (toggle)="onToggleProfile($event)" />
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

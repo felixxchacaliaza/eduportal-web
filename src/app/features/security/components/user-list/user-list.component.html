@@ -1,0 +1,101 @@
+<div class="user-table-container">
+  <table mat-table [dataSource]="users()" class="user-table" data-testid="users-table">
+
+    <!-- Código Column -->
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef class="user-table__th">Código</th>
+      <td mat-cell *matCellDef="let user" class="user-table__td user-table__code">
+        {{ user.code }}
+      </td>
+    </ng-container>
+
+    <!-- Persona Column -->
+    <ng-container matColumnDef="person">
+      <th mat-header-cell *matHeaderCellDef class="user-table__th">Colaborador / DNI</th>
+      <td mat-cell *matCellDef="let user" class="user-table__td">
+        <div class="user-table__person-cell">
+          <span class="user-table__person-name">
+            {{ user.person?.lastName ? (user.person?.lastName + ', ' + user.person?.firstName) : (user.person?.fullName || 'No asignado') }}
+          </span>
+          <span class="user-table__person-dni">DNI: {{ user.person?.dni || 'S/D' }}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef class="user-table__th">Correo Electrónico</th>
+      <td mat-cell *matCellDef="let user" class="user-table__td user-table__email">
+        {{ user.email }}
+      </td>
+    </ng-container>
+
+    <!-- Perfil Column -->
+    <ng-container matColumnDef="profile">
+      <th mat-header-cell *matHeaderCellDef class="user-table__th">Perfil / Rol</th>
+      <td mat-cell *matCellDef="let user" class="user-table__td">
+        <div class="user-table__role-badge" [class.user-table__role-badge--admin]="user.profile?.isSuperAdmin">
+          <mat-icon>{{ user.profile?.isSuperAdmin ? 'shield' : 'badge' }}</mat-icon>
+          <span>{{ user.profile?.name || 'Docente' }}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Estado Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="user-table__th">Estado</th>
+      <td mat-cell *matCellDef="let user" class="user-table__td">
+        <div class="user-table__status-group">
+          @if (user.isProtected) {
+            <span class="status-chip status-chip--protected" title="SuperAdmin Protegido (RN-SEG-02)">
+              <mat-icon>lock</mat-icon> Protegido
+            </span>
+          }
+          <span
+            class="status-chip"
+            [class.status-chip--active]="user.enabled"
+            [class.status-chip--inactive]="!user.enabled">
+            {{ user.enabled ? 'Activo' : 'Inactivo' }}
+          </span>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Acciones Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="user-table__th user-table__th--actions">Acciones</th>
+      <td mat-cell *matCellDef="let user" class="user-table__td user-table__td--actions">
+        <button
+          mat-icon-button
+          color="primary"
+          type="button"
+          (click)="onEdit(user)"
+          data-testid="edit-user-btn"
+          title="Editar cuenta de usuario">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          [color]="user.enabled ? 'warn' : 'accent'"
+          type="button"
+          (click)="onToggle(user)"
+          data-testid="toggle-user-btn"
+          [disabled]="user.isProtected"
+          [title]="user.isProtected ? 'La cuenta raíz no puede ser desactivada' : (user.enabled ? 'Desactivar cuenta' : 'Activar cuenta')">
+          <mat-icon>{{ user.enabled ? 'block' : 'check_circle' }}</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="user-table__row"></tr>
+
+    <!-- Fila Vacia -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell user-table__empty" [attr.colspan]="displayedColumns.length">
+        No se encontraron cuentas de usuario que coincidan con la búsqueda.
+      </td>
+    </tr>
+  </table>
+</div>

@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { UserSaveDialogPresenter } from './user-save-dialog.presenter';
 import { User, Profile, SaveUserDto } from '../../models';
-import { Person } from '../../../../core/api/models/interfaces/person.interface';
+import { IPerson as Person } from '../../../students/student-management/models/person.interface';
 
 export interface UserSaveDialogData {
   readonly user?: User;
