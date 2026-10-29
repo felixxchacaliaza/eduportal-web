@@ -8,6 +8,8 @@ export * from './models/interfaces/academic-year.interface';
 export * from './models/interfaces/grade-subject.interface';
 export * from './models/interfaces/grade-section.interface';
 export * from './models/interfaces/rule.interface';
+export * from './models/interfaces/menu.interface';
+export * from './models/interfaces/menu-node.interface';
 export * from './services/area.service';
 export * from './services/level.service';
 export * from './services/subject.service';
