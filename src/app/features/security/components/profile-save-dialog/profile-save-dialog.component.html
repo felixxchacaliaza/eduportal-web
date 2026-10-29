@@ -1,0 +1,175 @@
+<div class="profile-dialog">
+  <div class="profile-dialog__header">
+    <div class="profile-dialog__title-group">
+      <mat-icon class="profile-dialog__header-icon">{{ presenter.isEditing() ? 'shield' : 'admin_panel_settings' }}</mat-icon>
+      <div>
+        <h2 mat-dialog-title class="profile-dialog__title">
+          {{ presenter.isEditing() ? 'Editar Perfil Institucional' : 'Nuevo Perfil Institucional' }}
+        </h2>
+        <span class="profile-dialog__subtitle">Definición de rol y asignación granular de permisos RBAC</span>
+      </div>
+    </div>
+    <button mat-icon-button type="button" (click)="onCancel()" aria-label="Cerrar modal">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (presenter.isSuperAdmin()) {
+    <div class="profile-dialog__admin-alert">
+      <mat-icon>star</mat-icon>
+      <div>
+        <strong>Perfil Super Administrador Raíz:</strong>
+        <span> Posee acceso irrestricto automático (FULL) a todos los módulos y submódulos de la plataforma.</span>
+      </div>
+    </div>
+  }
+
+  <form [formGroup]="presenter.form" (ngSubmit)="onSubmit()" class="profile-dialog__form" novalidate>
+    <mat-dialog-content class="profile-dialog__content">
+      <!-- Datos Principales del Perfil -->
+      <div class="profile-dialog__main-fields">
+        <mat-form-field appearance="outline" class="profile-dialog__field">
+          <mat-label>Nombre del Perfil / Rol</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            placeholder="ej. COORDINADOR PEDAGÓGICO"
+            data-testid="profile-name-input"
+            required />
+          <mat-icon matPrefix>badge</mat-icon>
+          @if (presenter.form.controls.name.invalid && presenter.form.controls.name.touched) {
+            <mat-error>El nombre del perfil es obligatorio</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="profile-dialog__field">
+          <mat-label>Descripción de Funciones</mat-label>
+          <input
+            matInput
+            formControlName="description"
+            placeholder="Alcance de responsabilidades en el sistema"
+            data-testid="profile-description-input" />
+          <mat-icon matPrefix>description</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- Matriz Interactiva de Permisos sobre Menús -->
+      <section class="profile-dialog__matrix-section">
+        <div class="profile-dialog__matrix-header">
+          <h3 class="profile-dialog__matrix-title">Matriz de Permisos por Módulo</h3>
+          <span class="profile-dialog__matrix-subtitle">Defina el nivel de acceso para cada menú de la plataforma</span>
+        </div>
+
+        <div class="profile-dialog__table-wrapper">
+          <table class="profile-dialog__table">
+            <thead>
+              <tr>
+                <th class="col-module">Módulo / Pantalla</th>
+                <th class="col-level">Acceso Total (FULL)</th>
+                <th class="col-level">Solo Lectura (READ_ONLY)</th>
+                <th class="col-level">Sin Acceso (NONE)</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (menu of data.menus; track menu.id) {
+                <!-- Fila Padre / Grupo -->
+                <tr class="row-parent">
+                  <td class="cell-module">
+                    <mat-icon class="menu-icon">{{ menu.icon }}</mat-icon>
+                    <strong>{{ menu.label }}</strong>
+                  </td>
+                  <td class="cell-level">
+                    <button
+                      type="button"
+                      class="perm-chip perm-chip--full"
+                      [class.perm-chip--active]="presenter.getPermission(menu.id) === 'FULL'"
+                      [disabled]="presenter.isSuperAdmin()"
+                      (click)="setAccess(menu.id, 'FULL')">
+                      FULL
+                    </button>
+                  </td>
+                  <td class="cell-level">
+                    <button
+                      type="button"
+                      class="perm-chip perm-chip--read"
+                      [class.perm-chip--active]="presenter.getPermission(menu.id) === 'READ_ONLY'"
+                      [disabled]="presenter.isSuperAdmin()"
+                      (click)="setAccess(menu.id, 'READ_ONLY')">
+                      READ
+                    </button>
+                  </td>
+                  <td class="cell-level">
+                    <button
+                      type="button"
+                      class="perm-chip perm-chip--none"
+                      [class.perm-chip--active]="presenter.getPermission(menu.id) === 'NONE'"
+                      [disabled]="presenter.isSuperAdmin()"
+                      (click)="setAccess(menu.id, 'NONE')">
+                      NONE
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Filas Hijas / Submódulos -->
+                @for (child of menu.children; track child.id) {
+                  <tr class="row-child">
+                    <td class="cell-module cell-module--child">
+                      <mat-icon class="menu-icon menu-icon--child">{{ child.icon }}</mat-icon>
+                      <span>{{ child.label }}</span>
+                      <small class="route-hint">{{ child.path }}</small>
+                    </td>
+                    <td class="cell-level">
+                      <button
+                        type="button"
+                        class="perm-chip perm-chip--full"
+                        [class.perm-chip--active]="presenter.getPermission(child.id) === 'FULL'"
+                        [disabled]="presenter.isSuperAdmin()"
+                        (click)="setAccess(child.id, 'FULL')">
+                        FULL
+                      </button>
+                    </td>
+                    <td class="cell-level">
+                      <button
+                        type="button"
+                        class="perm-chip perm-chip--read"
+                        [class.perm-chip--active]="presenter.getPermission(child.id) === 'READ_ONLY'"
+                        [disabled]="presenter.isSuperAdmin()"
+                        (click)="setAccess(child.id, 'READ_ONLY')">
+                        READ
+                      </button>
+                    </td>
+                    <td class="cell-level">
+                      <button
+                        type="button"
+                        class="perm-chip perm-chip--none"
+                        [class.perm-chip--active]="presenter.getPermission(child.id) === 'NONE'"
+                        [disabled]="presenter.isSuperAdmin()"
+                        (click)="setAccess(child.id, 'NONE')">
+                        NONE
+                      </button>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="profile-dialog__actions">
+      <button mat-button type="button" (click)="onCancel()" data-testid="profile-dialog-cancel-btn">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        data-testid="profile-dialog-submit-btn"
+        [disabled]="presenter.form.invalid">
+        <mat-icon>save</mat-icon>
+        <span>{{ presenter.isEditing() ? 'Actualizar Perfil' : 'Guardar Perfil' }}</span>
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>
