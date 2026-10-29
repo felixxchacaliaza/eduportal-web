@@ -1,0 +1,115 @@
+<div class="table-container">
+  @if (isLoading()) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  <div class="table-scroll-wrapper">
+    <table mat-table [dataSource]="pagedWorkers()" class="mat-elevation-z1">
+      <!-- Código Trabajador -->
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef>Código</th>
+        <td mat-cell *matCellDef="let worker">
+          <span class="badge-code">{{ worker.code }}</span>
+        </td>
+      </ng-container>
+
+      <!-- DNI -->
+      <ng-container matColumnDef="dni">
+        <th mat-header-cell *matHeaderCellDef>DNI</th>
+        <td mat-cell *matCellDef="let worker">
+          <span class="dni-text">{{ worker.person?.dni || '-' }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Nombres y Apellidos -->
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef>Colaborador</th>
+        <td mat-cell *matCellDef="let worker">
+          <div class="person-cell">
+            <span class="full-name">{{ worker.person?.lastName }}, {{ worker.person?.firstName }}</span>
+            <span class="email-sub">{{ worker.person?.personalEmail }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Cargo Institucional -->
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef>Cargo Institucional</th>
+        <td mat-cell *matCellDef="let worker">
+          <span class="badge-position">{{ getPositionName(worker) }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Turno Laboral -->
+      <ng-container matColumnDef="shift">
+        <th mat-header-cell *matHeaderCellDef>Turno</th>
+        <td mat-cell *matCellDef="let worker">
+          <span class="shift-text">{{ getShiftLabel(worker.shift) }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Fecha Ingreso -->
+      <ng-container matColumnDef="hireDate">
+        <th mat-header-cell *matHeaderCellDef>Fecha Ingreso</th>
+        <td mat-cell *matCellDef="let worker">
+          <span class="date-text">{{ worker.hireDate | date:'dd/MM/yyyy' }}</span>
+        </td>
+      </ng-container>
+
+      <!-- Estado -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let worker">
+          <span [class]="worker.enabled !== false ? 'status-pill active' : 'status-pill inactive'">
+            {{ worker.enabled !== false ? 'Activo' : 'Inactivo' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Acciones -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-header">Acciones</th>
+        <td mat-cell *matCellDef="let worker" class="actions-cell">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="edit.emit(worker)"
+            matTooltip="Editar colaborador"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            [color]="worker.enabled !== false ? 'warn' : 'accent'"
+            (click)="toggleStatus.emit(worker)"
+            [matTooltip]="worker.enabled !== false ? 'Dar de baja (desactivar)' : 'Reactivar colaborador'"
+          >
+            <mat-icon>{{ worker.enabled !== false ? 'delete' : 'restore' }}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <!-- Fila Vacía -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell empty-cell" [attr.colspan]="displayedColumns.length">
+          <div class="empty-state">
+            <mat-icon>badge</mat-icon>
+            <p>No se encontraron trabajadores registrados con los criterios especificados.</p>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    [length]="workers().length"
+    [pageSize]="pageSize()"
+    [pageIndex]="pageIndex()"
+    [pageSizeOptions]="[5, 10, 20]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>
