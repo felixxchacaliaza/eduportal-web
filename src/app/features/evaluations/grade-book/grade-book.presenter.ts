@@ -126,12 +126,17 @@ export class GradeBookPresenter {
       this.subjects.set(subs || []);
       this.periodConfigs.set(periods || []);
 
-      // Seleccionar salón y asignatura por defecto si existen
+      // Seleccionar salón y asignatura por defecto si existen (preferir Matemática para coincidir con seeders)
       if (sections && sections.length > 0) {
         this.selectedGradeSectionId.set(sections[0].id);
       }
       if (subs && subs.length > 0) {
-        this.selectedSubjectId.set(subs[0].id);
+        const mathSubject = subs.find((s: any) =>
+          s.name?.toLowerCase().includes('matemática') ||
+          s.name?.toLowerCase().includes('matematica') ||
+          s.code === 'MAT-001'
+        );
+        this.selectedSubjectId.set(mathSubject ? mathSubject.id : subs[0].id);
       }
 
       await this.loadMatrix();
