@@ -23,6 +23,7 @@ import { ProfileListComponent } from '../../components/profile-list/profile-list
 import { UserSaveDialogComponent } from '../../components/user-save-dialog/user-save-dialog.component';
 import { ProfileSaveDialogComponent } from '../../components/profile-save-dialog/profile-save-dialog.component';
 import { InfoCardComponent } from '../../../../shared/components/info-card/info-card.component';
+import { HasPermissionDirective } from '../../../../shared/directives/has-permission';
 
 /**
  * ============================================================================
@@ -41,7 +42,8 @@ import { InfoCardComponent } from '../../../../shared/components/info-card/info-
     MatInputModule,
     UserListComponent,
     ProfileListComponent,
-    InfoCardComponent
+    InfoCardComponent,
+    HasPermissionDirective
   ],
   providers: [SecurityManagementPresenter],
   templateUrl: './security-management.component.html',
