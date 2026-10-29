@@ -1,0 +1,13 @@
+<div class="score-input-wrapper" [ngClass]="statusClass()" [class.score--disabled]="isDisabled()">
+  <input
+    type="text"
+    class="score-input-control"
+    [value]="displayValue()"
+    [disabled]="isDisabled()"
+    maxlength="2"
+    placeholder="--"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    autocomplete="off"
+  />
+</div>
