@@ -1,0 +1,46 @@
+<div class="incident-dialog">
+  <div class="incident-dialog__header">
+    <div class="incident-dialog__title-group">
+      <div class="incident-dialog__icon-wrapper">
+        <mat-icon>report_problem</mat-icon>
+      </div>
+      <div>
+        <h2 class="incident-dialog__title">Reportar Incidencia Disciplinaria</h2>
+        <p class="incident-dialog__subtitle">
+          Estudiante: <strong>{{ presenter.data.studentName }}</strong>
+          @if (presenter.data.studentDni) {
+            <span> (DNI: {{ presenter.data.studentDni }})</span>
+          }
+        </p>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      type="button"
+      (click)="presenter.close()"
+      aria-label="Cerrar modal"
+      [disabled]="presenter.isSaving()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (presenter.isSaving()) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  @if (presenter.errorMessage(); as err) {
+    <div class="incident-dialog__alert">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ err }}</span>
+    </div>
+  }
+
+  <div class="incident-dialog__content">
+    <app-incident-save-dialog-form
+      [isSubmitting]="presenter.isSaving()"
+      (formSubmit)="onFormSubmit($event)"
+      (formCancel)="onFormCancel()"
+    ></app-incident-save-dialog-form>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+<form [formGroup]="presenter.form" (ngSubmit)="onSubmit()" class="incident-save-form">
+  <div class="incident-save-form__fields">
+    <!-- Asunto / Título -->
+    <mat-form-field appearance="outline" class="incident-save-form__field full-width">
+      <mat-label>{{ presenter.constant['title'].label }}</mat-label>
+      @if (presenter.constant['title'].iconLeft) {
+        <mat-icon matPrefix>{{ presenter.constant['title'].iconLeft }}</mat-icon>
+      }
+      <input
+        matInput
+        name="title"
+        data-testid="incident-title"
+        [formControlName]="presenter.constant['title'].formControlName!"
+        [placeholder]="presenter.constant['title'].placeHolder!"
+        required
+      />
+      @if (presenter.form.get('title')?.hasError('required') && presenter.form.get('title')?.touched) {
+        <mat-error>El título es obligatorio</mat-error>
+      } @else if (presenter.form.get('title')?.hasError('minlength')) {
+        <mat-error>Mínimo 3 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Fila Tipo y Severidad -->
+    <div class="incident-save-form__row">
+      <!-- Tipo -->
+      <mat-form-field appearance="outline" class="incident-save-form__field">
+        <mat-label>{{ presenter.constant['type'].label }}</mat-label>
+        @if (presenter.constant['type'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.constant['type'].iconLeft }}</mat-icon>
+        }
+        <mat-select [formControlName]="presenter.constant['type'].formControlName!" required>
+          @for (opt of presenter.typeOptions; track opt.value) {
+            <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+          }
+        </mat-select>
+        @if (presenter.form.get('type')?.hasError('required') && presenter.form.get('type')?.touched) {
+          <mat-error>Seleccione un tipo</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Severidad -->
+      <mat-form-field appearance="outline" class="incident-save-form__field">
+        <mat-label>{{ presenter.constant['severity'].label }}</mat-label>
+        @if (presenter.constant['severity'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.constant['severity'].iconLeft }}</mat-icon>
+        }
+        <mat-select [formControlName]="presenter.constant['severity'].formControlName!" required>
+          @for (opt of presenter.severityOptions; track opt.value) {
+            <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+          }
+        </mat-select>
+        @if (presenter.form.get('severity')?.hasError('required') && presenter.form.get('severity')?.touched) {
+          <mat-error>Seleccione una gravedad</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Descripción -->
+    <mat-form-field appearance="outline" class="incident-save-form__field full-width">
+      <mat-label>{{ presenter.constant['description'].label }}</mat-label>
+      @if (presenter.constant['description'].iconLeft) {
+        <mat-icon matPrefix>{{ presenter.constant['description'].iconLeft }}</mat-icon>
+      }
+      <textarea
+        matInput
+        rows="3"
+        name="description"
+        data-testid="incident-description"
+        [formControlName]="presenter.constant['description'].formControlName!"
+        [placeholder]="presenter.constant['description'].placeHolder!"
+        required
+      ></textarea>
+      @if (presenter.form.get('description')?.hasError('required') && presenter.form.get('description')?.touched) {
+        <mat-error>La descripción es obligatoria</mat-error>
+      } @else if (presenter.form.get('description')?.hasError('minlength')) {
+        <mat-error>Mínimo 5 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Acción Tomada -->
+    <mat-form-field appearance="outline" class="incident-save-form__field full-width">
+      <mat-label>{{ presenter.constant['actionTaken'].label }}</mat-label>
+      @if (presenter.constant['actionTaken'].iconLeft) {
+        <mat-icon matPrefix>{{ presenter.constant['actionTaken'].iconLeft }}</mat-icon>
+      }
+      <textarea
+        matInput
+        rows="2"
+        name="actionTaken"
+        data-testid="incident-action"
+        [formControlName]="presenter.constant['actionTaken'].formControlName!"
+        [placeholder]="presenter.constant['actionTaken'].placeHolder!"
+      ></textarea>
+    </mat-form-field>
+  </div>
+
+  <div class="incident-save-form__actions">
+    <button
+      mat-button
+      type="button"
+      data-testid="incident-cancel-btn"
+      (click)="onCancel()"
+      [disabled]="isSubmitting"
+    >
+      Cancelar
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      data-testid="incident-submit-btn"
+      [disabled]="presenter.form.invalid || isSubmitting"
+      class="incident-save-form__submit-btn"
+    >
+      @if (isSubmitting) {
+        <mat-icon class="spinning">sync</mat-icon>
+      } @else {
+        <mat-icon>save</mat-icon>
+      }
+      <span>{{ isSubmitting ? 'Guardando...' : 'Registrar Incidencia' }}</span>
+    </button>
+  </div>
+</form>

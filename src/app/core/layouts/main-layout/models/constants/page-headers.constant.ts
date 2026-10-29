@@ -62,6 +62,13 @@ export const PAGE_HEADERS_CONSTANT: readonly PageHeaderConfig[] = Object.freeze(
     description: 'Registro oficial de notas por periodo con candados de cierre RUL-004 y escala vigesimal',
   }),
   Object.freeze({
+    route: '/asistencia',
+    breadcrumbs: ['Académico', 'Asistencia Diaria'],
+    title: 'Control de Asistencia Diaria Escolar',
+    icon: 'event_available',
+    description: 'Registro de asistencia por aula y gestión de incidencias de convivencia escolar',
+  }),
+  Object.freeze({
     route: '/grados-secciones',
     breadcrumbs: ['Académico', 'Grados y Secciones'],
     title: 'Grados y Secciones',

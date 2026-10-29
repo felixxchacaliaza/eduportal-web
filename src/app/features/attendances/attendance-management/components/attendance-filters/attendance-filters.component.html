@@ -1,0 +1,65 @@
+<div class="attendance-filters">
+  <div class="attendance-filters__selectors">
+    <!-- Selector de Salón / Sección -->
+    <mat-form-field appearance="outline" class="attendance-filters__field">
+      <mat-label>Salón y Sección</mat-label>
+      <mat-icon matPrefix>class</mat-icon>
+      <mat-select
+        [value]="selectedGradeSection"
+        (selectionChange)="gradeSectionChange.emit($event.value)"
+        [disabled]="isLoading || isSaving"
+      >
+        @for (sec of gradeSections; track sec.id) {
+          <mat-option [value]="sec.id">
+            {{ sec.grade?.name }}° {{ sec.section?.name }} - {{ sec.shift }} (Aforo: {{ sec.enrolledStudents || 0 }}/{{ sec.maxCapacity || 30 }})
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Selector de Fecha de Asistencia -->
+    <mat-form-field appearance="outline" class="attendance-filters__field">
+      <mat-label>Fecha de Asistencia</mat-label>
+      <mat-icon matPrefix>calendar_today</mat-icon>
+      <input
+        matInput
+        type="date"
+        [value]="selectedDate"
+        (change)="onDateInputChange($event)"
+        [disabled]="isLoading || isSaving"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="attendance-filters__actions">
+    <!-- Botón Rápido: Marcar Todos Presentes -->
+    <button
+      mat-stroked-button
+      type="button"
+      color="accent"
+      (click)="markAllPresent.emit()"
+      [disabled]="isLoading || isSaving || totalStudents === 0"
+      class="attendance-filters__mark-all-btn"
+    >
+      <mat-icon>done_all</mat-icon>
+      <span>Marcar Todos Presentes</span>
+    </button>
+
+    <!-- Botón Principal: Guardar Asistencias -->
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="saveAttendances.emit()"
+      [disabled]="isLoading || isSaving || totalStudents === 0"
+      class="attendance-filters__save-btn"
+    >
+      @if (isSaving) {
+        <mat-icon class="spinning">sync</mat-icon>
+      } @else {
+        <mat-icon>save</mat-icon>
+      }
+      <span>{{ isSaving ? 'Guardando...' : 'Guardar Asistencias' }}</span>
+    </button>
+  </div>
+</div>

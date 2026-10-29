@@ -1,0 +1,114 @@
+<div class="attendance-table-container">
+  @if (isLoading) {
+    <div class="attendance-table__loading">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Cargando padrón de estudiantes y registros de asistencia...</p>
+    </div>
+  } @else if (items.length === 0) {
+    <div class="attendance-table__empty">
+      <mat-icon class="attendance-table__empty-icon">school</mat-icon>
+      <h3>No hay estudiantes matriculados</h3>
+      <p>Seleccione otro salón o registre matrículas para el año escolar actual.</p>
+    </div>
+  } @else {
+    <div class="attendance-table-wrapper">
+      <table class="attendance-table">
+        <thead>
+          <tr>
+            <th class="col-num">#</th>
+            <th class="col-student">Estudiante</th>
+            <th class="col-status">Estado de Asistencia</th>
+            <th class="col-observation">Observación</th>
+            <th class="col-actions">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (group of items.controls; track $index) {
+            <tr class="attendance-table__row">
+              <td class="col-num">{{ $index + 1 }}</td>
+              <td class="col-student">
+                <div class="student-info">
+                  <span class="student-info__name">{{ group.get('studentName')?.value }}</span>
+                  <div class="student-info__meta">
+                    @if (group.get('studentCode')?.value) {
+                      <span class="badge badge--code">{{ group.get('studentCode')?.value }}</span>
+                    }
+                    @if (group.get('studentDni')?.value) {
+                      <span class="badge badge--dni">DNI: {{ group.get('studentDni')?.value }}</span>
+                    }
+                  </div>
+                </div>
+              </td>
+              <td class="col-status">
+                <div class="status-pills">
+                  <button
+                    type="button"
+                    class="status-pill status-pill--present"
+                    [class.active]="group.get('status')?.value === 'PRESENTE'"
+                    (click)="onSetStatus($index, 'PRESENTE')"
+                  >
+                    <mat-icon class="status-pill__icon">check_circle</mat-icon>
+                    <span>Presente</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="status-pill status-pill--late"
+                    [class.active]="group.get('status')?.value === 'TARDANZA'"
+                    (click)="onSetStatus($index, 'TARDANZA')"
+                  >
+                    <mat-icon class="status-pill__icon">schedule</mat-icon>
+                    <span>Tardanza</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="status-pill status-pill--absent"
+                    [class.active]="group.get('status')?.value === 'FALTA'"
+                    (click)="onSetStatus($index, 'FALTA')"
+                  >
+                    <mat-icon class="status-pill__icon">cancel</mat-icon>
+                    <span>Falta</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="status-pill status-pill--justified"
+                    [class.active]="group.get('status')?.value === 'JUSTIFICADO'"
+                    (click)="onSetStatus($index, 'JUSTIFICADO')"
+                  >
+                    <mat-icon class="status-pill__icon">verified</mat-icon>
+                    <span>Justificado</span>
+                  </button>
+                </div>
+              </td>
+              <td class="col-observation">
+                <input
+                  type="text"
+                  class="observation-input"
+                  [value]="group.get('observation')?.value || ''"
+                  (input)="onObservationChange($index, $event)"
+                  placeholder="Motivo o anotación..."
+                  maxlength="200"
+                />
+              </td>
+              <td class="col-actions">
+                <button
+                  mat-stroked-button
+                  color="warn"
+                  type="button"
+                  (click)="onReportIncident(group)"
+                  class="incident-btn"
+                  matTooltip="Reportar falta o mérito de conducta"
+                >
+                  <mat-icon>report_problem</mat-icon>
+                  <span>Incidencia</span>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

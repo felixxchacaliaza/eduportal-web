@@ -1,0 +1,31 @@
+<div class="attendance-management-container">
+  <!-- 1. Tarjetas KPI de Estado de Asistencia Diaria -->
+  <div class="kpi-grid">
+    @for (card of presenter.cards(); track card.label) {
+      <app-info-card [data]="card"></app-info-card>
+    }
+  </div>
+
+  <!-- 2. Barra de Filtros, Selector de Aula, Fecha y Acciones Rápidas -->
+  <app-attendance-filters
+    [gradeSections]="presenter.gradeSections()"
+    [selectedGradeSection]="presenter.selectedGradeSectionId()"
+    [selectedDate]="presenter.selectedDate()"
+    [isLoading]="presenter.isLoading()"
+    [isSaving]="presenter.isSaving()"
+    [totalStudents]="presenter.formPresenter.totalCount()"
+    (gradeSectionChange)="presenter.setGradeSection($event)"
+    (dateChange)="presenter.setDate($event)"
+    (markAllPresent)="presenter.markAllPresent()"
+    (saveAttendances)="presenter.save()"
+  ></app-attendance-filters>
+
+  <!-- 3. Matriz de Asistencia por Estudiante y Registro de Incidencias -->
+  <app-attendance-table
+    [items]="presenter.formPresenter.itemsArray"
+    [isLoading]="presenter.isLoading()"
+    [version]="presenter.formPresenter.version()"
+    (statusChange)="presenter.formPresenter.setStatus($event.index, $event.status)"
+    (reportIncident)="presenter.openIncidentDialog($event)"
+  ></app-attendance-table>
+</div>
