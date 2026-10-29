@@ -1,0 +1,39 @@
+<div class="section-change-dialog">
+  <div class="section-change-dialog__header">
+    <div class="section-change-dialog__title-group">
+      <mat-icon class="section-change-dialog__title-icon">published_with_changes</mat-icon>
+      <div>
+        <h2 mat-dialog-title class="section-change-dialog__title">
+          Cambio / Traslado de Sección Escolar
+        </h2>
+        <p class="section-change-dialog__subtitle">
+          Seleccione el nuevo salón escolar disponible para el estudiante dentro del año lectivo.
+        </p>
+      </div>
+    </div>
+    <button mat-icon-button (click)="presenter.close()" class="section-change-dialog__close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (presenter.isLoadingSections()) {
+    <mat-progress-bar mode="indeterminate" class="section-change-dialog__progress"></mat-progress-bar>
+  }
+
+  <mat-dialog-content class="section-change-dialog__content">
+    @if (presenter.errorMessage(); as err) {
+      <div class="section-change-dialog__error-banner">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ err }}</span>
+      </div>
+    }
+
+    <app-section-change-dialog-form
+      [student]="presenter.data.student"
+      [sections]="presenter.sections()"
+      [isSaving]="presenter.isSaving()"
+      (formSubmit)="onFormSubmit($event)"
+      (formCancel)="onFormCancel()"
+    ></app-section-change-dialog-form>
+  </mat-dialog-content>
+</div>

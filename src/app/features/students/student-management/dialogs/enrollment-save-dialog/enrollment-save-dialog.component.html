@@ -1,0 +1,54 @@
+<div class="enrollment-save-dialog">
+  <!-- Barra de progreso indeterminada -->
+  @if (presenter.isSaving() || presenter.isLoadingSections()) {
+    <mat-progress-bar mode="indeterminate" class="enrollment-save-dialog__progress"></mat-progress-bar>
+  }
+
+  <!-- Encabezado del Diálogo Modal -->
+  <div class="enrollment-save-dialog__header">
+    <div class="enrollment-save-dialog__title-group">
+      <div class="enrollment-save-dialog__icon-wrapper">
+        <mat-icon>how_to_reg</mat-icon>
+      </div>
+      <div>
+        <h2 mat-dialog-title class="enrollment-save-dialog__title">
+          Matrícula Anual del Estudiante
+        </h2>
+        <p class="enrollment-save-dialog__subtitle">
+          Seleccione el salón escolar y valide la disponibilidad de cupos para el periodo lectivo.
+        </p>
+      </div>
+    </div>
+
+    <!-- Botón de cierre 'X' -->
+    <button
+      mat-icon-button
+      type="button"
+      class="enrollment-save-dialog__close-btn"
+      [disabled]="presenter.isSaving()"
+      (click)="onFormCancel()"
+      title="Cerrar modal"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Banner de error si la API falló -->
+  @if (presenter.errorMessage(); as errorMsg) {
+    <div class="enrollment-save-dialog__error-banner" role="alert">
+      <mat-icon class="enrollment-save-dialog__error-icon">error_outline</mat-icon>
+      <span class="enrollment-save-dialog__error-text">{{ errorMsg }}</span>
+    </div>
+  }
+
+  <!-- Contenido Principal: Formulario Especializado -->
+  <mat-dialog-content class="enrollment-save-dialog__content">
+    <app-enrollment-save-dialog-form
+      [student]="presenter.data.student"
+      [sections]="presenter.sections()"
+      [isSaving]="presenter.isSaving()"
+      (formSubmit)="onFormSubmit($event)"
+      (formCancel)="onFormCancel()"
+    ></app-enrollment-save-dialog-form>
+  </mat-dialog-content>
+</div>
