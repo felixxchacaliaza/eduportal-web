@@ -1,0 +1,153 @@
+<div class="incidents">
+  <!-- 1. Tarjetas KPI Métricas -->
+  <div class="incidents__cards">
+    @for (card of cards(); track card.label) {
+      <app-info-card [data]="card" />
+    }
+  </div>
+
+  <!-- 2. Barra de Filtros y Búsqueda -->
+  <div class="incidents__filters">
+    <div class="incidents__filters-controls">
+      <!-- Buscador -->
+      <mat-form-field appearance="outline" class="incidents__field incidents__field--search">
+        <mat-label>Buscar por alumno, código o motivo...</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          type="text"
+          placeholder="Ej. García, INC-001, Conducta..."
+          [ngModel]="searchTerm()"
+          (ngModelChange)="onSearchChange($event)"
+        />
+      </mat-form-field>
+
+      <!-- Selector de Severidad -->
+      <mat-form-field appearance="outline" class="incidents__field">
+        <mat-label>Severidad</mat-label>
+        <mat-icon matPrefix>warning</mat-icon>
+        <mat-select [ngModel]="selectedSeverity()" (ngModelChange)="onSeverityChange($event)">
+          <mat-option value="ALL">Todas las Severidades</mat-option>
+          <mat-option value="LEVE">Leve</mat-option>
+          <mat-option value="MODERADA">Moderada</mat-option>
+          <mat-option value="GRAVE">Grave</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Selector de Tipo -->
+      <mat-form-field appearance="outline" class="incidents__field">
+        <mat-label>Tipo de Evento</mat-label>
+        <mat-icon matPrefix>category</mat-icon>
+        <mat-select [ngModel]="selectedType()" (ngModelChange)="onTypeChange($event)">
+          <mat-option value="ALL">Todos los Tipos</mat-option>
+          <mat-option value="MERITO">Mérito</mat-option>
+          <mat-option value="DEMERITO">Demérito</mat-option>
+          <mat-option value="ATENCION_PSICOLOGICA">Atención Psicológica</mat-option>
+          <mat-option value="CITACION_APODERADO">Citación Apoderado</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- 3. Spinner o Tabla de Datos -->
+  @if (isLoading()) {
+    <div class="incidents__loading">
+      <mat-spinner diameter="44" />
+      <p>Cargando bitácora de convivencia escolar y psicología...</p>
+    </div>
+  } @else {
+    <div class="incidents__table-container">
+      <table mat-table [dataSource]="filteredIncidents()" class="incidents__table">
+        <!-- Código Column -->
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef>CÓDIGO</th>
+          <td mat-cell *matCellDef="let inc">
+            <span class="incidents__code-badge">{{ inc.code }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Estudiante Column -->
+        <ng-container matColumnDef="student">
+          <th mat-header-cell *matHeaderCellDef>ESTUDIANTE</th>
+          <td mat-cell *matCellDef="let inc">
+            <div class="incidents__student-wrapper">
+              <span class="incidents__student-name">
+                {{ inc.student?.person?.lastName }}, {{ inc.student?.person?.firstName }}
+              </span>
+              <span class="incidents__student-code">{{ inc.student?.code }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Tipo Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>TIPO</th>
+          <td mat-cell *matCellDef="let inc">
+            <span class="incidents__type-chip" [class]="'incidents__type-chip--' + inc.type?.toLowerCase()">
+              {{ inc.type }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Severidad Column -->
+        <ng-container matColumnDef="severity">
+          <th mat-header-cell *matHeaderCellDef>SEVERIDAD</th>
+          <td mat-cell *matCellDef="let inc">
+            <span class="incidents__sev-chip" [class]="'incidents__sev-chip--' + inc.severity?.toLowerCase()">
+              {{ inc.severity || 'LEVE' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Motivo y Descripción Column -->
+        <ng-container matColumnDef="titleDescription">
+          <th mat-header-cell *matHeaderCellDef>MOTIVO Y DESCRIPCIÓN</th>
+          <td mat-cell *matCellDef="let inc">
+            <div class="incidents__desc-wrapper">
+              <strong class="incidents__title">{{ inc.title }}</strong>
+              <span class="incidents__desc">{{ inc.description }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Reportado por Column -->
+        <ng-container matColumnDef="reportedBy">
+          <th mat-header-cell *matHeaderCellDef>REPORTADO POR</th>
+          <td mat-cell *matCellDef="let inc">
+            <span class="incidents__reporter">
+              {{ inc.reportedBy?.lastName || '' }} {{ inc.reportedBy?.firstName || 'Docente / Tutor' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Fecha Column -->
+        <ng-container matColumnDef="incidentDate">
+          <th mat-header-cell *matHeaderCellDef>FECHA</th>
+          <td mat-cell *matCellDef="let inc">
+            <span class="incidents__date">{{ inc.incidentDate | date:'dd/MM/yyyy' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Estado Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>ESTADO</th>
+          <td mat-cell *matCellDef="let inc">
+            <span class="incidents__status" [class]="'incidents__status--' + inc.status?.toLowerCase()">
+              {{ inc.status || 'ABIERTA' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell incidents__no-data" [attr.colspan]="displayedColumns.length">
+            <mat-icon>info</mat-icon>
+            <p>No se encontraron registros de incidencias con los filtros seleccionados.</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  }
+</div>

@@ -1,0 +1,174 @@
+<div class="tuition-payments">
+  <!-- 1. Tarjetas KPI Métricas Financieras -->
+  <div class="tuition-payments__cards">
+    @for (card of cards(); track card.label) {
+      <app-info-card [data]="card" />
+    }
+  </div>
+
+  <!-- 2. Barra de Filtros y Búsqueda -->
+  <div class="tuition-payments__filters">
+    <div class="tuition-payments__filters-controls">
+      <!-- Buscador -->
+      <mat-form-field appearance="outline" class="tuition-payments__field tuition-payments__field--search">
+        <mat-label>Buscar por alumno, DNI o código...</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          type="text"
+          placeholder="Ej. Castillo, 72345678, PAY-001..."
+          [ngModel]="searchTerm()"
+          (ngModelChange)="onSearchChange($event)"
+        />
+      </mat-form-field>
+
+      <!-- Selector de Estado -->
+      <mat-form-field appearance="outline" class="tuition-payments__field">
+        <mat-label>Estado de Cobranza</mat-label>
+        <mat-icon matPrefix>payments</mat-icon>
+        <mat-select [ngModel]="filterStatus()" (ngModelChange)="onStatusChange($event)">
+          <mat-option value="ALL">Todos los Estados</mat-option>
+          <mat-option value="PENDIENTE">Pendientes</mat-option>
+          <mat-option value="PAGADO">Pagados / Al Día</mat-option>
+          <mat-option value="VENCIDO">Cuotas Vencidas</mat-option>
+          <mat-option value="EXONERADO">Exonerados</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Selector de Concepto / Cuota -->
+      <mat-form-field appearance="outline" class="tuition-payments__field">
+        <mat-label>Mes / Concepto</mat-label>
+        <mat-icon matPrefix>calendar_month</mat-icon>
+        <mat-select [ngModel]="filterConcept()" (ngModelChange)="onConceptChange($event)">
+          <mat-option value="ALL">Todas las Cuotas</mat-option>
+          <mat-option value="MATRICULA">Matrícula Anual</mat-option>
+          <mat-option value="PENSION_MARZO">Pensión Marzo</mat-option>
+          <mat-option value="PENSION_ABRIL">Pensión Abril</mat-option>
+          <mat-option value="PENSION_MAYO">Pensión Mayo</mat-option>
+          <mat-option value="PENSION_JUNIO">Pensión Junio</mat-option>
+          <mat-option value="PENSION_JULIO">Pensión Julio</mat-option>
+          <mat-option value="PENSION_AGOSTO">Pensión Agosto</mat-option>
+          <mat-option value="PENSION_SETIEMBRE">Pensión Setiembre</mat-option>
+          <mat-option value="PENSION_OCTUBRE">Pensión Octubre</mat-option>
+          <mat-option value="PENSION_NOVIEMBRE">Pensión Noviembre</mat-option>
+          <mat-option value="PENSION_DICIEMBRE">Pensión Diciembre</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- 3. Spinner o Tabla de Cuotas -->
+  @if (isLoading()) {
+    <div class="tuition-payments__loading">
+      <mat-spinner diameter="44" />
+      <p>Cargando padrón financiero de pensiones...</p>
+    </div>
+  } @else {
+    <div class="tuition-payments__table-container">
+      <table mat-table [dataSource]="filteredPayments()" class="tuition-payments__table">
+        <!-- Código Column -->
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef>CÓDIGO</th>
+          <td mat-cell *matCellDef="let p">
+            <span class="tuition-payments__code-badge">{{ p.code }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Estudiante Column -->
+        <ng-container matColumnDef="student">
+          <th mat-header-cell *matHeaderCellDef>ESTUDIANTE</th>
+          <td mat-cell *matCellDef="let p">
+            <div class="tuition-payments__student-wrapper">
+              <span class="tuition-payments__student-name">
+                {{ p.student?.person?.lastName }}, {{ p.student?.person?.firstName }}
+              </span>
+              <span class="tuition-payments__student-doc">DNI: {{ p.student?.person?.documentNumber }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Concepto Column -->
+        <ng-container matColumnDef="concept">
+          <th mat-header-cell *matHeaderCellDef>CONCEPTO</th>
+          <td mat-cell *matCellDef="let p">
+            <span class="tuition-payments__concept-chip">{{ p.concept }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Monto Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>MONTO</th>
+          <td mat-cell *matCellDef="let p">
+            <strong class="tuition-payments__amount">S/ {{ p.amount | number:'1.2-2' }}</strong>
+          </td>
+        </ng-container>
+
+        <!-- Vencimiento Column -->
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>VENCIMIENTO</th>
+          <td mat-cell *matCellDef="let p">
+            <span class="tuition-payments__due-date">{{ p.dueDate | date:'dd/MM/yyyy' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Estado Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>ESTADO</th>
+          <td mat-cell *matCellDef="let p">
+            <span class="tuition-payments__status" [class]="'tuition-payments__status--' + p.status?.toLowerCase()">
+              {{ p.status }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Medio / Fecha Pago Column -->
+        <ng-container matColumnDef="paymentInfo">
+          <th mat-header-cell *matHeaderCellDef>MEDIO Y FECHA</th>
+          <td mat-cell *matCellDef="let p">
+            @if (p.paidDate) {
+              <div class="tuition-payments__paid-info">
+                <span class="tuition-payments__paid-method">{{ p.paymentMethod || 'TRANSFERENCIA' }}</span>
+                <span class="tuition-payments__paid-date">{{ p.paidDate | date:'dd/MM/yyyy' }}</span>
+              </div>
+            } @else {
+              <span class="tuition-payments__unpaid-tag">Sin Pago</span>
+            }
+          </td>
+        </ng-container>
+
+        <!-- Acciones Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="tuition-payments__actions-header">ACCIÓN</th>
+          <td mat-cell *matCellDef="let p" class="tuition-payments__actions-cell">
+            @if (p.status === 'PAGADO') {
+              <span class="tuition-payments__completed-tag">
+                <mat-icon>verified</mat-icon>
+                Cancelado
+              </span>
+            } @else {
+              <button
+                mat-flat-button
+                color="primary"
+                class="tuition-payments__pay-btn"
+                (click)="openPaymentDialog(p)"
+              >
+                <mat-icon>point_of_sale</mat-icon>
+                Cobrar
+              </button>
+            }
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell tuition-payments__no-data" [attr.colspan]="displayedColumns.length">
+            <mat-icon>info</mat-icon>
+            <p>No se encontraron registros de cuotas con los filtros aplicados.</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  }
+</div>
