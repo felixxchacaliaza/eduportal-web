@@ -1,0 +1,60 @@
+.attendance-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.25rem;
+  background: var(--mat-sys-surface-container-low, #f7f9fc);
+  border-radius: 12px;
+  border: 1px solid var(--mat-sys-outline-variant, #e2e8f0);
+  box-sizing: border-box;
+
+  &__selectors {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 280px;
+  }
+
+  &__field {
+    min-width: 220px;
+    flex: 1;
+
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__mark-all-btn {
+    font-weight: 500;
+  }
+
+  &__save-btn {
+    font-weight: 600;
+    min-width: 180px;
+  }
+
+  .spinning {
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

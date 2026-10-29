@@ -37,6 +37,16 @@ export class EnrollmentService {
   }
 
   /**
+   * Obtiene los alumnos matriculados en una sección específica.
+   */
+  public async getBySection(sectionId: string): Promise<IEnrollment[]> {
+    const response = await firstValueFrom(
+      this.http.get<ApiResponse<IEnrollment[]>>(`${this.endpoint}/by-section/${sectionId}`)
+    );
+    return response.data || [];
+  }
+
+  /**
    * Ejecuta la matrícula de un alumno en un salón escolar.
    */
   public async enrollStudent(payload: IEnrollStudentRequestDto): Promise<IEnrollment> {

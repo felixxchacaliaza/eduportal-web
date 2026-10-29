@@ -1,0 +1,206 @@
+.attendance-table-container {
+  width: 100%;
+  background: var(--mat-sys-surface, #ffffff);
+  border-radius: 12px;
+  border: 1px solid var(--mat-sys-outline-variant, #e2e8f0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  box-sizing: border-box;
+
+  .attendance-table__loading,
+  .attendance-table__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    color: #64748b;
+
+    p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  .attendance-table__empty-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+  }
+
+  .attendance-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    thead th {
+      background: #f8fafc;
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid #e2e8f0;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #f1f5f9;
+      transition: background-color 0.15s;
+
+      &:hover {
+        background-color: #f8fafc;
+      }
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      vertical-align: middle;
+    }
+
+    .col-num {
+      width: 44px;
+      text-align: center;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .col-student {
+      min-width: 220px;
+    }
+
+    .col-status {
+      min-width: 320px;
+    }
+
+    .col-observation {
+      min-width: 200px;
+    }
+
+    .col-actions {
+      width: 140px;
+      text-align: center;
+    }
+  }
+
+  .student-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    &__name {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    &__meta {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+
+      &--code {
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      &--dni {
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+    }
+  }
+
+  .status-pills {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &__icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+
+    &--present.active {
+      background: #dcfce7;
+      color: #15803d;
+      border-color: #86efac;
+      font-weight: 600;
+    }
+
+    &--late.active {
+      background: #fef3c7;
+      color: #b45309;
+      border-color: #fde68a;
+      font-weight: 600;
+    }
+
+    &--absent.active {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+      font-weight: 600;
+    }
+
+    &--justified.active {
+      background: #ede9fe;
+      color: #6d28d9;
+      border-color: #ddd6fe;
+      font-weight: 600;
+    }
+  }
+
+  .observation-input {
+    width: 100%;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+  }
+
+  .incident-btn {
+    font-size: 0.8rem;
+    padding: 0 0.6rem;
+    height: 32px;
+  }
+}
