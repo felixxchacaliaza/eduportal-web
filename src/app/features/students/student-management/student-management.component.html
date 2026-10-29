@@ -1,0 +1,79 @@
+<div class="students">
+  <!-- 1. Tarjetas de Métricas Estadísticas del Padrón -->
+  <div class="students-cards">
+    @for (card of presenter.cards(); track card.label) {
+      <app-info-card [data]="card" />
+    }
+  </div>
+
+  <!-- 2. Barra Unificada de Filtros, Búsqueda y Botón de Registro -->
+  <div class="students-filters">
+    <div class="students-filters__controls">
+      <!-- Filtro por Estado -->
+      <mat-form-field appearance="outline" class="students-filters__field">
+        <mat-label>Estado de Estudiante</mat-label>
+        <mat-icon matPrefix>toggle_on</mat-icon>
+        <mat-select [value]="presenter.statusFilter()" (valueChange)="presenter.setStatusFilter($event)">
+          <mat-option value="ALL">Todos los Estados</mat-option>
+          <mat-option value="ACTIVE">Solo Activos</mat-option>
+          <mat-option value="INACTIVE">Solo Inactivos</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Buscador predictivo por DNI, Nombres o Código -->
+      <mat-form-field appearance="outline" class="students-filters__field students-filters__field--search">
+        <mat-label>Buscar por DNI, Nombres, Apellidos o Código...</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          #searchInput
+          matInput
+          type="text"
+          placeholder="Ej. 74859612, Quispe, STU-2026..."
+          [value]="presenter.searchTerm()"
+          (input)="presenter.setSearchTerm(searchInput.value)"
+        />
+        @if (presenter.searchTerm()) {
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="presenter.setSearchTerm(''); searchInput.value = ''"
+            matTooltip="Limpiar filtro"
+          >
+            <mat-icon>clear</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Botón de Acción Principal -->
+    <div class="students-filters__action">
+      <button
+        mat-flat-button
+        color="primary"
+        class="students-filters__create-btn"
+        (click)="presenter.openCreateDialog()"
+      >
+        <mat-icon>person_add</mat-icon>
+        Nuevo Estudiante
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. Spinner de Carga o Tabla Principal -->
+  @if (presenter.isLoading()) {
+    <div class="students__loading">
+      <mat-spinner diameter="44" />
+      <p>Cargando padrón oficial de estudiantes...</p>
+    </div>
+  } @else {
+    <app-student-list
+      [students]="presenter.filteredStudents()"
+      [isLoading]="presenter.isLoading()"
+      (edit)="presenter.openEditDialog($event)"
+      (enroll)="presenter.openEnrollDialog($event)"
+      (changeSection)="presenter.openSectionChangeDialog($event)"
+      (delete)="presenter.deleteStudent($event)"
+    />
+  }
+</div>

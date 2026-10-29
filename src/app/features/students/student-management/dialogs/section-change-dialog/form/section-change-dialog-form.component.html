@@ -1,0 +1,119 @@
+<form [formGroup]="presenter.form" (ngSubmit)="onSubmit()" class="section-change-form">
+
+  <!-- Resumen del Estudiante -->
+  <div class="section-change-form__student-banner">
+    <div class="section-change-form__student-avatar">
+      <mat-icon>school</mat-icon>
+    </div>
+    <div class="section-change-form__student-info">
+      <h4 class="section-change-form__student-name">
+        {{ student().person.lastName }}, {{ student().person.firstName }}
+      </h4>
+      <div class="section-change-form__student-meta">
+        <span><strong>DNI:</strong> {{ student().person.dni }}</span>
+        <span>•</span>
+        <span><strong>Código:</strong> {{ student().code || '—' }}</span>
+        <span>•</span>
+        <span><strong>Matrícula:</strong> {{ student().currentEnrollment?.code || '—' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Salón Actual -->
+  <div class="section-change-form__current-card">
+    <div class="section-change-form__current-header">
+      <mat-icon class="section-change-form__current-icon">meeting_room</mat-icon>
+      <div>
+        <span class="section-change-form__current-title">Salón Actual Asignado:</span>
+        <strong class="section-change-form__current-value">{{ getCurrentSectionName() }}</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selector de Nueva Sección de Destino -->
+  <mat-form-field appearance="outline" class="section-change-form__field">
+    <mat-label>{{ presenter.constant['gradeSection'].label }}</mat-label>
+    @if (presenter.constant['gradeSection'].iconLeft) {
+      <mat-icon matPrefix>{{ presenter.constant['gradeSection'].iconLeft }}</mat-icon>
+    }
+    <mat-select [formControlName]="presenter.constant['gradeSection'].formControlName!" required>
+      @for (sec of sections(); track sec.id) {
+        <mat-option
+          [value]="sec.id"
+          [disabled]="sec.id === getCurrentGradeSectionId() || (sec.availableVacancies ?? 0) <= 0"
+        >
+          {{ sec.grade.description || sec.grade.name }} "{{ sec.section.name }}"
+          ({{ sec.shift }})
+          — Vacantes: {{ sec.availableVacancies ?? 0 }} / {{ sec.maxCapacity }}
+          @if (sec.id === getCurrentGradeSectionId()) {
+            <span class="section-change-form__current-tag">[SECCIÓN ACTUAL]</span>
+          } @else if ((sec.availableVacancies ?? 0) <= 0) {
+            <span class="section-change-form__sold-out">[AGOTADO]</span>
+          }
+        </mat-option>
+      }
+    </mat-select>
+    @if (presenter.getErrorMessage('gradeSection')) {
+      <mat-error>{{ presenter.getErrorMessage('gradeSection') }}</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- Tarjeta de Vacantes de la Nueva Sección Seleccionada -->
+  @if (presenter.selectedSection(); as selected) {
+    <div
+      class="section-change-form__vacancy-card"
+      [class.section-change-form__vacancy-card--warning]="(selected.availableVacancies ?? 0) <= 0"
+    >
+      <div class="section-change-form__vacancy-row">
+        <div class="section-change-form__vacancy-item">
+          <span class="section-change-form__vacancy-label">Aforo Salón Destino</span>
+          <span class="section-change-form__vacancy-value">{{ selected.maxCapacity }}</span>
+        </div>
+        <div class="section-change-form__vacancy-item">
+          <span class="section-change-form__vacancy-label">Matriculados Actuales</span>
+          <span class="section-change-form__vacancy-value">{{ selected.enrolledStudents }}</span>
+        </div>
+        <div class="section-change-form__vacancy-item">
+          <span class="section-change-form__vacancy-label">Vacantes Disponibles</span>
+          <span
+            class="section-change-form__vacancy-value"
+            [class.section-change-form__vacancy-value--danger]="(selected.availableVacancies ?? 0) <= 0"
+            [class.section-change-form__vacancy-value--success]="(selected.availableVacancies ?? 0) > 0"
+          >
+            {{ selected.availableVacancies ?? 0 }}
+          </span>
+        </div>
+      </div>
+      @if ((selected.availableVacancies ?? 0) <= 0) {
+        <div class="section-change-form__capacity-alert">
+          <mat-icon>warning</mat-icon>
+          <span>El salón seleccionado no cuenta con vacantes disponibles. Seleccione otra aula.</span>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Botones de Acción -->
+  <div class="section-change-form__actions">
+    <button
+      mat-button
+      type="button"
+      (click)="onCancel()"
+      [disabled]="isSaving()"
+      class="section-change-form__cancel-btn"
+    >
+      Cancelar
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="isSaving() || !presenter.hasVacancies() || presenter.isSameSection()"
+      class="section-change-form__submit-btn"
+    >
+      <mat-icon>published_with_changes</mat-icon>
+      <span>Confirmar Traslado de Sección</span>
+    </button>
+  </div>
+
+</form>

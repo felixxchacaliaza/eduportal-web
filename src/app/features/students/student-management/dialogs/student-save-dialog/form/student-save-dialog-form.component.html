@@ -1,0 +1,366 @@
+<form [formGroup]="presenter.form" (ngSubmit)="onSubmit()" class="student-save-form">
+
+  <!-- ==================== DATOS DEL ALUMNO ==================== -->
+  <div class="student-save-form__section">
+    <div class="student-save-form__section-header">
+      <mat-icon class="student-save-form__section-icon">person</mat-icon>
+      <h3 class="student-save-form__section-title">Datos Personales del Estudiante</h3>
+      @if (presenter.isSearchingCivilPerson()) {
+        <span class="student-save-form__searching-badge">
+          <mat-icon class="student-save-form__spin-icon">sync</mat-icon> Consultando padrón...
+        </span>
+      }
+    </div>
+
+    <!-- Fila 1: DNI y Año de Ingreso -->
+    <div class="student-save-form__row">
+      <!-- DNI con búsqueda asíncrona -->
+      <mat-form-field appearance="outline" class="student-save-form__field">
+        <mat-label>{{ presenter.studentConstant['dni'].label }}</mat-label>
+        @if (presenter.studentConstant['dni'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.studentConstant['dni'].iconLeft }}</mat-icon>
+        }
+        <input
+          matInput
+          [formControlName]="presenter.studentConstant['dni'].formControlName!"
+          [placeholder]="presenter.studentConstant['dni'].placeHolder!"
+          maxlength="8"
+          required
+        />
+        @if (presenter.isSearchingCivilPerson()) {
+          <mat-icon matSuffix class="student-save-form__spin-icon">hourglass_top</mat-icon>
+        }
+        @if (presenter.form.get('dni')?.hasError('dniAlreadyExists')) {
+          <mat-error>El DNI ingresado ya pertenece a un estudiante registrado.</mat-error>
+        } @else if (presenter.getErrorMessage('dni')) {
+          <mat-error>{{ presenter.getErrorMessage('dni') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Año de Ingreso -->
+      <mat-form-field appearance="outline" class="student-save-form__field">
+        <mat-label>{{ presenter.studentConstant['entryYear'].label }}</mat-label>
+        @if (presenter.studentConstant['entryYear'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.studentConstant['entryYear'].iconLeft }}</mat-icon>
+        }
+        <input
+          matInput
+          [formControlName]="presenter.studentConstant['entryYear'].formControlName!"
+          [placeholder]="presenter.studentConstant['entryYear'].placeHolder!"
+          maxlength="4"
+          required
+        />
+        @if (presenter.getErrorMessage('entryYear')) {
+          <mat-error>{{ presenter.getErrorMessage('entryYear') }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 2: Nombres y Apellidos -->
+    <div class="student-save-form__row">
+      <mat-form-field appearance="outline" class="student-save-form__field">
+        <mat-label>{{ presenter.studentConstant['firstName'].label }}</mat-label>
+        @if (presenter.studentConstant['firstName'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.studentConstant['firstName'].iconLeft }}</mat-icon>
+        }
+        <input
+          matInput
+          [formControlName]="presenter.studentConstant['firstName'].formControlName!"
+          [placeholder]="presenter.studentConstant['firstName'].placeHolder!"
+          required
+        />
+        @if (presenter.getErrorMessage('firstName')) {
+          <mat-error>{{ presenter.getErrorMessage('firstName') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="student-save-form__field">
+        <mat-label>{{ presenter.studentConstant['lastName'].label }}</mat-label>
+        @if (presenter.studentConstant['lastName'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.studentConstant['lastName'].iconLeft }}</mat-icon>
+        }
+        <input
+          matInput
+          [formControlName]="presenter.studentConstant['lastName'].formControlName!"
+          [placeholder]="presenter.studentConstant['lastName'].placeHolder!"
+          required
+        />
+        @if (presenter.getErrorMessage('lastName')) {
+          <mat-error>{{ presenter.getErrorMessage('lastName') }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 3: Género y Teléfono -->
+    <div class="student-save-form__row">
+      <mat-form-field appearance="outline" class="student-save-form__field">
+        <mat-label>{{ presenter.studentConstant['gender'].label }}</mat-label>
+        @if (presenter.studentConstant['gender'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.studentConstant['gender'].iconLeft }}</mat-icon>
+        }
+        <mat-select [formControlName]="presenter.studentConstant['gender'].formControlName!" required>
+          <mat-option value="M">Masculino</mat-option>
+          <mat-option value="F">Femenino</mat-option>
+          <mat-option value="OTHER">Otro</mat-option>
+        </mat-select>
+        @if (presenter.getErrorMessage('gender')) {
+          <mat-error>{{ presenter.getErrorMessage('gender') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="student-save-form__field">
+        <mat-label>{{ presenter.studentConstant['phone'].label }}</mat-label>
+        @if (presenter.studentConstant['phone'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.studentConstant['phone'].iconLeft }}</mat-icon>
+        }
+        <input
+          matInput
+          [formControlName]="presenter.studentConstant['phone'].formControlName!"
+          [placeholder]="presenter.studentConstant['phone'].placeHolder!"
+          maxlength="9"
+        />
+        @if (presenter.getErrorMessage('phone')) {
+          <mat-error>{{ presenter.getErrorMessage('phone') }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 4: Correo Electrónico y Dirección -->
+    <div class="student-save-form__row">
+      <mat-form-field appearance="outline" class="student-save-form__field">
+        <mat-label>{{ presenter.studentConstant['personalEmail'].label }}</mat-label>
+        @if (presenter.studentConstant['personalEmail'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.studentConstant['personalEmail'].iconLeft }}</mat-icon>
+        }
+        <input
+          matInput
+          type="email"
+          [formControlName]="presenter.studentConstant['personalEmail'].formControlName!"
+          [placeholder]="presenter.studentConstant['personalEmail'].placeHolder!"
+          required
+        />
+        @if (presenter.getErrorMessage('personalEmail')) {
+          <mat-error>{{ presenter.getErrorMessage('personalEmail') }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="student-save-form__field">
+        <mat-label>{{ presenter.studentConstant['address'].label }}</mat-label>
+        @if (presenter.studentConstant['address'].iconLeft) {
+          <mat-icon matPrefix>{{ presenter.studentConstant['address'].iconLeft }}</mat-icon>
+        }
+        <input
+          matInput
+          [formControlName]="presenter.studentConstant['address'].formControlName!"
+          [placeholder]="presenter.studentConstant['address'].placeHolder!"
+        />
+        @if (presenter.getErrorMessage('address')) {
+          <mat-error>{{ presenter.getErrorMessage('address') }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </div>
+
+  <mat-divider class="student-save-form__divider"></mat-divider>
+
+  <!-- ==================== APODERADOS (PADRES / TUTORES) ==================== -->
+  <div class="student-save-form__section">
+    <div class="student-save-form__section-header student-save-form__section-header--between">
+      <div class="student-save-form__title-group">
+        <mat-icon class="student-save-form__section-icon">family_restroom</mat-icon>
+        <div>
+          <h3 class="student-save-form__section-title">Apoderados y Contactos de Emergencia</h3>
+          <p class="student-save-form__section-hint">
+            Registre al menos un apoderado e indique quién será el contacto legal principal.
+          </p>
+        </div>
+      </div>
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        (click)="addGuardian()"
+        [disabled]="isSaving()"
+        class="student-save-form__add-btn"
+      >
+        <mat-icon>person_add</mat-icon>
+        <span>Agregar Apoderado</span>
+      </button>
+    </div>
+
+    <!-- Lista de Apoderados dinámicos con FormArray -->
+    <div class="student-save-form__guardians-container">
+      @for (guardianGroup of presenter.guardiansArray.controls; track $index) {
+        <div
+          class="student-save-form__guardian-card"
+          [class.student-save-form__guardian-card--primary]="guardianGroup.get('isPrimary')?.value"
+          [formGroup]="$any(guardianGroup)"
+        >
+          <div class="student-save-form__guardian-card-header">
+            <div class="student-save-form__guardian-card-title">
+              <span class="student-save-form__guardian-badge">Apoderado #{{ $index + 1 }}</span>
+              <button
+                type="button"
+                mat-button
+                class="student-save-form__primary-toggle"
+                [class.student-save-form__primary-toggle--active]="guardianGroup.get('isPrimary')?.value"
+                (click)="setPrimaryGuardian($index)"
+                [matTooltip]="'Seleccionar como contacto principal'"
+              >
+                <mat-icon>{{ guardianGroup.get('isPrimary')?.value ? 'star' : 'star_border' }}</mat-icon>
+                <span>{{ guardianGroup.get('isPrimary')?.value ? 'Contacto Principal' : 'Marcar como Principal' }}</span>
+              </button>
+            </div>
+
+            @if (presenter.guardiansArray.length > 1) {
+              <button
+                mat-icon-button
+                type="button"
+                color="warn"
+                (click)="removeGuardian($index)"
+                [disabled]="isSaving()"
+                matTooltip="Eliminar apoderado"
+                class="student-save-form__remove-btn"
+              >
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            }
+          </div>
+
+          <div class="student-save-form__row">
+            <!-- DNI Apoderado -->
+            <mat-form-field appearance="outline" class="student-save-form__field">
+              <mat-label>{{ presenter.guardianConstant['dni'].label }}</mat-label>
+              @if (presenter.guardianConstant['dni'].iconLeft) {
+                <mat-icon matPrefix>{{ presenter.guardianConstant['dni'].iconLeft }}</mat-icon>
+              }
+              <input
+                matInput
+                [formControlName]="presenter.guardianConstant['dni'].formControlName!"
+                [placeholder]="presenter.guardianConstant['dni'].placeHolder!"
+                maxlength="8"
+                required
+              />
+              @if (presenter.getGuardianErrorMessage($index, 'dni')) {
+                <mat-error>{{ presenter.getGuardianErrorMessage($index, 'dni') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- Parentesco -->
+            <mat-form-field appearance="outline" class="student-save-form__field">
+              <mat-label>{{ presenter.guardianConstant['relationship'].label }}</mat-label>
+              @if (presenter.guardianConstant['relationship'].iconLeft) {
+                <mat-icon matPrefix>{{ presenter.guardianConstant['relationship'].iconLeft }}</mat-icon>
+              }
+              <mat-select [formControlName]="presenter.guardianConstant['relationship'].formControlName!" required>
+                <mat-option value="PADRE">Padre</mat-option>
+                <mat-option value="MADRE">Madre</mat-option>
+                <mat-option value="TUTOR_LEGAL">Tutor Legal</mat-option>
+                <mat-option value="OTRO">Otro</mat-option>
+              </mat-select>
+              @if (presenter.getGuardianErrorMessage($index, 'relationship')) {
+                <mat-error>{{ presenter.getGuardianErrorMessage($index, 'relationship') }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="student-save-form__row">
+            <!-- Nombres Apoderado -->
+            <mat-form-field appearance="outline" class="student-save-form__field">
+              <mat-label>{{ presenter.guardianConstant['firstName'].label }}</mat-label>
+              @if (presenter.guardianConstant['firstName'].iconLeft) {
+                <mat-icon matPrefix>{{ presenter.guardianConstant['firstName'].iconLeft }}</mat-icon>
+              }
+              <input
+                matInput
+                [formControlName]="presenter.guardianConstant['firstName'].formControlName!"
+                [placeholder]="presenter.guardianConstant['firstName'].placeHolder!"
+                required
+              />
+              @if (presenter.getGuardianErrorMessage($index, 'firstName')) {
+                <mat-error>{{ presenter.getGuardianErrorMessage($index, 'firstName') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- Apellidos Apoderado -->
+            <mat-form-field appearance="outline" class="student-save-form__field">
+              <mat-label>{{ presenter.guardianConstant['lastName'].label }}</mat-label>
+              @if (presenter.guardianConstant['lastName'].iconLeft) {
+                <mat-icon matPrefix>{{ presenter.guardianConstant['lastName'].iconLeft }}</mat-icon>
+              }
+              <input
+                matInput
+                [formControlName]="presenter.guardianConstant['lastName'].formControlName!"
+                [placeholder]="presenter.guardianConstant['lastName'].placeHolder!"
+                required
+              />
+              @if (presenter.getGuardianErrorMessage($index, 'lastName')) {
+                <mat-error>{{ presenter.getGuardianErrorMessage($index, 'lastName') }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="student-save-form__row">
+            <!-- Teléfono Apoderado -->
+            <mat-form-field appearance="outline" class="student-save-form__field">
+              <mat-label>{{ presenter.guardianConstant['phone'].label }}</mat-label>
+              @if (presenter.guardianConstant['phone'].iconLeft) {
+                <mat-icon matPrefix>{{ presenter.guardianConstant['phone'].iconLeft }}</mat-icon>
+              }
+              <input
+                matInput
+                [formControlName]="presenter.guardianConstant['phone'].formControlName!"
+                [placeholder]="presenter.guardianConstant['phone'].placeHolder!"
+                maxlength="9"
+              />
+              @if (presenter.getGuardianErrorMessage($index, 'phone')) {
+                <mat-error>{{ presenter.getGuardianErrorMessage($index, 'phone') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <!-- Email Apoderado -->
+            <mat-form-field appearance="outline" class="student-save-form__field">
+              <mat-label>{{ presenter.guardianConstant['email'].label }}</mat-label>
+              @if (presenter.guardianConstant['email'].iconLeft) {
+                <mat-icon matPrefix>{{ presenter.guardianConstant['email'].iconLeft }}</mat-icon>
+              }
+              <input
+                matInput
+                type="email"
+                [formControlName]="presenter.guardianConstant['email'].formControlName!"
+                [placeholder]="presenter.guardianConstant['email'].placeHolder!"
+              />
+              @if (presenter.getGuardianErrorMessage($index, 'email')) {
+                <mat-error>{{ presenter.getGuardianErrorMessage($index, 'email') }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Botones de Acción del Formulario -->
+  <div class="student-save-form__actions">
+    <button
+      mat-button
+      type="button"
+      (click)="onCancel()"
+      [disabled]="isSaving()"
+      class="student-save-form__cancel-btn"
+    >
+      Cancelar
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="isSaving()"
+      class="student-save-form__submit-btn"
+    >
+      <mat-icon>{{ mode() === 'create' ? 'person_add' : 'check' }}</mat-icon>
+      <span>{{ mode() === 'create' ? 'Registrar Estudiante' : 'Guardar Cambios' }}</span>
+    </button>
+  </div>
+
+</form>

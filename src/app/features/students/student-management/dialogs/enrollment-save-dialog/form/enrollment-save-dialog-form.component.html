@@ -1,0 +1,174 @@
+<form [formGroup]="presenter.form" (ngSubmit)="onSubmit()" class="enrollment-save-form">
+
+  <!-- Resumen del Estudiante Seleccionado -->
+  <div class="enrollment-save-form__student-banner">
+    <div class="enrollment-save-form__student-avatar">
+      <mat-icon>school</mat-icon>
+    </div>
+    <div class="enrollment-save-form__student-info">
+      <h4 class="enrollment-save-form__student-name">
+        {{ student().person.lastName }}, {{ student().person.firstName }}
+      </h4>
+      <div class="enrollment-save-form__student-meta">
+        <span><strong>DNI:</strong> {{ student().person.dni }}</span>
+        <span>•</span>
+        <span><strong>Código:</strong> {{ student().code || 'Por Asignar' }}</span>
+        <span>•</span>
+        <span><strong>Ingreso:</strong> {{ student().entryYear }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selector de Salón Escolar con Aforo -->
+  <mat-form-field appearance="outline" class="enrollment-save-form__field">
+    <mat-label>{{ presenter.enrollmentConstant['gradeSection'].label }}</mat-label>
+    @if (presenter.enrollmentConstant['gradeSection'].iconLeft) {
+      <mat-icon matPrefix>{{ presenter.enrollmentConstant['gradeSection'].iconLeft }}</mat-icon>
+    }
+    <mat-select [formControlName]="presenter.enrollmentConstant['gradeSection'].formControlName!" required>
+      @for (sec of sections(); track sec.id) {
+        <mat-option
+          [value]="sec.id"
+          [disabled]="(sec.availableVacancies ?? 0) <= 0"
+        >
+          {{ sec.grade.description || sec.grade.name }} "{{ sec.section.name }}"
+          ({{ sec.shift }})
+          — Cupos disponibles: {{ sec.availableVacancies ?? 0 }} / {{ sec.maxCapacity }}
+          @if ((sec.availableVacancies ?? 0) <= 0) {
+            <span class="enrollment-save-form__sold-out">[AGOTADO]</span>
+          }
+        </mat-option>
+      }
+    </mat-select>
+    @if (presenter.getErrorMessage('gradeSection')) {
+      <mat-error>{{ presenter.getErrorMessage('gradeSection') }}</mat-error>
+    }
+  </mat-form-field>
+
+  <!-- Tarjeta de Vacantes en Tiempo Real de la Sección Seleccionada -->
+  @if (presenter.selectedSection(); as selected) {
+    <div
+      class="enrollment-save-form__vacancy-card"
+      [class.enrollment-save-form__vacancy-card--warning]="(selected.availableVacancies ?? 0) <= 0"
+    >
+      <div class="enrollment-save-form__vacancy-row">
+        <div class="enrollment-save-form__vacancy-item">
+          <span class="enrollment-save-form__vacancy-label">Aforo Total</span>
+          <span class="enrollment-save-form__vacancy-value">{{ selected.maxCapacity }}</span>
+        </div>
+        <div class="enrollment-save-form__vacancy-item">
+          <span class="enrollment-save-form__vacancy-label">Matriculados</span>
+          <span class="enrollment-save-form__vacancy-value">{{ selected.enrolledStudents }}</span>
+        </div>
+        <div class="enrollment-save-form__vacancy-item">
+          <span class="enrollment-save-form__vacancy-label">Vacantes Restantes</span>
+          <span
+            class="enrollment-save-form__vacancy-value"
+            [class.enrollment-save-form__vacancy-value--danger]="(selected.availableVacancies ?? 0) <= 0"
+            [class.enrollment-save-form__vacancy-value--success]="(selected.availableVacancies ?? 0) > 0"
+          >
+            {{ selected.availableVacancies ?? 0 }}
+          </span>
+        </div>
+      </div>
+      @if ((selected.availableVacancies ?? 0) <= 0) {
+        <div class="enrollment-save-form__capacity-alert">
+          <mat-icon>warning</mat-icon>
+          <span>El salón seleccionado ha alcanzado su aforo máximo. Seleccione otra sección.</span>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Fila 1: Año Lectivo y Tipo de Matrícula -->
+  <div class="enrollment-save-form__row">
+    <mat-form-field appearance="outline" class="enrollment-save-form__field">
+      <mat-label>{{ presenter.enrollmentConstant['academicYear'].label }}</mat-label>
+      @if (presenter.enrollmentConstant['academicYear'].iconLeft) {
+        <mat-icon matPrefix>{{ presenter.enrollmentConstant['academicYear'].iconLeft }}</mat-icon>
+      }
+      <input
+        matInput
+        [formControlName]="presenter.enrollmentConstant['academicYear'].formControlName!"
+        [placeholder]="presenter.enrollmentConstant['academicYear'].placeHolder!"
+        maxlength="4"
+        required
+      />
+      @if (presenter.getErrorMessage('academicYear')) {
+        <mat-error>{{ presenter.getErrorMessage('academicYear') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="enrollment-save-form__field">
+      <mat-label>{{ presenter.enrollmentConstant['enrollmentType'].label }}</mat-label>
+      @if (presenter.enrollmentConstant['enrollmentType'].iconLeft) {
+        <mat-icon matPrefix>{{ presenter.enrollmentConstant['enrollmentType'].iconLeft }}</mat-icon>
+      }
+      <mat-select [formControlName]="presenter.enrollmentConstant['enrollmentType'].formControlName!" required>
+        <mat-option value="REGULAR">Regular</mat-option>
+        <mat-option value="INGRESANTE">Ingresante</mat-option>
+        <mat-option value="TRASLADO">Traslado</mat-option>
+      </mat-select>
+      @if (presenter.getErrorMessage('enrollmentType')) {
+        <mat-error>{{ presenter.getErrorMessage('enrollmentType') }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Fila 2: Condición de Matrícula y Observaciones -->
+  <div class="enrollment-save-form__row">
+    <mat-form-field appearance="outline" class="enrollment-save-form__field">
+      <mat-label>{{ presenter.enrollmentConstant['status'].label }}</mat-label>
+      @if (presenter.enrollmentConstant['status'].iconLeft) {
+        <mat-icon matPrefix>{{ presenter.enrollmentConstant['status'].iconLeft }}</mat-icon>
+      }
+      <mat-select [formControlName]="presenter.enrollmentConstant['status'].formControlName!" required>
+        <mat-option value="MATRICULADO">Matriculado</mat-option>
+        <mat-option value="TRASLADADO">Trasladado</mat-option>
+        <mat-option value="RETIRADO">Retirado</mat-option>
+      </mat-select>
+      @if (presenter.getErrorMessage('status')) {
+        <mat-error>{{ presenter.getErrorMessage('status') }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="enrollment-save-form__field">
+      <mat-label>{{ presenter.enrollmentConstant['observation'].label }}</mat-label>
+      @if (presenter.enrollmentConstant['observation'].iconLeft) {
+        <mat-icon matPrefix>{{ presenter.enrollmentConstant['observation'].iconLeft }}</mat-icon>
+      }
+      <input
+        matInput
+        [formControlName]="presenter.enrollmentConstant['observation'].formControlName!"
+        [placeholder]="presenter.enrollmentConstant['observation'].placeHolder!"
+      />
+      @if (presenter.getErrorMessage('observation')) {
+        <mat-error>{{ presenter.getErrorMessage('observation') }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <!-- Botones de Acción -->
+  <div class="enrollment-save-form__actions">
+    <button
+      mat-button
+      type="button"
+      (click)="onCancel()"
+      [disabled]="isSaving()"
+      class="enrollment-save-form__cancel-btn"
+    >
+      Cancelar
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="isSaving() || !presenter.hasVacancies()"
+      class="enrollment-save-form__submit-btn"
+    >
+      <mat-icon>assignment_turned_in</mat-icon>
+      <span>Confirmar Matrícula</span>
+    </button>
+  </div>
+
+</form>

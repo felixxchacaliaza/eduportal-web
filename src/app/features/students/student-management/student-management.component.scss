@@ -1,0 +1,94 @@
+// ============================================================================
+// Students Container Styles (BEM Methodology)
+// ============================================================================
+// Contenedor principal de la vista de Padrón de Estudiantes y Matrícula.
+// Sigue exactamente el mismo layout y dimensiones que GradesSections.
+// ============================================================================
+.students {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    gap: 1rem;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+
+    p {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+}
+
+// Grilla responsiva fluida para las 4 tarjetas de resumen métrico
+.students-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+// Barra unificada de controles de filtrado multivariable y botón de acción
+.students-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: #ffffff;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  &__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+  }
+
+  &__field {
+    min-width: 200px;
+    margin-bottom: -1.25em;
+
+    &--search {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    mat-icon {
+      color: #64748b;
+      margin-right: 0.5rem;
+    }
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+  }
+
+  &__create-btn {
+    height: 48px;
+    padding: 0 1.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+
+    mat-icon {
+      margin-right: 0.35rem;
+    }
+  }
+}

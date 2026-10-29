@@ -1,0 +1,167 @@
+<div class="student-list mat-elevation-z1">
+  @if (isLoading()) {
+    <mat-progress-bar mode="indeterminate" class="student-list__progress"></mat-progress-bar>
+  }
+
+  <table mat-table [dataSource]="pagedStudents()" class="student-list__table">
+
+    <!-- DNI -->
+    <ng-container matColumnDef="dni">
+      <th mat-header-cell *matHeaderCellDef class="student-list__header-cell">DNI</th>
+      <td mat-cell *matCellDef="let s" class="student-list__cell">
+        <span class="student-list__dni-badge">
+          {{ s.person?.dni }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Nombres y Apellidos -->
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef class="student-list__header-cell">Estudiante</th>
+      <td mat-cell *matCellDef="let s" class="student-list__cell">
+        <div class="student-list__student-cell">
+          <strong class="student-list__student-name">
+            {{ s.person?.lastName }}, {{ s.person?.firstName }}
+          </strong>
+          <span class="student-list__student-email">
+            {{ s.person?.personalEmail }}
+          </span>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Código del Estudiante -->
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef class="student-list__header-cell">Código</th>
+      <td mat-cell *matCellDef="let s" class="student-list__cell">
+        <span class="student-list__code">{{ s.code || '—' }}</span>
+      </td>
+    </ng-container>
+
+    <!-- Apoderado Principal -->
+    <ng-container matColumnDef="guardians">
+      <th mat-header-cell *matHeaderCellDef class="student-list__header-cell">Apoderado Principal</th>
+      <td mat-cell *matCellDef="let s" class="student-list__cell">
+        <div class="student-list__guardian-cell">
+          <span>{{ getPrimaryGuardian(s.guardians) }}</span>
+          @if (s.guardians && s.guardians.length > 1) {
+            <span class="student-list__extra-guardians" [matTooltip]="'Total de apoderados registrados: ' + s.guardians.length">
+              +{{ s.guardians.length - 1 }} más
+            </span>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Matrícula en el Año Lectivo en Curso -->
+    <ng-container matColumnDef="enrollment">
+      <th mat-header-cell *matHeaderCellDef class="student-list__header-cell">Matrícula 2026</th>
+      <td mat-cell *matCellDef="let s" class="student-list__cell">
+        @if (isEnrolled(s)) {
+          <div class="student-list__enrollment-box student-list__enrollment-box--enrolled" [matTooltip]="'Código: ' + (s.currentEnrollment?.code || 'MAT') + ' - Año Lectivo: 2026'">
+            <span class="student-list__enrollment-tag student-list__enrollment-tag--active">
+              <mat-icon>check_circle</mat-icon>
+              <span>Matriculado</span>
+            </span>
+            <span class="student-list__enrollment-section">
+              {{ getEnrollmentSummary(s.currentEnrollment) }}
+            </span>
+          </div>
+        } @else {
+          <span class="student-list__enrollment-tag student-list__enrollment-tag--pending" matTooltip="El estudiante aún no tiene matrícula registrada en el año escolar 2026">
+            <mat-icon>schedule</mat-icon>
+            <span>Sin Matrícula</span>
+          </span>
+        }
+      </td>
+    </ng-container>
+
+    <!-- Estado -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="student-list__header-cell">Estado</th>
+      <td mat-cell *matCellDef="let s" class="student-list__cell">
+        <span
+          class="student-list__status-badge"
+          [class.student-list__status-badge--active]="s.enabled"
+          [class.student-list__status-badge--inactive]="!s.enabled"
+        >
+          {{ s.enabled ? 'Activo' : 'Inactivo' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Acciones -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="student-list__header-cell student-list__header-cell--actions">Acciones</th>
+      <td mat-cell *matCellDef="let s" class="student-list__cell student-list__cell--actions">
+        @if (!isEnrolled(s)) {
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="enroll.emit(s)"
+            matTooltip="Matricular en periodo lectivo 2026"
+            class="student-list__action-btn"
+          >
+            <mat-icon>how_to_reg</mat-icon>
+          </button>
+        } @else {
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="changeSection.emit(s)"
+            matTooltip="Cambiar de Sección (Traslado de aula)"
+            class="student-list__action-btn"
+          >
+            <mat-icon>published_with_changes</mat-icon>
+          </button>
+        }
+
+        <button
+          mat-icon-button
+          color="accent"
+          (click)="edit.emit(s)"
+          matTooltip="Editar información"
+          class="student-list__action-btn"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="delete.emit(s)"
+          matTooltip="Dar de baja estudiante"
+          class="student-list__action-btn"
+        >
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="student-list__row"></tr>
+
+    <!-- Fila cuando no hay registros -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell student-list__empty-cell" [attr.colspan]="displayedColumns.length">
+        <div class="student-list__empty-state">
+          <mat-icon class="student-list__empty-icon">person_off</mat-icon>
+          <p class="student-list__empty-text">No se encontraron estudiantes registrados en el padrón.</p>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Paginador Oficial de Angular Material en Español -->
+  <mat-paginator
+    class="student-list__paginator"
+    [length]="students().length"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[5, 10, 25, 50]"
+    [pageIndex]="pageIndex()"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+    aria-label="Seleccionar página del padrón de alumnos"
+  >
+  </mat-paginator>
+</div>

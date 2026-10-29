@@ -1,0 +1,57 @@
+<div class="student-save-dialog">
+  <!-- Barra de progreso indeterminada durante el guardado -->
+  @if (presenter.isSaving()) {
+    <mat-progress-bar mode="indeterminate" class="student-save-dialog__progress"></mat-progress-bar>
+  }
+
+  <!-- Encabezado del Diálogo Modal -->
+  <div class="student-save-dialog__header">
+    <div class="student-save-dialog__title-group">
+      <div class="student-save-dialog__icon-wrapper">
+        <mat-icon>{{ presenter.data.mode === 'create' ? 'person_add' : 'manage_accounts' }}</mat-icon>
+      </div>
+      <div>
+        <h2 mat-dialog-title class="student-save-dialog__title">
+          {{ presenter.data.mode === 'create' ? 'Registrar Nuevo Estudiante' : 'Editar Estudiante' }}
+        </h2>
+        <p class="student-save-dialog__subtitle">
+          {{ presenter.data.mode === 'create'
+            ? 'Complete los datos personales y designe a los apoderados o tutores legales.'
+            : 'Modifique la información personal o los datos de contacto del alumno.'
+          }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Botón de cierre 'X' -->
+    <button
+      mat-icon-button
+      type="button"
+      class="student-save-dialog__close-btn"
+      [disabled]="presenter.isSaving()"
+      (click)="onFormCancel()"
+      title="Cerrar modal"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Banner de error si la API falló -->
+  @if (presenter.errorMessage(); as errorMsg) {
+    <div class="student-save-dialog__error-banner" role="alert">
+      <mat-icon class="student-save-dialog__error-icon">error_outline</mat-icon>
+      <span class="student-save-dialog__error-text">{{ errorMsg }}</span>
+    </div>
+  }
+
+  <!-- Contenido Principal: Formulario Especializado -->
+  <mat-dialog-content class="student-save-dialog__content">
+    <app-student-save-dialog-form
+      [mode]="presenter.data.mode"
+      [initialData]="presenter.data.student"
+      [isSaving]="presenter.isSaving()"
+      (formSubmit)="onFormSubmit($event)"
+      (formCancel)="onFormCancel()"
+    ></app-student-save-dialog-form>
+  </mat-dialog-content>
+</div>
