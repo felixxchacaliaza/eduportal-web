@@ -1,0 +1,74 @@
+<div class="grade-filters">
+  <!-- Controles de Selección de Matriz -->
+  <div class="grade-filters__controls">
+    <!-- Selector de Salón Escolar -->
+    <mat-form-field appearance="outline" class="grade-filters__field">
+      <mat-label>Salón y Sección</mat-label>
+      <mat-icon matPrefix>meeting_room</mat-icon>
+      <mat-select
+        [value]="selectedGradeSectionId()"
+        (selectionChange)="onGradeSectionSelect($event.value)"
+        placeholder="Seleccione un salón..."
+      >
+        @for (gs of gradeSections(); track gs.id) {
+          <mat-option [value]="gs.id">
+            {{ gs.grade?.name || gs.grade?.description || 'Grado' }} "{{ gs.section?.name || gs.section?.letter || 'A' }}" - {{ gs.shift || 'MAÑANA' }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Selector de Asignatura Curricular -->
+    <mat-form-field appearance="outline" class="grade-filters__field">
+      <mat-label>Asignatura Curricular</mat-label>
+      <mat-icon matPrefix>menu_book</mat-icon>
+      <mat-select
+        [value]="selectedSubjectId()"
+        (selectionChange)="onSubjectSelect($event.value)"
+        placeholder="Seleccione materia..."
+      >
+        @for (sub of subjects(); track sub.id) {
+          <mat-option [value]="sub.id">
+            {{ sub.name }} ({{ sub.code || 'ASIG' }})
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Indicadores de Estado de Candados RUL-004 -->
+    <div class="grade-filters__periods">
+      @for (p of periodConfigs(); track p.period) {
+        <div
+          class="period-badge"
+          [class.period-badge--open]="p.isOpen"
+          [class.period-badge--locked]="!p.isOpen"
+          [matTooltip]="p.isOpen ? (p.name + ': Periodo Habilitado') : (p.name + ': Candado Cerrado')"
+        >
+          <mat-icon class="period-badge__icon">
+            {{ p.isOpen ? 'lock_open' : 'lock' }}
+          </mat-icon>
+          <span class="period-badge__label">B{{ p.period }}</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Botón de Guardado Masivo Transaccional -->
+  <div class="grade-filters__action">
+    <button
+      mat-flat-button
+      color="primary"
+      class="save-btn"
+      [disabled]="isSaving() || !hasData()"
+      (click)="onSave()"
+    >
+      @if (isSaving()) {
+        <mat-spinner diameter="20" class="save-spinner"></mat-spinner>
+        <span>Guardando...</span>
+      } @else {
+        <mat-icon>save</mat-icon>
+        <span>Guardar Calificaciones</span>
+      }
+    </button>
+  </div>
+</div>
