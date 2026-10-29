@@ -70,6 +70,57 @@ export class AuthService {
   });
 
   /**
+   * Determina si el usuario en sesión posee permisos requeridos sobre un módulo o ruta.
+   * Regla SuperAdmin: Si el usuario es Super Administrador, siempre posee acceso total (FULL).
+   *
+   * @param moduleOrPath Identificador de clave (key), código o ruta del módulo.
+   * @param requiredLevel Nivel de acceso requerido ('READ_ONLY' o 'FULL'). Por defecto 'READ_ONLY'.
+   */
+  public hasPermission(
+    moduleOrPath: string,
+    requiredLevel: 'FULL' | 'READ_ONLY' = 'READ_ONLY'
+  ): boolean {
+    if (!this.isAuthenticated()) {
+      return false;
+    }
+
+    if (this.isSuperAdmin()) {
+      return true;
+    }
+
+    const tree = this.menuTree();
+    return this.searchMenuPermission(tree, moduleOrPath.toLowerCase(), requiredLevel);
+  }
+
+  private searchMenuPermission(
+    items: readonly AuthMenuItem[],
+    target: string,
+    requiredLevel: 'FULL' | 'READ_ONLY'
+  ): boolean {
+    for (const item of items) {
+      const keyMatch = item.key?.toLowerCase() === target;
+      const cleanPath = item.path?.toLowerCase().replace(/^\//, '');
+      const cleanTarget = target.replace(/^\//, '');
+      const pathMatch = cleanPath === cleanTarget;
+
+      if (keyMatch || pathMatch) {
+        if (requiredLevel === 'FULL') {
+          return item.accessLevel === 'FULL';
+        }
+        return item.accessLevel === 'FULL' || item.accessLevel === 'READ_ONLY';
+      }
+
+      if (item.children && item.children.length > 0) {
+        if (this.searchMenuPermission(item.children, target, requiredLevel)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  /**
    * Ejecuta la autenticación de credenciales ante el backend.
    */
   public async login(credentials: LoginRequestDto): Promise<LoginResponseData> {
