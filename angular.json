@@ -41,6 +41,35 @@
       "prefix": "app",
       "architect": {
         "build": {
+          "builder": "@angular-architects/native-federation:build",
+          "options": {
+            "cacheExternalArtifacts": true,
+            "tsConfig": "tsconfig.federation.json"
+          },
+          "configurations": {
+            "production": {
+              "target": "eduportal-web:esbuild:production"
+            },
+            "development": {
+              "target": "eduportal-web:esbuild:development",
+              "dev": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-architects/native-federation:build",
+          "options": {
+            "target": "eduportal-web:serve-original:development",
+            "tsConfig": "tsconfig.federation.json",
+            "rebuildDelay": 500,
+            "cacheExternalArtifacts": true,
+            "dev": true,
+            "devServer": true,
+            "port": 0
+          }
+        },
+        "esbuild": {
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
@@ -52,9 +81,8 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/styles.scss"],
+            "polyfills": ["es-module-shims"]
           },
           "configurations": {
             "production": {
@@ -86,17 +114,20 @@
           },
           "defaultConfiguration": "production"
         },
-        "serve": {
+        "serve-original": {
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "eduportal-web:build:production"
+              "buildTarget": "eduportal-web:esbuild:production"
             },
             "development": {
-              "buildTarget": "eduportal-web:build:development"
+              "buildTarget": "eduportal-web:esbuild:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "port": 4200
+          }
         }
       }
     }

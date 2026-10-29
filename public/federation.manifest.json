@@ -1,0 +1,10 @@
+{
+  "mfeStudents": "http://localhost:4201/remoteEntry.json",
+  "mfeStaff": "http://localhost:4202/remoteEntry.json",
+  "mfeAcademic": "http://localhost:4203/remoteEntry.json",
+  "mfeEvaluations": "http://localhost:4204/remoteEntry.json",
+  "mfeAttendances": "http://localhost:4205/remoteEntry.json",
+  "mfeIncidents": "http://localhost:4206/remoteEntry.json",
+  "mfeFinance": "http://localhost:4207/remoteEntry.json",
+  "mfeMaintenance": "http://localhost:4208/remoteEntry.json"
+}
