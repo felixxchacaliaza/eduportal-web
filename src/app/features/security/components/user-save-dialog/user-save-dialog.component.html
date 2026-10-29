@@ -1,0 +1,128 @@
+<div class="user-dialog">
+  <div class="user-dialog__header">
+    <div class="user-dialog__title-group">
+      <mat-icon class="user-dialog__header-icon">{{ presenter.isEditing() ? 'manage_accounts' : 'person_add' }}</mat-icon>
+      <div>
+        <h2 mat-dialog-title class="user-dialog__title">
+          {{ presenter.isEditing() ? 'Editar Cuenta de Usuario' : 'Nueva Cuenta de Usuario' }}
+        </h2>
+        <span class="user-dialog__subtitle">Configuración de credenciales y permisos institucionales</span>
+      </div>
+    </div>
+    <button mat-icon-button type="button" (click)="onCancel()" aria-label="Cerrar modal">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  @if (presenter.isProtected()) {
+    <div class="user-dialog__protected-alert">
+      <mat-icon>security</mat-icon>
+      <div>
+        <strong>Cuenta Raíz Protegida (RN-SEG-02):</strong>
+        <span> Este usuario cuenta con privilegios máximos inmutables. Su estado activo no puede ser revocado.</span>
+      </div>
+    </div>
+  }
+
+  <form [formGroup]="presenter.form" (ngSubmit)="onSubmit()" class="user-dialog__form" novalidate>
+    <mat-dialog-content class="user-dialog__content">
+      <div class="user-dialog__grid">
+        <!-- Selector de Persona -->
+        <mat-form-field appearance="outline" class="user-dialog__field">
+          <mat-label>Colaborador / Persona</mat-label>
+          <mat-select
+            formControlName="person"
+            data-testid="user-person-select"
+            (valueChange)="onPersonSelected($event)"
+            required>
+            @for (p of data.persons; track p.id) {
+              <mat-option [value]="p.id">
+                {{ p.lastName }}, {{ p.firstName }} (DNI: {{ p.dni }})
+              </mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>badge</mat-icon>
+          @if (presenter.form.controls.person.invalid && presenter.form.controls.person.touched) {
+            <mat-error>Debe asociar la cuenta a una persona física</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Selector de Perfil RBAC -->
+        <mat-form-field appearance="outline" class="user-dialog__field">
+          <mat-label>Perfil de Acceso (Rol)</mat-label>
+          <mat-select formControlName="profile" data-testid="user-profile-select" required>
+            @for (prof of data.profiles; track prof.id || prof._id) {
+              <mat-option [value]="prof.id || prof._id">
+                {{ prof.name }} {{ prof.isSuperAdmin ? '★ (SuperAdmin)' : '' }}
+              </mat-option>
+            }
+          </mat-select>
+          <mat-icon matPrefix>admin_panel_settings</mat-icon>
+          @if (presenter.form.controls.profile.invalid && presenter.form.controls.profile.touched) {
+            <mat-error>Debe asignar un perfil de acceso institucional</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Correo Electrónico -->
+        <mat-form-field appearance="outline" class="user-dialog__field user-dialog__field--full">
+          <mat-label>Correo Electrónico Institucional</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="usuario@eduportal.edu.pe"
+            data-testid="user-email-input"
+            required />
+          <mat-icon matPrefix>email</mat-icon>
+          @if (presenter.form.controls.email.invalid && presenter.form.controls.email.touched) {
+            <mat-error>Ingrese un correo electrónico válido</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Contraseña -->
+        <mat-form-field appearance="outline" class="user-dialog__field user-dialog__field--full">
+          <mat-label>{{ presenter.isEditing() ? 'Nueva Contraseña (Opcional)' : 'Contraseña de Acceso' }}</mat-label>
+          <input
+            matInput
+            [type]="presenter.hidePassword() ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="••••••••"
+            data-testid="user-password-input" />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="presenter.togglePasswordVisibility()">
+            <mat-icon>{{ presenter.hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (presenter.form.controls.password.invalid && presenter.form.controls.password.touched) {
+            <mat-error>La contraseña debe contener al menos 6 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Estado Activo -->
+        <div class="user-dialog__toggle-row">
+          <mat-slide-toggle formControlName="enabled" color="primary" data-testid="user-enabled-toggle">
+            <span>Cuenta de usuario activa para inicio de sesión</span>
+          </mat-slide-toggle>
+        </div>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" class="user-dialog__actions">
+      <button mat-button type="button" (click)="onCancel()" data-testid="user-dialog-cancel-btn">
+        Cancelar
+      </button>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        data-testid="user-dialog-submit-btn"
+        [disabled]="presenter.form.invalid">
+        <mat-icon>save</mat-icon>
+        <span>{{ presenter.isEditing() ? 'Actualizar Cuenta' : 'Guardar Cuenta' }}</span>
+      </button>
+    </mat-dialog-actions>
+  </form>
+</div>
