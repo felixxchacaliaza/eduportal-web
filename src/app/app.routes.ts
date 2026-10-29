@@ -32,10 +32,8 @@ export const routes: Routes = [
       },
       {
         path: 'alumnos',
-        loadComponent: () =>
-          import('./features/students/pages/students-page/students-page.component').then(
-            m => m.StudentsPageComponent
-          )
+        loadChildren: () =>
+          import('./features/students/students.routes').then(m => m.STUDENTS_ROUTES)
       },
       {
         path: '',
