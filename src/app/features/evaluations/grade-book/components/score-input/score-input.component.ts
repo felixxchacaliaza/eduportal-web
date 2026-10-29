@@ -14,7 +14,7 @@ import {
   ValidationErrors
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ScoreColorDirective } from '../../../../../../shared/directives/score-color/score-color.directive';
+import { ScoreColorDirective } from '../../../../../shared/directives/score-color/score-color.directive';
 
 /**
  * ============================================================================
