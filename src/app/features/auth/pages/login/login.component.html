@@ -148,11 +148,15 @@
           data-testid="login-submit-btn"
           [disabled]="authService.isLoading()">
           @if (authService.isLoading()) {
-            <mat-spinner diameter="20" class="login-page__spinner"></mat-spinner>
-            <span>Autenticando...</span>
+            <span class="login-page__btn-content">
+              <mat-spinner diameter="20" class="login-page__spinner"></mat-spinner>
+              <span>Autenticando...</span>
+            </span>
           } @else {
-            <mat-icon>login</mat-icon>
-            <span>Iniciar Sesión</span>
+            <span class="login-page__btn-content">
+              <mat-icon>login</mat-icon>
+              <span>Iniciar Sesión</span>
+            </span>
           }
         </button>
       </form>

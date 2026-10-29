@@ -258,6 +258,13 @@
     gap: 0.5rem;
   }
 
+  &__btn-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
   &__spinner {
     margin-right: 0.5rem;
   }

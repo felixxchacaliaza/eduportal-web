@@ -1,19 +1,38 @@
 import { Routes } from '@angular/router';
 import { menuResolver } from './core/resolvers/menu.resolver';
+import { authGuard, publicGuard } from './core/auth/guards';
 
 /**
  * ============================================================================
- * App Root Routes (Enrutamiento Principal de EduPortal)
+ * App Root Routes (Enrutamiento Principal Multi-Layout de EduPortal)
  * ============================================================================
- * Carga el layout base con Sidebar y Header, precargando el catálogo de menús
- * vía `menuResolver` e inyectando submódulos vía Lazy Loading.
+ * Estructura Multi-Layout desacoplada:
+ * 1. `/login`: Shell AuthLayout público protegido por `publicGuard`.
+ * 2. `''`: Shell MainLayout corporativo protegido por `authGuard`.
  * ============================================================================
  */
 export const routes: Routes = [
+  // Layout Público de Autenticación
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./core/layouts/auth-layout/auth-layout.component').then(m => m.AuthLayoutComponent),
+    canActivate: [publicGuard],
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES)
+      }
+    ]
+  },
+
+  // Layout Privado de la Aplicación (App Shell)
   {
     path: '',
     loadComponent: () =>
       import('./core/layouts/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
+    canActivate: [authGuard],
     resolve: {
       menuTree: menuResolver
     },
@@ -64,7 +83,13 @@ export const routes: Routes = [
         path: '',
         loadChildren: () =>
           import('./features/maintenance').then(m => m.MAINTENANCE_ROUTES)
-      },
+      }
     ]
+  },
+
+  // Redirección por defecto
+  {
+    path: '**',
+    redirectTo: 'dashboard'
   }
 ];
