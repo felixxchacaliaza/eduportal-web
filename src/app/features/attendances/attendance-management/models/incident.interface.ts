@@ -12,10 +12,12 @@ export interface IIncident {
   readonly gradeSection: any;
   readonly academicYear?: string;
   readonly incidentDate: string;
-  readonly type: 'LEVE' | 'GRAVE' | 'MUY_GRAVE';
+  readonly title?: string;
+  readonly type: 'LEVE' | 'GRAVE' | 'MUY_GRAVE' | 'MERITO' | 'DEMERITO' | 'ATENCION_PSICOLOGICA' | 'CITACION_APODERADO';
+  readonly severity?: 'LEVE' | 'MODERADA' | 'GRAVE';
   readonly description: string;
   readonly reportedBy?: any;
-  readonly status: 'REGISTRADO' | 'EN_PROCESO' | 'RESUELTO';
+  readonly status?: 'ABIERTA' | 'EN_SEGUIMIENTO' | 'CERRADA' | 'REGISTRADO' | 'EN_PROCESO' | 'RESUELTO';
   readonly actionTaken?: string;
   readonly enabled?: boolean;
 }
