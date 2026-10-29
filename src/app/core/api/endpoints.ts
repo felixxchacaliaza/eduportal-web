@@ -12,4 +12,7 @@ export const API_ENDPOINTS = {
   gradeSections: `${environment.apiUrl}/grade-sections`,
   gradeSubjects: `${environment.apiUrl}/grade-subjects`,
   menus: `${environment.apiUrl}/menus`,
+  students: `${environment.apiUrl}/students`,
+  persons: `${environment.apiUrl}/persons`,
+  enrollments: `${environment.apiUrl}/enrollments`,
 } as const;
