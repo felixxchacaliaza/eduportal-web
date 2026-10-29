@@ -48,6 +48,20 @@ export const PAGE_HEADERS_CONSTANT: readonly PageHeaderConfig[] = Object.freeze(
     description: 'Nómina de profesores titulares, personal administrativo y control de horas de cátedra contratadas',
   }),
   Object.freeze({
+    route: '/calificaciones',
+    breadcrumbs: ['Académico', 'Calificaciones'],
+    title: 'Matriz Dinámica de Calificaciones MINEDU',
+    icon: 'grade',
+    description: 'Registro oficial de notas por periodo con candados de cierre RUL-004 y escala vigesimal',
+  }),
+  Object.freeze({
+    route: '/notas',
+    breadcrumbs: ['Académico', 'Calificaciones'],
+    title: 'Matriz Dinámica de Calificaciones MINEDU',
+    icon: 'grade',
+    description: 'Registro oficial de notas por periodo con candados de cierre RUL-004 y escala vigesimal',
+  }),
+  Object.freeze({
     route: '/grados-secciones',
     breadcrumbs: ['Académico', 'Grados y Secciones'],
     title: 'Grados y Secciones',

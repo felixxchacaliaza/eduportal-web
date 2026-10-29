@@ -41,6 +41,16 @@ export const routes: Routes = [
           import('./features/staff/staff.routes').then(m => m.STAFF_ROUTES)
       },
       {
+        path: 'calificaciones',
+        loadChildren: () =>
+          import('./features/evaluations/evaluations.routes').then(m => m.EVALUATIONS_ROUTES)
+      },
+      {
+        path: 'notas',
+        redirectTo: 'calificaciones',
+        pathMatch: 'full'
+      },
+      {
         path: '',
         loadChildren: () =>
           import('./features/academic').then(m => m.ACADEMIC_ROUTES)

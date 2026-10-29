@@ -1,4 +1,4 @@
-import { FormHtml } from '../../../../../../shared/interfaces/form-html';
+import { FormHtml } from '../../../../../shared/interfaces/form-html';
 
 /**
  * ============================================================================
@@ -12,28 +12,26 @@ export const GRADE_BOOK_FORM_MODEL_CONSTANT: Record<string, FormHtml> = Object.f
     formControlName: 'gradeSectionId',
     label: 'Salón y Sección',
     placeHolder: 'Seleccione grado y sección...',
-    iconLeft: 'meeting_room',
-    validators: { required: true }
+    iconLeft: 'meeting_room'
   }),
   subjectId: Object.freeze({
     formControlName: 'subjectId',
     label: 'Asignatura',
     placeHolder: 'Seleccione asignatura curricular...',
-    iconLeft: 'menu_book',
-    validators: { required: true }
+    iconLeft: 'menu_book'
   }),
   academicYear: Object.freeze({
     formControlName: 'academicYear',
     label: 'Año Lectivo',
     placeHolder: 'Ej. 2026',
-    iconLeft: 'calendar_today',
-    validators: { required: true }
+    iconLeft: 'calendar_today'
   }),
   observation: Object.freeze({
     formControlName: 'observation',
     label: 'Observación Pedagógica',
     placeHolder: 'Anotación cualitativa o justificación...',
     type: 'text',
-    iconLeft: 'notes'
+    iconLeft: 'notes',
+    validators: { maxLength: 250 }
   })
 });

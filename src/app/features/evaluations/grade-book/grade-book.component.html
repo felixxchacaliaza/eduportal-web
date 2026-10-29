@@ -1,0 +1,29 @@
+<div class="grade-book-container">
+  <!-- 1. Tarjetas KPI Métricas de Rendimiento Escolar -->
+  <div class="kpi-grid">
+    @for (card of presenter.cards(); track card.label) {
+      <app-info-card [data]="card"></app-info-card>
+    }
+  </div>
+
+  <!-- 2. Barra de Filtros, Selectores y Acción de Guardado Masivo -->
+  <app-grade-book-filters
+    [gradeSections]="presenter.gradeSections()"
+    [subjects]="presenter.subjects()"
+    [selectedGradeSectionId]="presenter.selectedGradeSectionId()"
+    [selectedSubjectId]="presenter.selectedSubjectId()"
+    [periodConfigs]="presenter.periodConfigs()"
+    [isSaving]="presenter.isSaving()"
+    [hasData]="presenter.formPresenter.rows.length > 0"
+    (gradeSectionChange)="presenter.setGradeSection($event)"
+    (subjectChange)="presenter.setSubject($event)"
+    (save)="presenter.save()"
+  ></app-grade-book-filters>
+
+  <!-- 3. Matriz Densa Bidimensional de Calificaciones con Candados RUL-004 -->
+  <app-grade-book-matrix
+    [rows]="presenter.formPresenter.rows"
+    [periodConfigs]="presenter.periodConfigs()"
+    [isLoading]="presenter.isLoading()"
+  ></app-grade-book-matrix>
+</div>

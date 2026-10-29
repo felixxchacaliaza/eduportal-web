@@ -1,5 +1,5 @@
 import { Validators } from '@angular/forms';
-import { FormModel } from '../../../../../../shared/class/form-model';
+import { FormModel } from '../../../../../shared/class/form-model';
 
 /**
  * ============================================================================
