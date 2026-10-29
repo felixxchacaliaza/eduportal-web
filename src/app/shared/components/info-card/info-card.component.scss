@@ -1,0 +1,47 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.info-card {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &--green {
+    border-left: 4px solid #16a34a;
+  }
+
+  &--amber {
+    border-left: 4px solid #f59e0b;
+  }
+
+  &--blue {
+    border-left: 4px solid #2563eb;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  &__subtitle {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+}

@@ -1,0 +1,58 @@
+<mat-card class="subjects-filters mat-elevation-z1">
+  <div class="subjects-filters__container">
+    <div class="subjects-filters__controls">
+      <!-- 1. Filtro: Área Curricular -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="subjects-filters__field">
+        <mat-label>Área Curricular</mat-label>
+        <mat-icon matPrefix>category</mat-icon>
+        <mat-select
+          [value]="selectedArea()"
+          (selectionChange)="onAreaChange($event.value)"
+        >
+          @for (option of areas(); track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- 2. Filtro: Estado de Asignatura -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="subjects-filters__field">
+        <mat-label>Estado de Asignatura</mat-label>
+        <mat-icon matPrefix>toggle_on</mat-icon>
+        <mat-select
+          [value]="selectedStatus()"
+          (selectionChange)="onStatusChange($event.value)"
+        >
+          @for (option of statusOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- 3. Campo de Búsqueda por Texto o Código -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="subjects-filters__field subjects-filters__field--search">
+        <mat-label>Buscar Asignatura o Código...</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          [value]="search()"
+          (input)="onSearchInput($event)"
+          placeholder="Ej: Matemática o MAT-001"
+        />
+      </mat-form-field>
+    </div>
+
+    <!-- 4. Acción Principal: Crear Nueva Asignatura -->
+    <div class="subjects-filters__actions">
+      <button
+        mat-flat-button
+        color="primary"
+        class="subjects-filters__create-btn"
+        (click)="onCreate()"
+        title="Registrar una nueva asignatura en la malla curricular"
+      >
+        <mat-icon>add</mat-icon> Nueva Asignatura
+      </button>
+    </div>
+  </div>
+</mat-card>

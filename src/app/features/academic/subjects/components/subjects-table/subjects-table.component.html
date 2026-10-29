@@ -1,0 +1,122 @@
+<div class="subjects-table mat-elevation-z1">
+  <table mat-table [dataSource]="subjects()" class="subjects-table__table">
+    <!-- 1. Columna: Código de Asignatura -->
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef class="subjects-table__header-cell">Código</th>
+      <td mat-cell *matCellDef="let course" class="subjects-table__cell">
+        <span
+          class="subjects-table__code-badge"
+          [style.borderColor]="course.color"
+          [style.color]="course.color"
+        >
+          {{ course.code }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- 2. Columna: Nombre de la Asignatura -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef class="subjects-table__header-cell">Asignatura</th>
+      <td mat-cell *matCellDef="let course" class="subjects-table__cell">
+        <strong class="subjects-table__title">{{ course.name }}</strong>
+      </td>
+    </ng-container>
+
+    <!-- 3. Columna: Descripción -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef class="subjects-table__header-cell">Descripción</th>
+      <td mat-cell *matCellDef="let course" class="subjects-table__cell subjects-table__cell--description">
+        <span class="subjects-table__description-text" [title]="course.description || ''">
+          {{ course.description || '—' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- 4. Columna: Área Curricular -->
+    <ng-container matColumnDef="area">
+      <th mat-header-cell *matHeaderCellDef class="subjects-table__header-cell">Área Curricular</th>
+      <td mat-cell *matCellDef="let course" class="subjects-table__cell">
+        <span class="subjects-table__area-badge">{{ course.area }}</span>
+      </td>
+    </ng-container>
+
+    <!-- 5. Columna: Carga Horaria Semanal -->
+    <ng-container matColumnDef="hours">
+      <th mat-header-cell *matHeaderCellDef class="subjects-table__header-cell">Horas Semanales</th>
+      <td mat-cell *matCellDef="let course" class="subjects-table__cell">
+        <span class="subjects-table__hours-tag">
+          <strong>{{ course.hours }}</strong> hrs/sem
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- 6. Columna: Estado Operativo -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef class="subjects-table__header-cell">Estado Operativo</th>
+      <td mat-cell *matCellDef="let course" class="subjects-table__cell">
+        @if (course.status === 'Activa') {
+          <span class="subjects-table__status-badge subjects-table__status-badge--active">
+            Activa
+          </span>
+        } @else {
+          <span class="subjects-table__status-badge subjects-table__status-badge--inactive">
+            Desactiva
+          </span>
+        }
+      </td>
+    </ng-container>
+
+    <!-- 7. Columna: Acciones de Gestión -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef class="subjects-table__header-cell subjects-table__header-cell--actions">
+        Acciones
+      </th>
+      <td mat-cell *matCellDef="let course" class="subjects-table__cell subjects-table__cell--actions">
+        <div class="subjects-table__actions">
+          <button
+            mat-stroked-button
+            class="subjects-table__action-btn subjects-table__action-btn--edit"
+            (click)="edit.emit(course.id)"
+            title="Modificar parámetros de la asignatura"
+          >
+            Editar
+          </button>
+
+          @if (course.status === 'Activa') {
+            <button
+              mat-stroked-button
+              class="subjects-table__action-btn subjects-table__action-btn--deactivate"
+              (click)="toggleStatus.emit(course.id)"
+              title="Desactivar asignatura"
+            >
+              Desactivar
+            </button>
+          } @else {
+            <button
+              mat-flat-button
+              class="subjects-table__action-btn subjects-table__action-btn--reactivate"
+              (click)="toggleStatus.emit(course.id)"
+              title="Reactivar asignatura"
+            >
+              Activar
+            </button>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Filas Header, Data y No-Data -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="subjects-table__header-row"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="subjects-table__row"
+      [class.subjects-table__row--inactive]="row.status !== 'Activa'"
+    ></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell subjects-table__empty-cell" [attr.colspan]="displayedColumns.length">
+        No se encontraron asignaturas registradas o coincidentes con los filtros aplicados.
+      </td>
+    </tr>
+  </table>
+</div>

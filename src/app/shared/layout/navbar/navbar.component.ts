@@ -14,6 +14,7 @@ export class NavbarComponent {
   public readonly toggleSidebar = output<void>();
 
   public onToggleClick(): void {
+    console.log("cambio")
     this.toggleSidebar.emit();
   }
 }

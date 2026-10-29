@@ -25,7 +25,11 @@ export const routes: Routes = [
             m => m.StudentsPageComponent
           )
       },
-
+      {
+        path: '',
+        loadChildren: () =>
+         import('./features/academic').then(m => m.ACADEMIC_ROUTES)
+      },
     ]
   }
 ];

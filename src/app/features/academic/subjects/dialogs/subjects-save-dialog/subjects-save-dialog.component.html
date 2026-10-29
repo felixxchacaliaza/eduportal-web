@@ -1,0 +1,58 @@
+<div class="subjects-save-dialog">
+  <!-- Barra de progreso indeterminada durante el guardado -->
+  @if (presenter.isSaving()) {
+    <mat-progress-bar mode="indeterminate" class="subjects-save-dialog__progress"></mat-progress-bar>
+  }
+
+  <!-- Encabezado del Diálogo Modal -->
+  <div class="subjects-save-dialog__header">
+    <div class="subjects-save-dialog__title-group">
+      <div class="subjects-save-dialog__icon-wrapper">
+        <mat-icon>{{ presenter.data.mode === 'create' ? 'add_circle' : 'edit_note' }}</mat-icon>
+      </div>
+      <div>
+        <h2 mat-dialog-title class="subjects-save-dialog__title">
+          {{ presenter.data.mode === 'create' ? 'Registrar Nueva Asignatura' : 'Editar Asignatura' }}
+        </h2>
+        <p class="subjects-save-dialog__subtitle">
+          {{ presenter.data.mode === 'create'
+            ? 'Define los parámetros pedagógicos y de carga horaria en la malla curricular.'
+            : 'Modifica los parámetros y estado operativo de ' + (presenter.data.subject?.name ?? 'la asignatura') + '.'
+          }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Botón de cierre 'X' en la esquina superior -->
+    <button
+      mat-icon-button
+      type="button"
+      class="subjects-save-dialog__close-btn"
+      [disabled]="presenter.isSaving()"
+      (click)="onFormCancel()"
+      title="Cerrar ventana modal"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Banner de error si la API falló -->
+  @if (presenter.errorMessage(); as errorMsg) {
+    <div class="subjects-save-dialog__error-banner" role="alert">
+      <mat-icon class="subjects-save-dialog__error-icon">error_outline</mat-icon>
+      <span class="subjects-save-dialog__error-text">{{ errorMsg }}</span>
+    </div>
+  }
+
+  <!-- Contenido Principal: Formulario Especializado -->
+  <mat-dialog-content class="subjects-save-dialog__content">
+    <app-subjects-save-dialog-form
+      [mode]="presenter.data.mode"
+      [initialData]="presenter.data.subject"
+      [areas]="presenter.data.areas"
+      [isSaving]="presenter.isSaving()"
+      (formSubmit)="onFormSubmit($event)"
+      (formCancel)="onFormCancel()"
+    />
+  </mat-dialog-content>
+</div>

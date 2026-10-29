@@ -1,0 +1,12 @@
+<mat-card
+  class="info-card mat-elevation-z1"
+  [class.info-card--green]="data().color === 'green'"
+  [class.info-card--amber]="data().color === 'amber'"
+  [class.info-card--blue]="data().color === 'blue'"
+>
+  <span class="info-card__label">{{ data().label }}</span>
+  <span class="info-card__value">{{ data().value }}</span>
+  @if (data().subtitle) {
+    <span class="info-card__subtitle">{{ data().subtitle }}</span>
+  }
+</mat-card>
