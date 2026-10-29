@@ -18,3 +18,4 @@ export * from './services/academic-year.service';
 export * from './services/grade-subject.service';
 export * from './services/grade-section.service';
 export * from './services/rule.service';
+export * from './services/menu.service';
