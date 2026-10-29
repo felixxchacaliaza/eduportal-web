@@ -16,6 +16,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EvaluationPeriodConfig } from '../../models/evaluation-period-config.interface';
 import { ScoreInputComponent } from '../score-input/score-input.component';
+import { ScoreColorDirective } from '../../../../../shared/directives/score-color/score-color.directive';
+import { GradeStatusPipe } from '../../../../../shared/pipes/grade-status/grade-status.pipe';
 
 /**
  * ============================================================================
@@ -27,7 +29,7 @@ import { ScoreInputComponent } from '../score-input/score-input.component';
  * Proyecta:
  * - Filas de estudiantes matriculados.
  * - Columnas dinámicas de bimestres con `<app-score-input>`.
- * - Columnas calculadas de promedio final y chips de condición académica.
+ * - Integración con `ScoreColorDirective` y `GradeStatusPipe` (Senior Boost 06.1.1).
  * ============================================================================
  */
 @Component({
@@ -40,7 +42,9 @@ import { ScoreInputComponent } from '../score-input/score-input.component';
     MatIconModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    ScoreInputComponent
+    ScoreInputComponent,
+    ScoreColorDirective,
+    GradeStatusPipe
   ],
   templateUrl: './grade-book-matrix.component.html',
   styleUrls: ['./grade-book-matrix.component.scss'],
