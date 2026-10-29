@@ -10,7 +10,7 @@ import { Routes } from '@angular/router';
  */
 export const STUDENTS_ROUTES: Routes = [
   {
-    path: 'alumnos',
+    path: '',
     loadComponent: () =>
       import('./student-management/student-management.component').then(
         m => m.StudentManagementComponent
