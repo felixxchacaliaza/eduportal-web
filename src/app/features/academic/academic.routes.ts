@@ -19,9 +19,9 @@ export const ACADEMIC_ROUTES: Routes = [
     loadComponent: () =>
       import('./grade-subjects/grade-subjects.component').then(m => m.GradeSubjectsComponent),
   },
- /* {
+  {
     path: 'grados-secciones',
     loadComponent: () =>
       import('./grades-sections/grades-sections.component').then(m => m.GradesSectionsComponent),
-  },*/
+  },
 ];

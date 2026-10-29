@@ -14,6 +14,5 @@ export const API_ENDPOINTS = {
   rules: `${environment.apiUrl}/rules`,
 
 
-
 } as const;
 

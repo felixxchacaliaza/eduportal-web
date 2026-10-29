@@ -1,0 +1,28 @@
+// ============================================================================
+// GradesSections Container Styles (BEM Methodology)
+// ============================================================================
+// Contenedor principal de la vista de Grados y Secciones.
+// ============================================================================
+.grades-sections {
+  display: flex;
+  flex-direction: column;
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    gap: 1rem;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+
+    p {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+}

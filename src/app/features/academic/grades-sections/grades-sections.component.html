@@ -1,0 +1,26 @@
+<div class="grades-sections">
+  <!-- 1. Tarjetas de Métricas Estadísticas de Aulas y Secciones -->
+  <app-grades-sections-cards [cards]="cards()" />
+
+  <!-- 2. Barra Unificada de Filtros, Búsqueda y Botón de Apertura -->
+  <app-grades-sections-filters
+    [grades]="grades()"
+    [filterState]="filterState()"
+    (filterChange)="onFilterChange($event)"
+    (create)="onCreateSection()"
+  />
+
+  <!-- 3. Spinner de Carga o Tabla Principal -->
+  @if (isLoading()) {
+    <div class="grades-sections__loading">
+      <mat-spinner diameter="44" />
+      <p>Cargando distribución de aulas y secciones...</p>
+    </div>
+  } @else {
+    <app-grades-sections-table
+      [sections]="filteredSections()"
+      (toggleStatus)="onToggleStatus($event)"
+      (edit)="onEditSection($event)"
+    />
+  }
+</div>
