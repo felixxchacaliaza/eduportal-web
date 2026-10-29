@@ -1,0 +1,112 @@
+<div class="matrix-wrapper">
+  @if (isLoading()) {
+    <div class="matrix-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Consultando planilla de calificaciones oficiales...</p>
+    </div>
+  } @else if (rows().length === 0) {
+    <div class="matrix-empty">
+      <div class="matrix-empty__icon-box">
+        <mat-icon>fact_check</mat-icon>
+      </div>
+      <h3>Planilla No Cargada</h3>
+      <p>Seleccione un salón y asignatura en la barra superior para visualizar o registrar las actas de evaluación.</p>
+    </div>
+  } @else {
+    <div class="table-container">
+      <table class="dense-matrix">
+        <thead>
+          <tr>
+            <th class="col-num">#</th>
+            <th class="col-code">Código</th>
+            <th class="col-dni">DNI</th>
+            <th class="col-name">Estudiante</th>
+            @for (p of periodConfigs(); track p.period) {
+              <th class="col-period" [class.col-period--locked]="!p.isOpen">
+                <div class="period-header">
+                  <span>{{ p.name }}</span>
+                  @if (!p.isOpen) {
+                    <mat-icon class="lock-icon" matTooltip="Periodo Cerrado (Candado RUL-004)">lock</mat-icon>
+                  }
+                </div>
+              </th>
+            }
+            <th class="col-average">Promedio</th>
+            <th class="col-status">Condición</th>
+            <th class="col-obs">Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows().controls; track $index; let idx = $index) {
+            <tr [formGroup]="row" class="matrix-row">
+              <!-- Índice correlativo -->
+              <td class="col-num">{{ idx + 1 }}</td>
+
+              <!-- Código del Alumno -->
+              <td class="col-code">
+                <span class="code-badge">{{ row.get('studentCode')?.value || 'STU-000' }}</span>
+              </td>
+
+              <!-- DNI -->
+              <td class="col-dni">{{ row.get('studentDni')?.value || '--------' }}</td>
+
+              <!-- Nombre Completo -->
+              <td class="col-name font-semibold">
+                {{ row.get('studentName')?.value }}
+              </td>
+
+              <!-- Celdas de Calificación por Periodo -->
+              @for (p of periodConfigs(); track p.period) {
+                <td class="col-period text-center">
+                  <app-score-input
+                    [formControl]="getPeriodScoreControl(row, p.period)"
+                  ></app-score-input>
+                </td>
+              }
+
+              <!-- Promedio Final Computado en Caliente -->
+              <td class="col-average text-center">
+                @if (row.get('finalAverage')?.value !== null && row.get('finalAverage')?.value !== undefined) {
+                  <span
+                    class="average-chip"
+                    [class.average--pass]="row.get('finalAverage')?.value >= 11"
+                    [class.average--fail]="row.get('finalAverage')?.value < 11"
+                  >
+                    {{ row.get('finalAverage')?.value < 10 ? '0' + row.get('finalAverage')?.value : row.get('finalAverage')?.value }}
+                  </span>
+                } @else {
+                  <span class="average-chip average--none">--</span>
+                }
+              </td>
+
+              <!-- Chip de Condición Académica -->
+              <td class="col-status text-center">
+                @switch (row.get('status')?.value) {
+                  @case ('APROBADO') {
+                    <span class="status-chip status--aprobado">Aprobado</span>
+                  }
+                  @case ('DESAPROBADO') {
+                    <span class="status-chip status--desaprobado">Desaprobado</span>
+                  }
+                  @default {
+                    <span class="status-chip status--en-curso">En Curso</span>
+                  }
+                }
+              </td>
+
+              <!-- Observación Pedagógica -->
+              <td class="col-obs">
+                <input
+                  type="text"
+                  formControlName="observation"
+                  class="obs-input"
+                  placeholder="Sin notas adicionales..."
+                />
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
