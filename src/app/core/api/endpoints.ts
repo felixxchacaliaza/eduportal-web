@@ -18,4 +18,5 @@ export const API_ENDPOINTS = {
   positions: `${environment.apiUrl}/positions`,
   teachers: `${environment.apiUrl}/teachers`,
   workers: `${environment.apiUrl}/workers`,
+  evaluations: `${environment.apiUrl}/evaluations`,
 } as const;
