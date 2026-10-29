@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.grade-filters {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  padding: 16px;
+  margin-bottom: 20px;
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  &__controls {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    flex: 1;
+  }
+
+  &__field {
+    min-width: 180px;
+
+    &--year {
+      min-width: 160px;
+    }
+
+    &--search {
+      min-width: 240px;
+      flex: 1;
+    }
+  }
+}
