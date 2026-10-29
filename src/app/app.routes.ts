@@ -75,6 +75,16 @@ export const routes: Routes = [
           import('./features/attendances/attendance.routes').then(m => m.ATTENDANCE_ROUTES)
       },
       {
+        path: 'incidencias',
+        loadChildren: () =>
+          import('./features/incidents/incidents.routes').then(m => m.INCIDENTS_ROUTES)
+      },
+      {
+        path: 'pensiones',
+        loadChildren: () =>
+          import('./features/tuition-payments/tuition-payments.routes').then(m => m.TUITION_PAYMENTS_ROUTES)
+      },
+      {
         path: 'seguridad',
         loadChildren: () =>
           import('./features/security/security.routes').then(m => m.SECURITY_ROUTES)

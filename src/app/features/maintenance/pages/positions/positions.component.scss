@@ -1,0 +1,198 @@
+.positions {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background-color: #ffffff;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+    &-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      flex: 1;
+    }
+  }
+
+  &__field {
+    min-width: 200px;
+    margin-bottom: -1.25em;
+
+    &--search {
+      flex: 1;
+      min-width: 280px;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    gap: 1rem;
+    color: #64748b;
+    font-size: 0.95rem;
+  }
+
+  &__table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+
+  &__table {
+    width: 100%;
+
+    th.mat-header-cell {
+      background-color: #f8fafc;
+      color: #475569;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    td.mat-cell {
+      padding: 1rem 1.5rem;
+      font-size: 0.875rem;
+      color: #334155;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    tr.mat-row:hover {
+      background-color: #f8fafc;
+    }
+  }
+
+  &__code-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    background-color: #f1f5f9;
+    color: #475569;
+    font-family: monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  &__name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__name {
+    font-weight: 600;
+    color: #0f172a;
+  }
+
+  &__dept-chip {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background-color: #e0f2fe;
+    color: #0369a1;
+
+    &--direccion {
+      background-color: #fef3c7;
+      color: #b45309;
+    }
+
+    &--administracion {
+      background-color: #e0e7ff;
+      color: #4338ca;
+    }
+
+    &--psicopedagogia {
+      background-color: #fce7f3;
+      color: #be185d;
+    }
+
+    &--convivencia {
+      background-color: #ede9fe;
+      color: #6d28d9;
+    }
+
+    &--servicios_generales {
+      background-color: #f1f5f9;
+      color: #475569;
+    }
+  }
+
+  &__description {
+    color: #64748b;
+    font-size: 0.825rem;
+    max-width: 320px;
+    display: inline-block;
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+
+    mat-icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+    }
+
+    &--active {
+      background-color: #dcfce7;
+      color: #15803d;
+    }
+
+    &--inactive {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+  }
+
+  &__no-data {
+    text-align: center;
+    padding: 3rem 1.5rem !important;
+    color: #64748b;
+
+    mat-icon {
+      font-size: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #94a3b8;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+  }
+}

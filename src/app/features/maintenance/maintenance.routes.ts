@@ -20,4 +20,9 @@ export const MAINTENANCE_ROUTES: Routes = [
     loadComponent: () =>
       import('./areas/areas.component').then(m => m.AreasComponent),
   },
+  {
+    path: 'cargos',
+    loadComponent: () =>
+      import('./pages/positions/positions.component').then(m => m.PositionsComponent),
+  },
 ];
