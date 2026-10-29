@@ -1,0 +1,87 @@
+// src/app/shared/styles/_kpi-card.scss
+@use './variables' as *;
+@use './mixins' as *;
+
+.kpi-cards-grid {
+  @include kpi-grid;
+}
+
+.kpi-card {
+  @include surface-card;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $text-muted;
+  }
+
+  &__icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    &--primary {
+      background-color: $primary-light;
+      color: $primary;
+    }
+
+    &--success {
+      background-color: $success-bg;
+      color: $success;
+    }
+
+    &--warning {
+      background-color: $warning-bg;
+      color: $warning;
+    }
+
+    &--info {
+      background-color: $info-bg;
+      color: $info;
+    }
+  }
+
+  &__value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: $text-main;
+    line-height: 1.1;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: $text-muted;
+  }
+}
