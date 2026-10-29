@@ -21,4 +21,6 @@ export const API_ENDPOINTS = {
   evaluations: `${environment.apiUrl}/evaluations`,
   attendances: `${environment.apiUrl}/attendances`,
   incidents: `${environment.apiUrl}/incidents`,
+  authLogin: `${environment.apiUrl}/auth/login`,
+  authMe: `${environment.apiUrl}/auth/me`,
 } as const;

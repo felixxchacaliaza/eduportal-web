@@ -12,6 +12,7 @@ export default defineConfig({
   reporter: 'list',
   use: {
     baseURL: 'http://localhost:4200',
+    storageState: './tests/e2e/.auth/admin-state.json',
     trace: 'off',
     screenshot: 'only-on-failure',
     headless: true,

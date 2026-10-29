@@ -31,13 +31,24 @@
     </button>
 
     <div class="app-navbar__user">
-      <div class="app-navbar__avatar">
-        <span>FJ</span>
+      <div class="app-navbar__avatar" data-testid="navbar-user-avatar">
+        <span>{{ userInitials() }}</span>
       </div>
       <div class="app-navbar__user-info">
-        <span class="app-navbar__user-name">Prof. Félix Chacaliaza</span>
-        <span class="app-navbar__user-role">Administrador</span>
+        <span class="app-navbar__user-name" data-testid="navbar-user-name">{{ authService.userFullName() || 'Usuario EduPortal' }}</span>
+        <span class="app-navbar__user-role" data-testid="navbar-user-role">{{ authService.userRoleName() || 'Docente' }}</span>
       </div>
     </div>
+
+    <button
+      mat-icon-button
+      type="button"
+      aria-label="Cerrar sesión"
+      data-testid="logout-btn"
+      class="app-navbar__icon-btn app-navbar__logout-btn"
+      (click)="authService.logout()"
+      title="Cerrar Sesión">
+      <mat-icon>logout</mat-icon>
+    </button>
   </div>
 </header>

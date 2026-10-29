@@ -1,0 +1,171 @@
+<div class="login-page">
+  <!-- Panel Lateral Decorativo / Hero Escolar -->
+  <aside class="login-page__hero">
+    <div class="login-page__hero-overlay"></div>
+    <div class="login-page__hero-content">
+      <div class="login-page__hero-badge">
+        <mat-icon>school</mat-icon>
+        <span>Sistema de Gestión Escolar Integral</span>
+      </div>
+      <h1 class="login-page__hero-title">EduPortal Web</h1>
+      <p class="login-page__hero-description">
+        Plataforma SaaS para la administración académica, padrón de alumnos,
+        matriz de calificaciones MINEDU, control de asistencia y seguridad RBAC.
+      </p>
+      <div class="login-page__hero-features">
+        <div class="login-page__feature-item">
+          <mat-icon>verified_user</mat-icon>
+          <span>Autenticación JWT y control de acceso por roles</span>
+        </div>
+        <div class="login-page__feature-item">
+          <mat-icon>fact_check</mat-icon>
+          <span>Cumplimiento normativo y reglas institucionales RUL-001 a RUL-006</span>
+        </div>
+        <div class="login-page__feature-item">
+          <mat-icon>speed</mat-icon>
+          <span>Arquitectura Zoneless reactiva de alto rendimiento</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Panel Principal del Formulario -->
+  <main class="login-page__form-container">
+    <div class="login-page__card">
+      <header class="login-page__card-header">
+        <div class="login-page__logo-badge">
+          <mat-icon>lock_outline</mat-icon>
+        </div>
+        <h2 class="login-page__title">Acceso al Sistema</h2>
+        <p class="login-page__subtitle">
+          Bienvenido a EduPortal. Ingrese con sus credenciales institucionales.
+        </p>
+      </header>
+
+      <!-- Selector Rápido de Roles para Pruebas y Docencia -->
+      <section class="login-page__quick-roles" aria-label="Cuentas de demostración">
+        <span class="login-page__quick-roles-label">Cuentas demo:</span>
+        <div class="login-page__quick-roles-buttons">
+          <button
+            type="button"
+            class="login-page__role-chip"
+            data-testid="role-superadmin-btn"
+            (click)="fillRole('admin')">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>SuperAdmin</span>
+          </button>
+          <button
+            type="button"
+            class="login-page__role-chip"
+            data-testid="role-director-btn"
+            (click)="fillRole('director')">
+            <mat-icon>badge</mat-icon>
+            <span>Director</span>
+          </button>
+          <button
+            type="button"
+            class="login-page__role-chip"
+            data-testid="role-docente-btn"
+            (click)="fillRole('docente')">
+            <mat-icon>person</mat-icon>
+            <span>Docente</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Alerta de Error -->
+      @if (presenter.errorMessage(); as errorMsg) {
+        <div class="login-page__alert" data-testid="login-error-alert" role="alert">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMsg }}</span>
+        </div>
+      }
+
+      <!-- Formulario Reactivo de Login -->
+      <form
+        class="login-page__form"
+        [formGroup]="presenter.form"
+        (ngSubmit)="onSubmit()"
+        novalidate>
+
+        <!-- Campo Correo Electrónico -->
+        <mat-form-field appearance="outline" class="login-page__field">
+          <mat-label>Correo Electrónico</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="ejemplo@eduportal.edu.pe"
+            data-testid="login-email-input"
+            autocomplete="email"
+            required />
+          <mat-icon matPrefix>email</mat-icon>
+          @if (presenter.form.controls.email.invalid && presenter.form.controls.email.touched) {
+            <mat-error>Ingrese un correo electrónico institucional válido</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Campo Contraseña -->
+        <mat-form-field appearance="outline" class="login-page__field">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            [type]="presenter.hidePassword() ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="••••••••"
+            data-testid="login-password-input"
+            autocomplete="current-password"
+            required />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            data-testid="toggle-password-btn"
+            (click)="presenter.togglePasswordVisibility()"
+            [attr.aria-label]="presenter.hidePassword() ? 'Mostrar contraseña' : 'Ocultar contraseña'">
+            <mat-icon>{{ presenter.hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (presenter.form.controls.password.invalid && presenter.form.controls.password.touched) {
+            <mat-error>La contraseña debe tener mínimo 6 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Fila de Opciones: Recordar sesión -->
+        <div class="login-page__options-row">
+          <mat-checkbox formControlName="rememberMe" color="primary">
+            Recordar en este equipo
+          </mat-checkbox>
+          <span class="login-page__security-note">Conexión cifrada TLS</span>
+        </div>
+
+        <!-- Botón de Envío -->
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="login-page__submit-btn"
+          data-testid="login-submit-btn"
+          [disabled]="authService.isLoading()">
+          @if (authService.isLoading()) {
+            <span class="login-page__btn-content">
+              <mat-spinner diameter="20" class="login-page__spinner"></mat-spinner>
+              <span>Autenticando...</span>
+            </span>
+          } @else {
+            <span class="login-page__btn-content">
+              <mat-icon>login</mat-icon>
+              <span>Iniciar Sesión</span>
+            </span>
+          }
+        </button>
+      </form>
+
+      <!-- Pie de Seguridad Institucional -->
+      <footer class="login-page__card-footer">
+        <mat-icon>verified</mat-icon>
+        <span>EduPortal © 2026 — Acceso Seguro con JWT & RBAC</span>
+      </footer>
+    </div>
+  </main>
+</div>

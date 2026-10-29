@@ -1,0 +1,18 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:4200",
+      "localStorage": [
+        {
+          "name": "eduportal_token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.mock"
+        },
+        {
+          "name": "eduportal_user",
+          "value": "{\"id\":\"6ae22a9398145a49c3a57489\",\"code\":\"USR-001\",\"email\":\"root@eduportal.edu.pe\",\"person\":{\"id\":\"6ae22a9398145a49c3a5748a\",\"dni\":\"10293847\",\"fullName\":\"Félix Chacaliaza Flores\"},\"profile\":{\"id\":\"6ae22a9398145a49c3a5748b\",\"name\":\"SUPER ADMINISTRADOR\",\"isSuperAdmin\":true},\"menuTree\":[]}"
+        }
+      ]
+    }
+  ]
+}
