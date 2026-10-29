@@ -1,4 +1,4 @@
-<!-- src/app/shared/components/sidebar/sidebar.component.html -->
+<!-- src/app/shared/layout/sidebar/sidebar.component.html -->
 <aside class="app-sidebar" [class.app-sidebar--collapsed]="isCollapsed()">
   <nav class="app-sidebar__nav">
     <div class="app-sidebar__section-label">
@@ -10,10 +10,10 @@
     </div>
 
     <ul class="app-sidebar__menu">
-      @for (item of navItems; track item.label) {
+      @for (item of navItems(); track item.label) {
         <li class="app-sidebar__item">
           @if (item.children && item.children.length > 0) {
-            <!-- Ítem de grupo desplegable -->
+            <!-- Ítem de Option Group desplegable -->
             <button
               type="button"
               class="app-sidebar__link app-sidebar__link--group"
@@ -34,7 +34,7 @@
               }
             </button>
 
-            <!-- Submenú de opciones del grupo -->
+            <!-- Submenú de opciones hijas del grupo -->
             @if (!isCollapsed() && isGroupOpen(item.label)) {
               <ul class="app-sidebar__submenu">
                 @for (subItem of item.children; track subItem.path) {

@@ -1,23 +1,17 @@
-// src/app/shared/components/sidebar/sidebar.component.ts
-import { Component, input, signal } from '@angular/core';
+// src/app/shared/layout/sidebar/sidebar.component.ts
+import { Component, input, signal, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { MenuService } from '../../../core/api/services/menu.service';
+import { NavigationItem } from './models/navigation-item.interface';
 
-export interface NavigationSubItem {
-  readonly path: string;
-  readonly label: string;
-  readonly icon?: string;
-  readonly badge?: string;
-}
-
-export interface NavigationItem {
-  readonly label: string;
-  readonly icon: string;
-  readonly path?: string;
-  readonly badge?: string;
-  readonly children?: readonly NavigationSubItem[];
-}
-
+/**
+ * ============================================================================
+ * SidebarComponent
+ * ============================================================================
+ * Menú lateral de navegación con soporte de Option Groups dinámicos desde la API.
+ * ============================================================================
+ */
 @Component({
   selector: 'app-sidebar',
   imports: [RouterLink, RouterLinkActive, MatIconModule],
@@ -25,11 +19,32 @@ export interface NavigationItem {
   styleUrl: './sidebar.component.scss'
 })
 export class SidebarComponent {
-  // Signal input reactivo recibido desde el componente padre:
+  private readonly menuService = inject(MenuService);
+
+  /** Signal input reactivo recibido desde el componente padre: */
   public readonly isCollapsed = input<boolean>(false);
 
-  // Control de grupos desplegados (inicia abierto 'Académico'):
-  public readonly openGroups = signal<Set<string>>(new Set(['Académico']));
+  /** Opción para recibir items personalizados por input binding si fuera requerido: */
+  public readonly itemsInput = input<readonly NavigationItem[] | null>(null, { alias: 'navItems' });
+
+  /** Control de grupos desplegados (inicia abierto 'Gestión Académica' y 'Mantenimiento'): */
+  public readonly openGroups = signal<Set<string>>(new Set(['Gestión Académica', 'Académico', 'Mantenimiento']));
+
+  /**
+   * Catálogo reactivo de navegación escolar:
+   * Prioriza el input directo, luego los datos del MenuService (MongoDB), y como fallback el catálogo base.
+   */
+  public readonly navItems = computed<readonly NavigationItem[]>(() => {
+    const inputVal = this.itemsInput();
+    if (inputVal && inputVal.length > 0) {
+      return inputVal;
+    }
+    const fromService = this.menuService.navigationItems();
+    if (fromService && fromService.length > 0) {
+      return fromService;
+    }
+    return this.fallbackNavItems;
+  });
 
   public toggleGroup(label: string): void {
     const current = new Set(this.openGroups());
@@ -45,16 +60,15 @@ export class SidebarComponent {
     return this.openGroups().has(label);
   }
 
-  // Lista tipada de navegación escolar:
-  public readonly navItems: readonly NavigationItem[] = [
+  /** Catálogo de respaldo estático en caso de desconexión momentánea de la API: */
+  private readonly fallbackNavItems: readonly NavigationItem[] = [
     { path: '/dashboard', label: 'Panel de Control', icon: 'dashboard' },
-    { path: '/alumnos', label: 'Padrón de Alumnos', icon: 'people', badge: '100' },
     {
-      label: 'Académico',
+      label: 'Gestión Académica',
       icon: 'school',
       children: [
-        { path: '/grados-secciones', label: 'Grados-Secciones', icon: 'class' },
-        { path: '/grados-asignaturas', label: 'Grados-Asignaturas', icon: 'auto_stories' },
+        { path: '/grados-secciones', label: 'Salones y Secciones', icon: 'class' },
+        { path: '/grados-asignaturas', label: 'Malla Curricular', icon: 'auto_stories' },
         { path: '/asignaturas', label: 'Asignaturas', icon: 'menu_book' },
       ]
     },
@@ -65,7 +79,6 @@ export class SidebarComponent {
         { path: '/niveles', label: 'Niveles Educativos', icon: 'layers' },
         { path: '/areas', label: 'Áreas Curriculares', icon: 'category' },
       ]
-    },
-    { path: '/notas', label: 'Calificaciones', icon: 'grade' }
+    }
   ];
 }

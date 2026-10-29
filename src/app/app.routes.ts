@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
+import { menuResolver } from './core/resolvers/menu.resolver';
 
 /**
  * ============================================================================
  * App Root Routes (Enrutamiento Principal de EduPortal)
  * ============================================================================
- * Carga el layout base con Sidebar y Header, e inyecta los submódulos
- * funcionales (Dashboard, Alumnos, Académico y Mantenimiento) vía Lazy Loading.
+ * Carga el layout base con Sidebar y Header, precargando el catálogo de menús
+ * vía `menuResolver` e inyectando submódulos vía Lazy Loading.
  * ============================================================================
  */
 export const routes: Routes = [
@@ -13,6 +14,9 @@ export const routes: Routes = [
     path: '',
     loadComponent: () =>
       import('./core/layouts/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
+    resolve: {
+      menuTree: menuResolver
+    },
     children: [
       {
         path: '',

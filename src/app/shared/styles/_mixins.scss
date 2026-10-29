@@ -1,0 +1,42 @@
+// src/app/shared/styles/_mixins.scss
+
+/**
+ * Mixin para forzar el contenedor de vista a ancho completo sin centrado artificial
+ */
+@mixin full-width-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/**
+ * Mixin para tarjetas de superficie limpia con borde sutil y sombra suave
+ */
+@mixin surface-card {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: var(--radius-md, 10px);
+  box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+
+/**
+ * Mixin para alineación flex de barra de herramientas horizontal
+ */
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/**
+ * Mixin para grilla responsiva de tarjetas métricas
+ */
+@mixin kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}

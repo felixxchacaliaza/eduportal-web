@@ -1,0 +1,40 @@
+// src/app/shared/styles/_variables.scss
+
+// Paleta Institucional EduPortal SaaS
+$primary: var(--primary, #e40035);
+$primary-hover: var(--primary-hover, #c8002f);
+$primary-light: var(--primary-light, #fff1f2);
+
+$secondary: var(--secondary, #0f172a);
+$secondary-light: var(--secondary-light, #1e293b);
+$accent: var(--accent, #00b4d8);
+
+// Fondos y Superficies
+$bg-page: var(--bg-page, #f8fafc);
+$bg-surface: var(--bg-surface, #ffffff);
+$border-color: var(--border-color, #e2e8f0);
+
+// Textos
+$text-main: var(--text-main, #0f172a);
+$text-muted: var(--text-muted, #64748b);
+$text-light: var(--text-light, #94a3b8);
+
+// Estados Escolares
+$success: var(--success, #10b981);
+$success-bg: var(--success-bg, #ecfdf5);
+$warning: var(--warning, #f59e0b);
+$warning-bg: var(--warning-bg, #fffbeb);
+$danger: var(--danger, #ef4444);
+$danger-bg: var(--danger-bg, #fef2f2);
+$info: var(--info, #3b82f6);
+$info-bg: var(--info-bg, #eff6ff);
+
+// Sombras y Radios
+$shadow-sm: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+$shadow-md: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+$shadow-lg: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+
+$radius-sm: var(--radius-sm, 6px);
+$radius-md: var(--radius-md, 10px);
+$radius-lg: var(--radius-lg, 16px);
+$radius-full: var(--radius-full, 9999px);
