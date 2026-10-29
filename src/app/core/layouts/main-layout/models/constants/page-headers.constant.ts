@@ -41,11 +41,31 @@ export const PAGE_HEADERS_CONSTANT: readonly PageHeaderConfig[] = Object.freeze(
     description: 'Gestión y registro de estudiantes matriculados',
   }),
   Object.freeze({
+    route: '/personal',
+    breadcrumbs: ['Personal', 'Personal Escolar'],
+    title: 'Personal Escolar: Docentes y Colaboradores',
+    icon: 'badge',
+    description: 'Nómina de profesores titulares, personal administrativo y control de horas de cátedra contratadas',
+  }),
+  Object.freeze({
     route: '/grados-secciones',
     breadcrumbs: ['Académico', 'Grados y Secciones'],
     title: 'Grados y Secciones',
     icon: 'class',
     description: 'Distribución y administración de aulas, grados y secciones',
   }),
+  Object.freeze({
+    route: '/niveles',
+    breadcrumbs: ['Mantenimiento', 'Niveles Educativos'],
+    title: 'Niveles Educativos',
+    icon: 'stairs',
+    description: 'Gestión y configuración de niveles de enseñanza escolar',
+  }),
+  Object.freeze({
+    route: '/areas',
+    breadcrumbs: ['Mantenimiento', 'Áreas Curriculares'],
+    title: 'Áreas Curriculares',
+    icon: 'category',
+    description: 'Organización pedagógica de áreas de aprendizaje oficial según MINEDU',
+  }),
 ]);
-

@@ -1,13 +1,45 @@
 <div class="staff-container">
-  <!-- Cabecera de la Página -->
-  <div class="page-header">
-    <div class="header-titles">
-      <h1 class="page-title">Personal Escolar: Docentes y Colaboradores</h1>
-      <p class="page-subtitle">
-        Nómina de profesores titulares, personal administrativo y control de horas de cátedra contratadas
-      </p>
+  <!-- Métricas KPI Estadísticas Computadas -->
+  <div class="kpi-grid">
+    @for (card of presenter.cards(); track card.label) {
+      <app-info-card [data]="card"></app-info-card>
+    }
+  </div>
+
+  <!-- Barra de Filtros, Búsqueda Predictiva y Acción de Registro -->
+  <div class="filter-toolbar">
+    <div class="filter-toolbar__controls">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar por DNI, nombres, apellidos o cargo...</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input
+          matInput
+          [value]="presenter.searchTerm()"
+          (input)="presenter.setSearchTerm($any($event.target).value)"
+          placeholder="Ej: Valdivia, 70899901, Secretaria..."
+        />
+        @if (presenter.searchTerm()) {
+          <button matSuffix mat-icon-button (click)="presenter.setSearchTerm('')">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="status-field">
+        <mat-label>Estado Laboral</mat-label>
+        <mat-icon matPrefix>filter_list</mat-icon>
+        <mat-select
+          [value]="presenter.statusFilter()"
+          (selectionChange)="presenter.setStatusFilter($event.value)"
+        >
+          <mat-option value="ALL">Todos los Estados</mat-option>
+          <mat-option value="ACTIVE">Activos</mat-option>
+          <mat-option value="INACTIVE">Inactivos / Bajas</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
-    <div class="header-actions">
+
+    <div class="filter-toolbar__action">
       <button
         mat-flat-button
         color="primary"
@@ -18,45 +50,6 @@
         <span>{{ presenter.selectedTabIndex() === 0 ? 'Nuevo Docente' : 'Nuevo Colaborador' }}</span>
       </button>
     </div>
-  </div>
-
-  <!-- Métricas KPI Estadísticas Computadas -->
-  <div class="kpi-grid">
-    @for (card of presenter.cards(); track card.label) {
-      <app-info-card [data]="card"></app-info-card>
-    }
-  </div>
-
-  <!-- Barra de Filtros y Búsqueda Predictiva -->
-  <div class="filter-toolbar">
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>Buscar por DNI, nombres, apellidos o cargo...</mat-label>
-      <mat-icon matPrefix>search</mat-icon>
-      <input
-        matInput
-        [value]="presenter.searchTerm()"
-        (input)="presenter.setSearchTerm($any($event.target).value)"
-        placeholder="Ej: Valdivia, 70899901, Secretaria..."
-      />
-      @if (presenter.searchTerm()) {
-        <button matSuffix mat-icon-button (click)="presenter.setSearchTerm('')">
-          <mat-icon>close</mat-icon>
-        </button>
-      }
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="status-field">
-      <mat-label>Estado Laboral</mat-label>
-      <mat-icon matPrefix>filter_list</mat-icon>
-      <mat-select
-        [value]="presenter.statusFilter()"
-        (selectionChange)="presenter.setStatusFilter($event.value)"
-      >
-        <mat-option value="ALL">Todos los Estados</mat-option>
-        <mat-option value="ACTIVE">Activos</mat-option>
-        <mat-option value="INACTIVE">Inactivos / Bajas</mat-option>
-      </mat-select>
-    </mat-form-field>
   </div>
 
   <!-- Pestañas Reactivas para Docentes y Trabajadores -->
