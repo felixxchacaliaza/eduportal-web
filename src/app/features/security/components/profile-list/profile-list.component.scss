@@ -1,0 +1,116 @@
+.profile-table-container {
+  width: 100%;
+  overflow-x: auto;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  &__th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #cbd5e1;
+
+    &--actions {
+      text-align: right;
+    }
+  }
+
+  &__td {
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+    color: #1e293b;
+    border-bottom: 1px solid #f1f5f9;
+
+    &--actions {
+      text-align: right;
+      white-space: nowrap;
+    }
+  }
+
+  &__row {
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: #f8fafc;
+    }
+  }
+
+  &__code {
+    font-family: monospace;
+    font-weight: 600;
+    color: #0284c7;
+  }
+
+  &__name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__name {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  &__desc {
+    color: #64748b;
+    font-size: 0.8rem;
+  }
+}
+
+.profile-badge-admin {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 4px;
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.perm-count-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+  background-color: #f1f5f9;
+  color: #334155;
+
+  &--all {
+    background-color: #ecfdf5;
+    color: #047857;
+    font-weight: 700;
+  }
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &--active {
+    background-color: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+  }
+
+  &--inactive {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+  }
+}
