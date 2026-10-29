@@ -65,7 +65,7 @@
   <mat-tab-group
     class="security-page__tabs"
     [selectedIndex]="presenter.activeTabIndex()"
-    (selectedIndexChange)="presenter.setActiveTab($event)"
+    (selectedIndexChange)="onTabChange($event)"
     animationDuration="200ms">
 
     <!-- Pestaña 1: Cuentas de Usuario -->

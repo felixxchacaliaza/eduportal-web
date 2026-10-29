@@ -81,13 +81,13 @@ export const routes: Routes = [
       },
       {
         path: 'usuarios',
-        redirectTo: 'seguridad',
-        pathMatch: 'full'
+        loadChildren: () =>
+          import('./features/security/security.routes').then(m => m.SECURITY_ROUTES)
       },
       {
         path: 'perfiles',
-        redirectTo: 'seguridad',
-        pathMatch: 'full'
+        loadChildren: () =>
+          import('./features/security/security.routes').then(m => m.SECURITY_ROUTES)
       },
       {
         path: '',

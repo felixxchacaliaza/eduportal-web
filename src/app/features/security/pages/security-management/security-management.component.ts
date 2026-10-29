@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router, NavigationEnd } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -7,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, filter } from 'rxjs';
 
 import { SecurityManagementPresenter } from './security-management.presenter';
 import { UserService } from '../../services/user.service';
@@ -57,18 +58,44 @@ export class SecurityManagementComponent implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly router = inject(Router);
 
   /** Catálogo auxiliar de personas y menús */
   public readonly persons = signal<readonly Person[]>([]);
   public readonly menus = signal<readonly MenuNode[]>([]);
 
   public async ngOnInit(): Promise<void> {
+    this.syncTabWithRoute();
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.syncTabWithRoute();
+      });
+
     await Promise.all([
       this.userService.loadAll(),
       this.profileService.loadAll(),
       this.loadPersons(),
       this.loadMenus()
     ]);
+  }
+
+  public syncTabWithRoute(): void {
+    const url = this.router.url;
+    if (url.includes('/perfiles')) {
+      this.presenter.setActiveTab(1);
+    } else if (url.includes('/usuarios')) {
+      this.presenter.setActiveTab(0);
+    }
+  }
+
+  public onTabChange(index: number): void {
+    this.presenter.setActiveTab(index);
+    if (index === 1 && !this.router.url.includes('/perfiles')) {
+      this.router.navigate(['/perfiles']);
+    } else if (index === 0 && !this.router.url.includes('/usuarios') && !this.router.url.endsWith('/seguridad')) {
+      this.router.navigate(['/usuarios']);
+    }
   }
 
   public onSearchChange(term: string): void {

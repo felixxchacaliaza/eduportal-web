@@ -113,4 +113,38 @@ test.describe('E2E Real Browser Tests - Módulo Administración de Usuarios y Pe
     await expect(dialog).not.toBeVisible();
   });
 
+  test('E2E-04: Navegación desde el Sidebar para Cuentas de Acceso (/usuarios) y Perfiles (/perfiles)', async ({ page }) => {
+    // 1. Desplegar el grupo "Seguridad y Acceso" en el sidebar si no está abierto
+    const securityGroupBtn = page.locator('button.app-sidebar__link--group').filter({ hasText: 'Seguridad y Acceso' });
+    const isSubmenuVisible = await page.locator('.app-sidebar__submenu-link').filter({ hasText: 'Cuentas de Acceso' }).isVisible();
+    if (!isSubmenuVisible) {
+      await securityGroupBtn.click();
+      await page.waitForTimeout(200);
+    }
+
+    // 2. Hacer clic en "Perfiles y Permisos RBAC" desde el sidebar
+    const perfilesLink = page.locator('.app-sidebar__submenu-link').filter({ hasText: 'Perfiles y Permiso' });
+    await expect(perfilesLink).toBeVisible();
+    await perfilesLink.click();
+    await page.waitForTimeout(300);
+
+    // 3. Verificar que la URL sea /perfiles y la pestaña activa sea Perfiles RBAC
+    await expect(page).toHaveURL(/\/perfiles/);
+    const activeTab = page.locator('.mat-mdc-tab.mdc-tab--active');
+    await expect(activeTab).toContainText('Perfiles y Permisos RBAC');
+    await expect(page.locator('[data-testid="profiles-table"]')).toBeVisible();
+
+    // 4. Hacer clic en "Cuentas de Acceso" desde el sidebar
+    const usuariosLink = page.locator('.app-sidebar__submenu-link').filter({ hasText: 'Cuentas de Acceso' });
+    await expect(usuariosLink).toBeVisible();
+    await usuariosLink.click();
+    await page.waitForTimeout(300);
+
+    // 5. Verificar que la URL sea /usuarios y la pestaña activa sea Cuentas de Usuario
+    await expect(page).toHaveURL(/\/usuarios/);
+    const activeTab2 = page.locator('.mat-mdc-tab.mdc-tab--active');
+    await expect(activeTab2).toContainText('Cuentas de Usuario');
+    await expect(page.locator('[data-testid="users-table"]')).toBeVisible();
+  });
+
 });
