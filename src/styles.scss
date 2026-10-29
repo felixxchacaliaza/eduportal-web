@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 /* src/styles.scss */
+@use './app/shared/styles/kpi-card' as *;
 @import '@angular/material/prebuilt-themes/azure-blue.css';
 
 :root {
@@ -121,5 +122,4 @@ button, input, select, textarea {
 
 
 
-/* Shared KPI Cards & Full Width Layout Utilities */
-@import './app/shared/styles/kpi-card';
+/* Shared KPI Cards & Full Width Layout Utilities (cargado via @use al inicio) */
