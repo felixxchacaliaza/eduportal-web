@@ -1,0 +1,91 @@
+<div class="payment-dialog">
+  <div class="payment-dialog__header">
+    <div class="payment-dialog__header-info">
+      <mat-icon class="payment-dialog__header-icon">paid</mat-icon>
+      <div>
+        <h2 mat-dialog-title class="payment-dialog__title">Registrar Cobranza de Cuota</h2>
+        <span class="payment-dialog__subtitle">Código: {{ data.payment.code }}</span>
+      </div>
+    </div>
+    <button mat-icon-button (click)="onCancel()" class="payment-dialog__close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="payment-dialog__content">
+    <!-- Resumen de la cuota a cobrar -->
+    <div class="payment-dialog__summary">
+      <div class="payment-dialog__summary-row">
+        <span class="payment-dialog__summary-label">Alumno:</span>
+        <strong class="payment-dialog__summary-value">
+          {{ data.payment.student.person.lastName }}, {{ data.payment.student.person.firstName }}
+        </strong>
+      </div>
+      <div class="payment-dialog__summary-row">
+        <span class="payment-dialog__summary-label">DNI:</span>
+        <span class="payment-dialog__summary-value">{{ data.payment.student.person.documentNumber }}</span>
+      </div>
+      <div class="payment-dialog__summary-row">
+        <span class="payment-dialog__summary-label">Concepto:</span>
+        <span class="payment-dialog__summary-value payment-dialog__concept-tag">
+          {{ data.payment.concept }}
+        </span>
+      </div>
+      <div class="payment-dialog__summary-row payment-dialog__summary-row--highlight">
+        <span class="payment-dialog__summary-label">Monto a Cancelar:</span>
+        <strong class="payment-dialog__amount">S/ {{ data.payment.amount | number:'1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <!-- Formulario de Amortización -->
+    <form [formGroup]="form" class="payment-dialog__form">
+      <!-- Método de Pago -->
+      <mat-form-field appearance="outline" class="payment-dialog__field">
+        <mat-label>Medio de Pago</mat-label>
+        <mat-icon matPrefix>account_balance_wallet</mat-icon>
+        <mat-select formControlName="paymentMethod">
+          @for (method of paymentMethods; track method.value) {
+            <mat-option [value]="method.value">
+              <mat-icon>{{ method.icon }}</mat-icon>
+              {{ method.label }}
+            </mat-option>
+          }
+        </mat-select>
+        <mat-error *ngIf="form.get('paymentMethod')?.hasError('required')">
+          Debe seleccionar un método de pago
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Número de Operación / Voucher -->
+      <mat-form-field appearance="outline" class="payment-dialog__field">
+        <mat-label>N° Operación / Referencia Bancaria</mat-label>
+        <mat-icon matPrefix>tag</mat-icon>
+        <input
+          matInput
+          type="text"
+          formControlName="operationNumber"
+          placeholder="Ej: BCP-982341, YAPE-4412"
+        />
+        <mat-hint>Opcional para pagos en efectivo</mat-hint>
+      </mat-form-field>
+
+      <!-- Fecha de Pago -->
+      <mat-form-field appearance="outline" class="payment-dialog__field">
+        <mat-label>Fecha de Pago Realizada</mat-label>
+        <mat-icon matPrefix>calendar_today</mat-icon>
+        <input matInput type="date" formControlName="paidDate" />
+        <mat-error *ngIf="form.get('paidDate')?.hasError('required')">
+          La fecha de pago es requerida
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="payment-dialog__actions">
+    <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+    <button mat-flat-button color="primary" type="button" (click)="onSubmit()" [disabled]="form.invalid">
+      <mat-icon>check_circle</mat-icon>
+      Confirmar Amortización
+    </button>
+  </mat-dialog-actions>
+</div>

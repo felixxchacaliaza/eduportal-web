@@ -11,8 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { PositionService } from '../../../staff/staff-management/services/position.service';
 import { IPosition } from '../../../staff/staff-management/models/position.interface';
-import { InfoCardComponent } from '../../../../shared/components/info-card/info-card.component';
-import { InfoCardData } from '../../../../shared/components/info-card/info-card-data.interface';
+import { InfoCardComponent, InfoCardData } from '../../../../shared/components/info-card/info-card.component';
 
 /**
  * ============================================================================

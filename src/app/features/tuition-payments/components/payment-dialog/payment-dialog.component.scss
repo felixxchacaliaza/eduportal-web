@@ -1,0 +1,108 @@
+.payment-dialog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+
+    &-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    &-icon {
+      font-size: 1.75rem;
+      width: 1.75rem;
+      height: 1.75rem;
+      color: #0284c7;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-family: monospace;
+  }
+
+  &__content {
+    padding: 1.5rem !important;
+  }
+
+  &__summary {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+
+      &--highlight {
+        border-top: 1px dashed #cbd5e1;
+        padding-top: 0.5rem;
+        margin-top: 0.25rem;
+      }
+    }
+
+    &-label {
+      color: #64748b;
+    }
+
+    &-value {
+      color: #1e293b;
+    }
+  }
+
+  &__concept-tag {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.75rem;
+  }
+
+  &__amount {
+    color: #059669;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__field {
+    width: 100%;
+  }
+
+  &__actions {
+    padding: 1rem 1.5rem !important;
+    border-top: 1px solid #e2e8f0;
+    gap: 0.5rem;
+  }
+}

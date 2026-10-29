@@ -9,10 +9,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
-import { IncidentService } from '../../attendances/attendance-management/services/incident.service';
-import { IIncident } from '../../attendances/attendance-management/models/incident.interface';
-import { InfoCardComponent } from '../../../shared/components/info-card/info-card.component';
-import { InfoCardData } from '../../../shared/components/info-card/info-card-data.interface';
+import { IncidentService } from '../../../attendances/attendance-management/services/incident.service';
+import { IIncident } from '../../../attendances/attendance-management/models/incident.interface';
+import { InfoCardComponent, InfoCardData } from '../../../../shared/components/info-card/info-card.component';
 
 /**
  * ============================================================================
