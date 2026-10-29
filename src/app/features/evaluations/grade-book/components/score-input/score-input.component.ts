@@ -14,6 +14,7 @@ import {
   ValidationErrors
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ScoreColorDirective } from '../../../../../shared/directives/score-color/score-color.directive';
 
 /**
  * ============================================================================
@@ -32,7 +33,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-score-input',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ScoreColorDirective],
   templateUrl: './score-input.component.html',
   styleUrls: ['./score-input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

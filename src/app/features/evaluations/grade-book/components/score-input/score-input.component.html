@@ -1,4 +1,9 @@
-<div class="score-input-wrapper" [ngClass]="statusClass()" [class.score--disabled]="isDisabled()">
+<div
+  class="score-input-wrapper"
+  [appScoreColor]="score()"
+  [ngClass]="statusClass()"
+  [class.score--disabled]="isDisabled()"
+>
   <input
     type="text"
     class="score-input-control"

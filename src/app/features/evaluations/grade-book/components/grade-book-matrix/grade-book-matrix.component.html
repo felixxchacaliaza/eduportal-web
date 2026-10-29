@@ -64,29 +64,34 @@
                 </td>
               }
 
-              <!-- Promedio Final Computado en Caliente -->
+              <!-- Promedio Final Computado en Caliente con ScoreColorDirective -->
               <td class="col-average text-center">
                 @if (row.get('finalAverage')?.value !== null && row.get('finalAverage')?.value !== undefined) {
                   <span
                     class="average-chip"
+                    [appScoreColor]="row.get('finalAverage')?.value"
                     [class.average--pass]="row.get('finalAverage')?.value >= 11"
                     [class.average--fail]="row.get('finalAverage')?.value < 11"
                   >
                     {{ row.get('finalAverage')?.value < 10 ? '0' + row.get('finalAverage')?.value : row.get('finalAverage')?.value }}
                   </span>
                 } @else {
-                  <span class="average-chip average--none">--</span>
+                  <span class="average-chip average--none" [appScoreColor]="null">--</span>
                 }
               </td>
 
-              <!-- Chip de Condición Académica -->
+              <!-- Chip de Condición Académica con GradeStatusPipe -->
               <td class="col-status text-center">
                 @switch (row.get('status')?.value) {
                   @case ('APROBADO') {
-                    <span class="status-chip status--aprobado">Aprobado</span>
+                    <span class="status-chip status--aprobado" [appScoreColor]="row.get('finalAverage')?.value">
+                      {{ row.get('finalAverage')?.value | gradeStatus }}
+                    </span>
                   }
                   @case ('DESAPROBADO') {
-                    <span class="status-chip status--desaprobado">Desaprobado</span>
+                    <span class="status-chip status--desaprobado" [appScoreColor]="row.get('finalAverage')?.value">
+                      {{ row.get('finalAverage')?.value | gradeStatus }}
+                    </span>
                   }
                   @default {
                     <span class="status-chip status--en-curso">En Curso</span>
