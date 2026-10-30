@@ -1,5 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+// src/app/core/api/services/area.service.ts
 import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { API_ENDPOINTS } from '../endpoints';
 import { ApiResponse } from '../models/interfaces/api-response.interface';
@@ -12,26 +13,24 @@ export class AreaService {
   private readonly http = inject(HttpClient);
   private readonly endpoint = API_ENDPOINTS.areas;
 
-  /**
-   * 1. Listar todas las áreas curriculares (Promesa con async / await)
-   * GET /api/areas (areaRoutes.get('/', AreaController.getAreas))
-   */
   public async getAreas(): Promise<Area[]> {
-    const response = await firstValueFrom(
+    const res = await firstValueFrom(
       this.http.get<ApiResponse<Area[]>>(this.endpoint)
     );
-    return response.data;
+    return res.data;
   }
 
-  /**
-   * 2. Obtener área curricular por ID o CODE (Promesa con async / await)
-   * GET /api/areas/:id
-   */
-  public async getAreaById(id: string): Promise<Area> {
-    const response = await firstValueFrom(
-      this.http.get<ApiResponse<Area>>(`${this.endpoint}/${id}`)
+  public async createArea(payload: Partial<Area>): Promise<Area> {
+    const res = await firstValueFrom(
+      this.http.post<ApiResponse<Area>>(this.endpoint, payload)
     );
-    return response.data;
+    return res.data;
+  }
+
+  public async updateArea(id: string, payload: Partial<Area>): Promise<Area> {
+    const res = await firstValueFrom(
+      this.http.put<ApiResponse<Area>>(`${this.endpoint}/${id}`, payload)
+    );
+    return res.data;
   }
 }
-

@@ -1,0 +1,97 @@
+// ============================================================================
+// LevelSaveDialog Styles (BEM Methodology)
+// ============================================================================
+.level-save-dialog {
+  position: relative;
+  min-width: 440px;
+  max-width: 520px;
+  padding: 0.5rem 0;
+
+  &__progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem 0.5rem;
+  }
+
+  &__icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background-color: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &__titles {
+    flex: 1;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  &__subtitle {
+    margin: 0.25rem 0 0;
+    font-size: 0.8125rem;
+    color: #64748b;
+  }
+
+  &__close-btn {
+    color: #94a3b8;
+    &:hover {
+      color: #0f172a;
+    }
+  }
+
+  &__error-banner {
+    margin: 0.5rem 1.5rem 0;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  &__content {
+    padding: 1.25rem 1.5rem !important;
+  }
+
+  &__form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__full-row {
+    width: 100%;
+  }
+
+  &__actions {
+    padding: 0.75rem 1.5rem 1.25rem !important;
+    gap: 0.5rem;
+  }
+}

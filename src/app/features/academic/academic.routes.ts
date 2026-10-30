@@ -24,4 +24,5 @@ export const ACADEMIC_ROUTES: Routes = [
     loadComponent: () =>
       import('./grades-sections/grades-sections.component').then(m => m.GradesSectionsComponent),
   },
+  //poner uno mas
 ];

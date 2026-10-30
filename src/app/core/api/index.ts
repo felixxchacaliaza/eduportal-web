@@ -16,3 +16,7 @@ export * from './models/interfaces/rule.interface';
 export * from './models/interfaces/grade-section.interface';
 export * from './services/rule.service';
 export * from './services/grade-section.service';
+
+
+export * from './services/level.service';
+

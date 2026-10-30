@@ -53,11 +53,20 @@ export class SidebarComponent {
       label: 'Académico',
       icon: 'school',
       children: [
+        //agregar uno mas
         { path: '/grados-secciones', label: 'Salones y Secciones', icon: 'class' },
         { path: '/grados-asignaturas', label: 'Grados-Asignaturas', icon: 'auto_stories' },
         { path: '/asignaturas', label: 'Asignaturas', icon: 'menu_book' }
       ]
     },
+    {
+  label: 'Mantenimiento',
+  icon: 'tune',
+  children: [
+    { path: '/niveles', label: 'Niveles Educativos', icon: 'layers' },
+    { path: '/areas', label: 'Áreas Curriculares', icon: 'category' },
+  ]
+},
     { path: '/notas', label: 'Calificaciones', icon: 'grade' },
     
   ];

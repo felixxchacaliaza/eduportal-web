@@ -4,3 +4,4 @@ export * from './subjects/subjects.component';
 
 // Rutas académicas
 export * from '../academic/academic.routes';
+

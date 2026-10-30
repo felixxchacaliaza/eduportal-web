@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { MAINTENANCE_ROUTES } from './features/maintenance/maintenance.routes';
+import { ACADEMIC_ROUTES } from './features/academic/academic.routes';
 
 export const routes: Routes = [
   {
@@ -30,6 +32,11 @@ export const routes: Routes = [
         loadChildren: () =>
          import('./features/academic').then(m => m.ACADEMIC_ROUTES)
       },
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/maintenance').then(m => m.MAINTENANCE_ROUTES)
+      }
     ]
   }
 ];
