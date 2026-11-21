@@ -7,7 +7,7 @@
  */
 export const environment = {
   production: true,
-  apiUrl: 'https://eduportal-api.onrender.com/api',
+  apiUrl: 'https://eduportal-api-starter.onrender.com/api',
   institutionName: 'EduPortal SaaS - Plataforma Escolar',
   academicYear: 2026,
   sessionTimeoutMinutes: 60
